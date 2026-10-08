@@ -1,0 +1,15 @@
+# 大文件与产物一律不入库（只保留代码）
+__pycache__/
+*.py[cod]
+*.pth
+*.pt
+*.map
+*.npy
+*.npz
+*.log
+results/
+logs/
+.maps_audit/
+.errmap_audit/
+.errmap/
+visualization/
