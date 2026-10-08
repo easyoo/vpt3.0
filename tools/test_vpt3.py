@@ -23,8 +23,9 @@ def main():
     ap.add_argument('--device', default='cuda:0')
     args = ap.parse_args()
 
-    sys.path.insert(0, os.path.join(HERE, 'code'))
-    mod = load_mod(os.path.join(HERE, 'code', 'main-fewshot-vpt3.py'))
+    CODE = os.path.normpath(os.path.join(HERE, '..', 'code'))   # 仓库内代码目录
+    sys.path.insert(0, CODE)
+    mod = load_mod(os.path.join(CODE, 'main-fewshot-vpt3.py'))
     from util.memorybank import MemoryBank
 
     class A: pass
