@@ -1,0 +1,6 @@
+[skip] bank 图已存在: /home/jjquan/experiment/visual/audit_mapping/.errmap_audit/toothbrush.map
+mapping-map:   0%|                    | 0/3 [00:00<?, ?it/s]mapping-map:  33%|████        | 1/3 [00:01<00:03,  1.83s/it]mapping-map:  67%|████████    | 2/3 [00:02<00:00,  1.10it/s]mapping-map: 100%|████████████| 3/3 [00:02<00:00,  1.76it/s]mapping-map: 100%|████████████| 3/3 [00:02<00:00,  1.31it/s]
+[mapping] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/toothbrush_mapping.map
+[gt] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/toothbrush_gt.map
+[meta] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/toothbrush_meta.json
+  样本数 = 42（两个分支共用同一次 DataLoader 遍历 → 顺序一致）

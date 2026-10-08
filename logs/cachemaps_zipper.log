@@ -1,0 +1,6 @@
+[skip] bank 图已存在: /home/jjquan/experiment/visual/audit_mapping/.errmap_audit/zipper.map
+mapping-map:   0%|                   | 0/10 [00:00<?, ?it/s]mapping-map:  10%|█          | 1/10 [00:01<00:12,  1.39s/it]mapping-map:  20%|██▏        | 2/10 [00:01<00:05,  1.37it/s]mapping-map:  30%|███▎       | 3/10 [00:01<00:03,  1.95it/s]mapping-map:  40%|████▍      | 4/10 [00:02<00:02,  2.43it/s]mapping-map:  50%|█████▌     | 5/10 [00:02<00:01,  2.78it/s]mapping-map:  60%|██████▌    | 6/10 [00:02<00:01,  3.11it/s]mapping-map:  70%|███████▋   | 7/10 [00:02<00:00,  3.32it/s]mapping-map:  80%|████████▊  | 8/10 [00:03<00:00,  3.50it/s]mapping-map:  90%|█████████▉ | 9/10 [00:03<00:00,  3.58it/s]mapping-map: 100%|██████████| 10/10 [00:03<00:00,  4.44it/s]mapping-map: 100%|██████████| 10/10 [00:03<00:00,  2.76it/s]
+[mapping] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/zipper_mapping.map
+[gt] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/zipper_gt.map
+[meta] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/zipper_meta.json
+  样本数 = 151（两个分支共用同一次 DataLoader 遍历 → 顺序一致）

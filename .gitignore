@@ -6,9 +6,7 @@ __pycache__/
 *.map
 *.npy
 *.npz
-*.log
 results/
-logs/
 .maps_audit/
 .errmap_audit/
 .errmap/

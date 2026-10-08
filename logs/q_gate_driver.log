@@ -1,0 +1,13 @@
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=8e8231eb-4e9c-ebff-f292-178b6259f844
+[gpu_guard] 校验通过
+[2026-10-08 11:04:33] gate / screw / 35ep
+[2026-10-08 11:08:24] gate/screw exit=0
+[2026-10-08 11:08:25] gate / hazelnut / 35ep
+[2026-10-08 11:12:54] gate/hazelnut exit=0
+[2026-10-08 11:12:54] gate / wood / 35ep
+[2026-10-08 11:17:11] gate/wood exit=0
+[2026-10-08 11:17:11] gate / capsule / 35ep
+[2026-10-08 11:20:56] gate/capsule exit=0
+[2026-10-08 11:20:56] gate / metal_nut / 35ep
+[2026-10-08 11:24:32] gate/metal_nut exit=0
+[2026-10-08 11:24:55] GATE_QUEUE_DONE

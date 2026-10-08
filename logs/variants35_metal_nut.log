@@ -1,0 +1,15 @@
+metal_nut:   0%|                      | 0/8 [00:00<?, ?it/s]metal_nut:   0%|                      | 0/8 [00:03<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/jjquan/experiment/visual/audit_mapping/probe_scale.py", line 154, in <module>
+    main()
+  File "/home/jjquan/experiment/visual/audit_mapping/probe_scale.py", line 124, in main
+    am = gk(am)
+  File "/home/jjquan/miniconda3/envs/vpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/jjquan/miniconda3/envs/vpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/jjquan/miniconda3/envs/vpt/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 554, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/jjquan/miniconda3/envs/vpt/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 549, in _conv_forward
+    return F.conv2d(
+RuntimeError: Given groups=1, weight of size [1, 1, 5, 5], expected input[16, 16, 392, 392] to have 1 channels, but got 16 channels instead
