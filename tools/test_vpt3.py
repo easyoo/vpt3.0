@@ -23,8 +23,8 @@ def main():
     ap.add_argument('--device', default='cuda:0')
     args = ap.parse_args()
 
-    sys.path.insert(0, os.path.join(HERE, 'code_test_vpt3'))
-    mod = load_mod(os.path.join(HERE, 'code_test_vpt3', 'main-fewshot-test_vpt3.py'))
+    sys.path.insert(0, os.path.join(HERE, 'code'))
+    mod = load_mod(os.path.join(HERE, 'code', 'main-fewshot-vpt3.py'))
     from util.memorybank import MemoryBank
 
     class A: pass
@@ -55,7 +55,7 @@ def main():
     for img, gt, label, _ in dl:
         err.append(torch.tensor(mb.query_batch(img.to(args.device))).unsqueeze(1).to(args.device))
     errmap = torch.cat(err, 0)
-    r = mod.evaluation_batch_test_vpt3(model, dl, args.device, errmap, raw_bank, a.fused_layer,
+    r = mod.evaluation_batch_vpt3(model, dl, args.device, errmap, raw_bank, a.fused_layer,
                                   w=args.w, scales=(1.5,), tta_flip=True)
     names = ["I-AUROC", "I-AP", "I-F1", "P-AUROC", "P-AP", "P-F1", "P-AUPRO"]
     print(f'\n[test_vpt3.0 / {args.cls}] w={args.w}: ' +
