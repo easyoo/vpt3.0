@@ -1,0 +1,10 @@
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:m4m6r3_15:pill
+[05:46:29] train pill on 0e3a7e1c (save=m4m6r3_15)
+[05:50:19] train pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=85% tag=train:m4m6r3_15:screw
+[05:50:19] train screw on 0e3a7e1c (save=m4m6r3_15)
+[05:54:03] train screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r3_15:tile
+[05:54:03] train tile on 0e3a7e1c (save=m4m6r3_15)
+[05:57:31] train tile 结束 exit=0
+[2026-10-09 05:57:31] ROTATE_TRAIN_DONE save=m4m6r3_15

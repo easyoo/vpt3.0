@@ -1,0 +1,9 @@
+vpt3.5
+# 版本冻结: 2026-10-09
+# = 训练（与原 vpt3.0 相同）：35 轮 / 4-shot / aux 合成异常；预处理 Resize(448) → CenterCrop(392)
+# + 测试（本版新口径）：Resize(448)，**不裁剪**
+# + 改善后 mapping 分支：M1 原型初始化 + M3 原型多样性正则 + M4 全局原型锚点
+#                         + M6 可学习度量头 + M7 跨图排序一致性损失
+# + 原版 MemoryBank 分支：facebook/dinov2-base 中层双 stage + faiss（4 shot × 22 增强 = 88 张）
+# + 类内 z 标准化后的加权融合：0.3·z(mapping) + 0.7·z(bank)
+# + 统一数据源：训练/两个分支共用 shot_utils 的同一份 shot 清单（换 shot 数也一致）

@@ -1,0 +1,32 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8496, 0), ('1', 8496, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 1, 0), ('1', 8456, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 8496, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 8496, 10)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 8496, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 86), ('1', 8496, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 0), ('1', 3904, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 3966, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 88), ('1', 3966, 95)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 1, 0)]），休眠 120s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:m4m6r_15:pill
+[02:39:38] train pill on 0e3a7e1c (save=m4m6r_15)
+[02:43:38] train pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r_15:screw
+[02:43:38] train screw on 0e3a7e1c (save=m4m6r_15)
+[02:47:37] train screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r_15:tile
+[02:47:37] train tile on 0e3a7e1c (save=m4m6r_15)
+[02:51:08] train tile 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r_15:toothbrush
+[02:51:08] train toothbrush on 0e3a7e1c (save=m4m6r_15)
+[02:53:09] train toothbrush 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r_15:transistor
+[02:53:09] train transistor on 0e3a7e1c (save=m4m6r_15)
+[02:57:30] train transistor 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r_15:wood
+[02:57:30] train wood on 0e3a7e1c (save=m4m6r_15)
+[03:01:42] train wood 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r_15:zipper
+[03:01:42] train zipper on 0e3a7e1c (save=m4m6r_15)
+[03:07:20] train zipper 结束 exit=0
+[2026-10-09 03:07:20] ROTATE_TRAIN_DONE save=m4m6r_15

@@ -1,0 +1,18 @@
+[2026-09-29 15:20:18] 等待 900s 后开始 control 队列
+[2026-09-29 15:35:18] control / screw / 35ep
+[2026-09-29 15:42:27] control/screw exit=0
+[2026-09-29 15:42:27] control / hazelnut / 35ep
+[2026-09-29 15:50:26] control/hazelnut exit=0
+[2026-09-29 15:50:26] control / wood / 35ep
+[2026-09-29 15:57:30] control/wood exit=0
+[2026-09-29 15:57:30] control / capsule / 35ep
+[2026-09-29 16:03:12] control/capsule exit=0
+[2026-09-29 16:03:12] control / metal_nut / 35ep
+[2026-09-29 16:07:31] control/metal_nut exit=0
+[2026-09-29 16:07:31] control-seed2 / screw / 35ep
+[2026-09-29 16:12:05] control-seed2/screw exit=0
+[2026-09-29 16:12:05] control-seed2 / hazelnut / 35ep
+[2026-09-29 16:18:18] control-seed2/hazelnut exit=0
+[2026-09-29 16:18:18] control-seed2 / metal_nut / 35ep
+[2026-09-29 16:24:17] control-seed2/metal_nut exit=0
+[2026-09-29 16:24:17] QUEUE_CONTROL_DONE

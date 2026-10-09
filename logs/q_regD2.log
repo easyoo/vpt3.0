@@ -1,0 +1,14 @@
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:regD2:leather
+[04:26:11] train leather on 0e3a7e1c (save=regD2)
+[04:31:47] train leather 结束 exit=0
+[pick_gpu] 有高优先级任务在等卡（评估），本轮让路：休眠 120s
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3906, 100), ('1', 10587, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 1, 0), ('1', 10587, 4)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 1, 0), ('1', 10507, 100)]），休眠 120s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:regD2:pill
+[04:39:48] train pill on 0e3a7e1c (save=regD2)
+[04:43:52] train pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:regD2:zipper
+[04:43:52] train zipper on 0e3a7e1c (save=regD2)
+[04:49:33] train zipper 结束 exit=0
+[2026-10-09 04:49:33] ROTATE_TRAIN_DONE save=regD2

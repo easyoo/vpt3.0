@@ -1,0 +1,42 @@
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=0e3a7e1c-105c-997d-921f-b4247b4dc822
+[gpu_guard] 校验通过
+=== mapping_only ===
+
+[mapping_only] 15 类平均: I-AUROC=0.9417  I-AP=0.9580  I-F1=0.9424  P-AUROC=0.9115  P-AP=0.4296  P-F1=0.4732  P-AUPRO=0.8526
+=== bank_only ===
+
+[bank_only] 15 类平均: I-AUROC=0.9803  I-AP=0.9898  I-F1=0.9721  P-AUROC=0.9666  P-AP=0.6368  P-F1=0.6392  P-AUPRO=0.9327
+=== sum ===
+
+[sum] 15 类平均: I-AUROC=0.9745  I-AP=0.9773  I-F1=0.9650  P-AUROC=0.9664  P-AP=0.5591  P-F1=0.5996  P-AUPRO=0.9294
+=== prod ===
+
+[prod] 15 类平均: I-AUROC=0.9512  I-AP=0.9638  I-F1=0.9472  P-AUROC=0.9016  P-AP=0.4856  P-F1=0.5231  P-AUPRO=0.8625
+=== max ===
+
+[max] 15 类平均: I-AUROC=0.9796  I-AP=0.9883  I-F1=0.9721  P-AUROC=0.9662  P-AP=0.6037  P-F1=0.6326  P-AUPRO=0.9315
+=== zsum ===
+
+[zsum] 15 类平均: I-AUROC=0.9690  I-AP=0.9714  I-F1=0.9625  P-AUROC=0.9667  P-AP=0.5419  P-F1=0.5931  P-AUPRO=0.9314
+=== zprod ===
+
+[zprod] 15 类平均: I-AUROC=0.9367  I-AP=0.9617  I-F1=0.9365  P-AUROC=0.8289  P-AP=0.4742  P-F1=0.5348  P-AUPRO=0.7965
+=== zmax ===
+
+[zmax] 15 类平均: I-AUROC=0.9696  I-AP=0.9717  I-F1=0.9641  P-AUROC=0.9652  P-AP=0.5418  P-F1=0.6073  P-AUPRO=0.9303
+=== mm_sum ===
+
+[mm_sum] 15 类平均: I-AUROC=0.9750  I-AP=0.9777  I-F1=0.9649  P-AUROC=0.9668  P-AP=0.5758  P-F1=0.6120  P-AUPRO=0.9314
+=== mm_prod ===
+
+[mm_prod] 15 类平均: I-AUROC=0.9517  I-AP=0.9641  I-F1=0.9476  P-AUROC=0.8998  P-AP=0.4902  P-F1=0.5270  P-AUPRO=0.8614
+=== mm_max ===
+
+[mm_max] 15 类平均: I-AUROC=0.9798  I-AP=0.9888  I-F1=0.9721  P-AUROC=0.9668  P-AP=0.6351  P-F1=0.6388  P-AUPRO=0.9332
+=== rank_sum ===
+
+[rank_sum] 15 类平均: I-AUROC=0.9649  I-AP=0.9749  I-F1=0.9565  P-AUROC=0.9648  P-AP=0.5825  P-F1=0.5861  P-AUPRO=0.9204
+=== rank_prod ===
+
+[rank_prod] 15 类平均: I-AUROC=0.9647  I-AP=0.9748  I-F1=0.9559  P-AUROC=0.9636  P-AP=0.5774  P-F1=0.5852  P-AUPRO=0.9210
+=== wsum:0.3 ===

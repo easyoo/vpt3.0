@@ -1,0 +1,120 @@
+[bank-nocrop448] transistor: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3826.07it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/7 [00:00<?, ?it/s]bank448:  14%|██▎             | 1/7 [00:59<05:58, 59.83s/it]bank448:  29%|████▌           | 2/7 [01:57<04:53, 58.65s/it]bank448:  43%|██████▊         | 3/7 [02:55<03:52, 58.15s/it]bank448:  57%|█████████▏      | 4/7 [03:51<02:52, 57.42s/it]bank448:  71%|███████████▍    | 5/7 [04:47<01:54, 57.02s/it]bank448:  86%|█████████████▋  | 6/7 [05:44<00:56, 56.94s/it]bank448: 100%|████████████████| 7/7 [05:58<00:00, 42.95s/it]bank448: 100%|████████████████| 7/7 [05:58<00:00, 51.26s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/transistor.map shape=(100, 1, 448, 448)
+[bank-nocrop448] bottle: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3613.18it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/6 [00:00<?, ?it/s]bank448:  17%|██▋             | 1/6 [00:59<04:55, 59.11s/it]bank448:  33%|█████▎          | 2/6 [01:58<03:56, 59.01s/it]bank448:  50%|████████        | 3/6 [02:54<02:53, 57.90s/it]bank448:  67%|██████████▋     | 4/6 [03:49<01:53, 56.90s/it][bank-nocrop448] metal_nut: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3929.59it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/8 [00:00<?, ?it/s]bank448:  83%|█████████████▎  | 5/6 [04:49<00:57, 57.76s/it]bank448:  12%|██              | 1/8 [01:00<07:03, 60.44s/it]bank448: 100%|████████████████| 6/6 [05:00<00:00, 41.80s/it]bank448: 100%|████████████████| 6/6 [05:00<00:00, 50.03s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/bottle.map shape=(83, 1, 448, 448)
+[bank-nocrop448] cable: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4070.44it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/10 [00:00<?, ?it/s]bank448:  25%|████            | 2/8 [01:59<05:56, 59.34s/it]bank448:  10%|█▌             | 1/10 [00:57<08:40, 57.88s/it]bank448:  38%|██████          | 3/8 [02:57<04:55, 59.14s/it]bank448:  20%|███            | 2/10 [01:55<07:43, 57.99s/it]bank448:  50%|████████        | 4/8 [03:54<03:51, 57.96s/it]bank448:  30%|████▌          | 3/10 [02:52<06:42, 57.44s/it]bank448:  62%|██████████      | 5/8 [04:50<02:52, 57.59s/it]bank448:  40%|██████         | 4/10 [03:48<05:40, 56.78s/it]bank448:  75%|████████████    | 6/8 [05:46<01:54, 57.04s/it]bank448:  50%|███████▌       | 5/10 [04:45<04:45, 57.04s/it]bank448:  88%|██████████████  | 7/8 [06:43<00:56, 56.98s/it]bank448: 100%|████████████████| 8/8 [06:54<00:00, 42.21s/it]bank448: 100%|████████████████| 8/8 [06:54<00:00, 51.81s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/metal_nut.map shape=(115, 1, 448, 448)
+bank448:  60%|█████████      | 6/10 [05:41<03:46, 56.66s/it][bank-nocrop448] pill: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3723.48it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/11 [00:00<?, ?it/s]bank448:  70%|██████████▌    | 7/10 [06:39<02:50, 56.93s/it]bank448:   9%|█▎             | 1/11 [00:59<09:52, 59.29s/it]bank448:  80%|████████████   | 8/10 [07:34<01:52, 56.40s/it]bank448:  18%|██▋            | 2/11 [01:56<08:43, 58.12s/it]bank448:  90%|█████████████▌ | 9/10 [08:30<00:56, 56.30s/it]bank448:  27%|████           | 3/11 [02:54<07:42, 57.81s/it]bank448: 100%|██████████████| 10/10 [08:52<00:00, 45.49s/it]bank448: 100%|██████████████| 10/10 [08:52<00:00, 53.21s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/cable.map shape=(150, 1, 448, 448)
+[bank-nocrop448] capsule: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3818.62it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/9 [00:00<?, ?it/s]bank448:  36%|█████▍         | 4/11 [03:50<06:41, 57.38s/it]bank448:  11%|█▊              | 1/9 [00:58<07:47, 58.45s/it]bank448:  45%|██████▊        | 5/11 [04:46<05:40, 56.78s/it]bank448:  22%|███▌            | 2/9 [01:55<06:42, 57.50s/it]bank448:  55%|████████▏      | 6/11 [05:43<04:43, 56.78s/it]bank448:  33%|█████▎          | 3/9 [02:52<05:42, 57.14s/it]bank448:  64%|█████████▌     | 7/11 [06:40<03:47, 56.85s/it]bank448:  44%|███████         | 4/9 [03:48<04:43, 56.76s/it]bank448:  73%|██████████▉    | 8/11 [07:37<02:51, 57.06s/it]bank448:  56%|████████▉       | 5/9 [04:44<03:46, 56.67s/it]bank448:  82%|████████████▎  | 9/11 [08:35<01:54, 57.20s/it]bank448:  67%|██████████▋     | 6/9 [05:40<02:49, 56.40s/it]bank448:  91%|████████████▋ | 10/11 [09:31<00:57, 57.02s/it]bank448:  78%|████████████▍   | 7/9 [06:37<01:52, 56.49s/it]bank448: 100%|██████████████| 11/11 [09:56<00:00, 47.20s/it]bank448: 100%|██████████████| 11/11 [09:56<00:00, 54.26s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/pill.map shape=(167, 1, 448, 448)
+[bank-nocrop448] screw: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4193.68it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/10 [00:00<?, ?it/s]bank448:  89%|██████████████▏ | 8/9 [07:33<00:56, 56.33s/it]bank448: 100%|████████████████| 9/9 [07:47<00:00, 43.07s/it]bank448: 100%|████████████████| 9/9 [07:47<00:00, 51.91s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/capsule.map shape=(132, 1, 448, 448)
+[bank-nocrop448] carpet: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]bank448:  10%|█▌             | 1/10 [00:58<08:46, 58.45s/it]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 5673.17it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/8 [00:00<?, ?it/s]bank448:  20%|███            | 2/10 [01:58<07:53, 59.22s/it]bank448:  12%|██              | 1/8 [01:01<07:10, 61.43s/it]bank448:  30%|████▌          | 3/10 [02:55<06:47, 58.27s/it]bank448:  25%|████            | 2/8 [01:59<05:56, 59.39s/it]bank448:  40%|██████         | 4/10 [03:53<05:49, 58.20s/it]bank448:  38%|██████          | 3/8 [02:59<04:58, 59.70s/it]bank448:  50%|███████▌       | 5/10 [04:53<04:55, 59.04s/it]bank448:  50%|████████        | 4/8 [03:58<03:58, 59.64s/it]bank448:  60%|█████████      | 6/10 [05:53<03:57, 59.35s/it]bank448:  62%|██████████      | 5/8 [04:54<02:54, 58.32s/it]bank448:  75%|████████████    | 6/8 [05:50<01:54, 57.41s/it]bank448:  70%|██████████▌    | 7/10 [06:53<02:58, 59.45s/it]bank448:  88%|██████████████  | 7/8 [06:46<00:56, 56.75s/it]bank448:  80%|████████████   | 8/10 [07:52<01:58, 59.22s/it]bank448: 100%|████████████████| 8/8 [07:03<00:00, 44.36s/it]bank448: 100%|████████████████| 8/8 [07:03<00:00, 52.99s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/carpet.map shape=(117, 1, 448, 448)
+[bank-nocrop448] grid: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4135.90it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/5 [00:00<?, ?it/s]bank448:  90%|█████████████▌ | 9/10 [08:51<00:59, 59.37s/it]bank448:  20%|███▏            | 1/5 [00:57<03:49, 57.30s/it]bank448: 100%|██████████████| 10/10 [09:50<00:00, 59.12s/it]bank448: 100%|██████████████| 10/10 [09:50<00:00, 59.07s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/screw.map shape=(160, 1, 448, 448)
+[bank-nocrop448] tile: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3347.51it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/8 [00:00<?, ?it/s]bank448:  40%|██████▍         | 2/5 [01:55<02:54, 58.05s/it]bank448:  12%|██              | 1/8 [01:02<07:14, 62.07s/it]bank448:  60%|█████████▌      | 3/5 [02:58<01:59, 59.95s/it]bank448:  25%|████            | 2/8 [02:04<06:15, 62.57s/it]bank448:  80%|████████████▊   | 4/5 [04:00<01:00, 60.93s/it]bank448:  38%|██████          | 3/8 [03:08<05:14, 62.97s/it]bank448: 100%|████████████████| 5/5 [04:56<00:00, 58.97s/it]bank448: 100%|████████████████| 5/5 [04:56<00:00, 59.22s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/grid.map shape=(78, 1, 448, 448)
+[bank-nocrop448] hazelnut: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4275.30it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/7 [00:00<?, ?it/s]bank448:  50%|████████        | 4/8 [04:09<04:09, 62.28s/it]bank448:  14%|██▎             | 1/7 [01:03<06:23, 63.87s/it]bank448:  62%|██████████      | 5/8 [05:13<03:08, 62.75s/it]bank448:  29%|████▌           | 2/7 [02:09<05:23, 64.64s/it]bank448:  75%|████████████    | 6/8 [06:16<02:05, 62.83s/it]bank448:  43%|██████▊         | 3/7 [03:12<04:16, 64.02s/it]bank448:  88%|██████████████  | 7/8 [07:17<01:02, 62.16s/it]bank448: 100%|████████████████| 8/8 [07:35<00:00, 48.38s/it]bank448: 100%|████████████████| 8/8 [07:35<00:00, 56.99s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/tile.map shape=(117, 1, 448, 448)
+bank448:  57%|█████████▏      | 4/7 [04:11<03:06, 62.26s/it][bank-nocrop448] toothbrush: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 5106.24it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/3 [00:00<?, ?it/s]bank448:  71%|███████████▍    | 5/7 [05:13<02:04, 62.03s/it]bank448:  33%|█████▎          | 1/3 [01:01<02:02, 61.08s/it]bank448:  86%|█████████████▋  | 6/7 [06:13<01:01, 61.37s/it]bank448:  67%|██████████▋     | 2/3 [02:01<01:00, 60.65s/it]bank448: 100%|████████████████| 3/3 [02:38<00:00, 49.67s/it]bank448: 100%|████████████████| 3/3 [02:38<00:00, 52.70s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/toothbrush.map shape=(42, 1, 448, 448)
+bank448: 100%|████████████████| 7/7 [07:07<00:00, 59.03s/it]bank448: 100%|████████████████| 7/7 [07:07<00:00, 61.13s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/hazelnut.map shape=(110, 1, 448, 448)
+[bank-nocrop448] wood: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3962.79it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/5 [00:00<?, ?it/s][bank-nocrop448] leather: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4100.04it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                        | 0/8 [00:00<?, ?it/s]bank448:  20%|███▏            | 1/5 [00:57<03:51, 57.99s/it]bank448:  12%|██              | 1/8 [01:01<07:09, 61.31s/it]bank448:  40%|██████▍         | 2/5 [01:55<02:53, 57.80s/it]bank448:  25%|████            | 2/8 [02:01<06:04, 60.76s/it]bank448:  60%|█████████▌      | 3/5 [02:52<01:54, 57.46s/it]bank448:  38%|██████          | 3/8 [03:00<04:59, 59.98s/it]bank448:  80%|████████████▊   | 4/5 [03:49<00:57, 57.17s/it]bank448:  50%|████████        | 4/8 [03:59<03:58, 59.58s/it]bank448: 100%|████████████████| 5/5 [04:41<00:00, 55.35s/it]bank448: 100%|████████████████| 5/5 [04:41<00:00, 56.32s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/wood.map shape=(79, 1, 448, 448)
+[bank-nocrop448] zipper: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3793.19it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/10 [00:00<?, ?it/s]bank448:  62%|██████████      | 5/8 [04:59<02:58, 59.51s/it]bank448:  10%|█▌             | 1/10 [00:57<08:41, 57.98s/it]bank448:  75%|████████████    | 6/8 [05:59<01:59, 59.80s/it]bank448:  20%|███            | 2/10 [01:57<07:53, 59.17s/it]bank448:  88%|██████████████  | 7/8 [06:59<00:59, 59.94s/it]bank448: 100%|████████████████| 8/8 [07:44<00:00, 55.08s/it]bank448: 100%|████████████████| 8/8 [07:44<00:00, 58.06s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/leather.map shape=(124, 1, 448, 448)
+bank448:  30%|████▌          | 3/10 [02:58<06:57, 59.57s/it]bank448:  40%|██████         | 4/10 [03:56<05:54, 59.13s/it]bank448:  50%|███████▌       | 5/10 [04:55<04:56, 59.23s/it]bank448:  60%|█████████      | 6/10 [05:54<03:56, 59.17s/it]bank448:  70%|██████████▌    | 7/10 [06:53<02:56, 58.82s/it]bank448:  80%|████████████   | 8/10 [07:53<01:58, 59.28s/it]bank448:  90%|█████████████▌ | 9/10 [08:51<00:59, 59.00s/it]bank448: 100%|██████████████| 10/10 [09:16<00:00, 48.46s/it]bank448: 100%|██████████████| 10/10 [09:16<00:00, 55.66s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448/zipper.map shape=(151, 1, 448, 448)

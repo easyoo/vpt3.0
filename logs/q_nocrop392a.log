@@ -1,0 +1,5 @@
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:nocrop392a:transistor
+[20:40:11] train transistor on 0e3a7e1c (save=nocrop392a)
+Terminated
+[20:40:48] train transistor 结束 exit=143
+[20:40:48] 严重错误：transistor 训练失败（exit=143），中止本轮

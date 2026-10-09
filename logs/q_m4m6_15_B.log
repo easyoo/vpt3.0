@@ -1,0 +1,8 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 0), ('1', 3186, 55)]），休眠 120s 后重试
+[pick_gpu] 选中 共享卡（已用 3186MiB / 共 24576MiB，剩余 21390MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=89% tag=train:m4m6_15:pill
+[01:45:20] train pill on 3bf0407c (save=m4m6_15)
+[01:51:02] train pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3186MiB / 共 24576MiB，剩余 21390MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6_15:screw
+[01:51:02] train screw on 3bf0407c (save=m4m6_15)
+[01:54:09] train screw 结束 exit=1
+[01:54:09] 严重错误：screw 训练失败（exit=1），中止本轮

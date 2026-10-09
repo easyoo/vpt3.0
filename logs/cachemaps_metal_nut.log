@@ -1,0 +1,6 @@
+[skip] bank 图已存在: /home/jjquan/experiment/visual/audit_mapping/.errmap_audit/metal_nut.map
+mapping-map:   0%|                    | 0/8 [00:00<?, ?it/s]mapping-map:  12%|█▌          | 1/8 [00:01<00:09,  1.34s/it]mapping-map:  25%|███         | 2/8 [00:01<00:04,  1.42it/s]mapping-map:  38%|████▌       | 3/8 [00:01<00:02,  2.00it/s]mapping-map:  50%|██████      | 4/8 [00:02<00:01,  2.48it/s]mapping-map:  62%|███████▌    | 5/8 [00:02<00:01,  2.84it/s]mapping-map:  75%|█████████   | 6/8 [00:02<00:00,  3.14it/s]mapping-map:  88%|██████████▌ | 7/8 [00:02<00:00,  3.36it/s]mapping-map: 100%|████████████| 8/8 [00:02<00:00,  2.67it/s]
+[mapping] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/metal_nut_mapping.map
+[gt] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/metal_nut_gt.map
+[meta] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/metal_nut_meta.json
+  样本数 = 115（两个分支共用同一次 DataLoader 遍历 → 顺序一致）

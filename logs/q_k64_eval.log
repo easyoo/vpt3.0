@@ -1,0 +1,16 @@
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=1MiB util=0%
+[21:57:08] eval transistor on 3bf0407c
+[21:57:33] transistor exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=338MiB util=14%
+[21:57:34] eval screw on 0e3a7e1c
+[21:58:08] screw exit=0
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=1MiB util=0%
+[21:58:08] eval capsule on 3bf0407c
+[21:58:37] capsule exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=338MiB util=0%
+[21:58:38] eval metal_nut on 0e3a7e1c
+[21:59:03] metal_nut exit=0
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=1MiB util=0%
+[21:59:03] eval wood on 3bf0407c
+[21:59:25] wood exit=0
+[2026-10-08 21:59:25] ROTATE_EVAL_DONE

@@ -1,0 +1,16 @@
+# 大文件与产物一律不入库（只保留代码 + 文本日志）
+__pycache__/
+*.py[cod]
+*.pth
+*.pt
+*.map
+*.npy
+*.npz
+results/
+.maps_audit/
+.errmap_audit/
+.maps_nocrop*/
+.errmap_nocrop*/
+.both_nocrop*/
+.shots/
+visualization/

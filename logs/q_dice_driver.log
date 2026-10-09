@@ -1,0 +1,13 @@
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=0e3a7e1c-105c-997d-921f-b4247b4dc822
+[gpu_guard] 校验通过
+[2026-10-08 10:56:33] dice / screw / 35ep
+[2026-10-08 11:01:11] dice/screw exit=0
+[2026-10-08 11:01:11] dice / hazelnut / 35ep
+[2026-10-08 11:06:23] dice/hazelnut exit=0
+[2026-10-08 11:06:23] dice / wood / 35ep
+[2026-10-08 11:12:05] dice/wood exit=0
+[2026-10-08 11:12:05] dice / capsule / 35ep
+[2026-10-08 11:15:49] dice/capsule exit=0
+[2026-10-08 11:15:49] dice / metal_nut / 35ep
+[2026-10-08 11:19:24] dice/metal_nut exit=0
+[2026-10-08 11:24:51] DICE_QUEUE_DONE

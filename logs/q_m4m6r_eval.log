@@ -1,0 +1,21 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8496, 85), ('1', 8496, 0)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8496, 12), ('1', 8496, 100)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8496, 0), ('1', 8496, 93)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8496, 86), ('1', 8496, 100)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8496, 100), ('1', 8496, 100)]），休眠 15s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6r:transistor
+[02:10:32] eval transistor on 0e3a7e1c (save=m4m6r tag=vpt4m6r)
+[02:10:58] eval transistor 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=50% tag=eval:m4m6r:screw
+[02:10:58] eval screw on 0e3a7e1c (save=m4m6r tag=vpt4m6r)
+[02:11:32] eval screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=86% tag=eval:m4m6r:capsule
+[02:11:32] eval capsule on 0e3a7e1c (save=m4m6r tag=vpt4m6r)
+[02:12:02] eval capsule 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=94% tag=eval:m4m6r:metal_nut
+[02:12:03] eval metal_nut on 0e3a7e1c (save=m4m6r tag=vpt4m6r)
+[02:12:29] eval metal_nut 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=77% tag=eval:m4m6r:wood
+[02:12:30] eval wood on 0e3a7e1c (save=m4m6r tag=vpt4m6r)
+[02:12:53] eval wood 结束 exit=0
+[2026-10-09 02:12:53] ROTATE_EVAL_DONE save=m4m6r

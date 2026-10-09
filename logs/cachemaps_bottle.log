@@ -1,0 +1,6 @@
+[skip] bank 图已存在: /home/jjquan/experiment/visual/audit_mapping/.errmap_audit/bottle.map
+mapping-map:   0%|                    | 0/6 [00:00<?, ?it/s]mapping-map:  17%|██          | 1/6 [00:01<00:07,  1.44s/it]mapping-map:  33%|████        | 2/6 [00:01<00:02,  1.34it/s]mapping-map:  50%|██████      | 3/6 [00:01<00:01,  1.92it/s]mapping-map:  67%|████████    | 4/6 [00:02<00:00,  2.41it/s]mapping-map:  83%|██████████  | 5/6 [00:02<00:00,  2.77it/s]mapping-map: 100%|████████████| 6/6 [00:02<00:00,  2.33it/s]
+[mapping] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/bottle_mapping.map
+[gt] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/bottle_gt.map
+[meta] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/bottle_meta.json
+  样本数 = 83（两个分支共用同一次 DataLoader 遍历 → 顺序一致）

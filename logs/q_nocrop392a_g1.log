@@ -1,0 +1,7 @@
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=train:nocrop392a:transistor
+[20:40:55] train transistor on 3bf0407c (save=nocrop392a)
+[20:45:14] train transistor 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:nocrop392a:tile
+[20:45:14] train tile on 3bf0407c (save=nocrop392a)
+[20:48:50] train tile 结束 exit=0
+[2026-10-09 20:48:50] ROTATE_TRAIN_DONE save=nocrop392a
