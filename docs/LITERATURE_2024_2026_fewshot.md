@@ -298,3 +298,30 @@ Hyperbolic Defect Feature Synthesis（CVPR'26，少样本缺陷分类）、Dual 
 * 三种"官方族"实现（adeval / MVTec 官方 / SubspaceAD）差异 **≤0.0002**；
 * PromptAD 与 DictAS 的"FPR 重标定"变体系统性低 **约 0.0015**（同口径下可预期）；
 * ⇒ 我们用 adeval 报的 `P-AUPRO` 与文献 `PRO` **可直接并排比较**（误差量级 ≤0.2 个点）。
+
+---
+
+# 附 3：vpt3.5 正式口径（训练裁剪 392 / **测试不裁剪 resize 448**）的对比数字
+
+> 前文（表 0–表 4）用的是 **vpt4.0 / 测试也裁剪 392** 的口径。vpt3.5 交付口径改为
+> **测试不裁剪 448**，因此这里补一组同设置对照，供与顶会方法并排比较。
+> 完整的论文对比表见仓库 `COMPARISON.md`，本版性能明细见 `PERFORMANCE.md`。
+
+## 附3.1 vpt3.5 三支（15 类平均，官方 adeval）
+| 分支 | I-AUROC | I-AP | I-F1 | P-AUROC | P-AP | P-F1 | P-AUPRO |
+|---|---|---|---|---|---|---|---|
+| mapping-only | 97.11 | 98.40 | 96.84 | 96.51 | 56.80 | 59.86 | 92.46 (AUPRO) |
+| bank-only | 97.82 | 98.84 | 97.05 | 97.21 | 63.15 | 63.68 | 94.52 (AUPRO) |
+| **mapping ⊕ bank（0.3/0.7）** | **98.06** | **99.02** | **97.58** | **97.81** | **65.57** | **65.84** | **95.31 (AUPRO)** |
+
+## 附3.2 与 2024–2026 顶会最好值对照（4-shot / MVTec / 单类）
+| 年份 | 最好 I-AUROC | 最好 P-AUROC | 最好 PRO/AUPRO | 代表方法 |
+|---|---|---|---|---|
+| 2024 | 96.6 | 96.5 | 90.5 | PromptAD（CVPR'24）/ AnomalyGPT（AAAI'24）/ FOCT（MM'24） |
+| 2025 | 97.7 | 97.2 | 93.4 | AnomalyDINO（WACV'25）/ KAG-prompt（AAAI'25）/ IIPAD |
+| 2026 | 98.0 | 97.9 | 95.1 | SubspaceAD（CVPR'26）/ FoundAD（ICLR'26） |
+| **vpt3.5（本项目）** | **98.06** | **97.81** | **95.31** | 改善型 mapping ⊕ 原版 MemoryBank |
+
+* vpt3.5 在 I-AUROC / PRO 上高于表内所有单独方法；P-AUROC 与 SubspaceAD（97.9）同档（本版 97.81）；
+* 口径差异（分辨率 240–672、是否 training-free、PRO 实现细节）决定**只能看量级、不能精确排名**，
+  详见 `COMPARISON.md` 的"口径差异声明"；本仓库 `P-AUPRO` 与文献 `PRO@30%` 已做多方实现互验（差 ≤0.0002）。

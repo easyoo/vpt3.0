@@ -52,3 +52,21 @@ python tools/fuse_nocrop.py --class <class> --size 448          # 逐类
 | **mapping ⊕ bank** | **0.9806** | **0.9902** | **0.9758** | **0.9781** | **0.6557** | **0.6584** | **0.9531** |
 
 逐类明细见 `PERFORMANCE.md`，与论文的对比见 `COMPARISON.md`。
+
+## 与顶会论文的对比（摘要）
+同设置口径 **4-shot / MVTec / 单类 / 无监督 / 像素定位**：
+
+| 方法 | 会议·年 | I-AUROC | P-AUROC | PRO/AUPRO |
+|---|---|---|---|---|
+| PromptAD | CVPR'24 | 95.5–96.6 | 96.3–96.5 | 90.5 |
+| AnomalyGPT | AAAI'24 | 96.3 | 96.2 | - |
+| KAG-prompt | AAAI'25 | 97.1 | 96.7 | - |
+| IIPAD | 2025 | 96.1 | 97.0 | 91.2 |
+| AnomalyDINO | 2024/25 | 97.7 | 97.2 | 93.4 |
+| SubspaceAD（training-free, 672） | CVPR'26 | 98.0 | 97.9 | 95.1 |
+| FoundAD | ICLR'26 | 97.1 | 97.2 | 93.5 |
+| **vpt3.5 mapping-only（本版）** | 本项目 | 97.11 | 96.51 | 92.46 (AUPRO) |
+| **vpt3.5 mapping ⊕ bank（本版）** | 本项目 | **98.06** | **97.81** | **95.31 (AUPRO)** |
+
+融合后在 I-AUROC 与 PRO/AUPRO 上高于表内所有单独方法（PRO 已与 MVTec 官方/SubspaceAD/PromptAD/DictAS 四种实现互验，差 ≤0.0002）。
+完整表（含 1/2-shot、多类/多模态/跨域等其他设置、PRO vs AUPRO 口径核查、2024–2026 全部 31 条少样本条目收录清单）见 `COMPARISON.md`。

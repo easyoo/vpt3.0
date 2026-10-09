@@ -6,6 +6,17 @@
 
 ---
 
+## 表 0 · 本项目 vpt3.5（基准行，便于与下面各表对齐）
+
+| 分支 | 分辨率·裁剪 | I-AUROC | I-AP | I-F1 | P-AUROC | P-AP | P-F1 | PRO/AUPRO |
+|---|---|---|---|---|---|---|---|---|
+| mapping-only（M1+M3+M4+M6+M7） | 448·测试不裁 | 97.11 | 98.40 | 96.84 | 96.51 | 56.80 | 59.86 | 92.46 (AUPRO) |
+| bank-only（原版 MemoryBank） | 448·测试不裁 | 97.82 | 98.84 | 97.05 | 97.21 | 63.15 | 63.68 | 94.52 (AUPRO) |
+| **mapping ⊕ bank（类内 z 0.3/0.7）** | 448·测试不裁 | **98.06** | **99.02** | **97.58** | **97.81** | **65.57** | **65.84** | **95.31 (AUPRO)** |
+| 参考：vpt3.0 mapping 基线 | 392·裁剪 | 95.86 | 97.19 | 95.59 | 96.40 | 56.50 | 59.50 | 91.07 (AUPRO) |
+
+---
+
 ## 表 1 · 4-shot / MVTec / 单类 / 无监督（与本项目同设置，主表）
 
 | 方法 | 会议·年 | 分辨率·裁剪 | I-AUROC | I-AP | I-F1 | P-AUROC | P-AP | P-F1 | PRO/AUPRO |
@@ -36,6 +47,21 @@
 * **P-AUROC**：mapping-only 96.51 略低于 2025–26 区间上沿；融合后 **97.81** 追平/略超 SubspaceAD 的 97.9 量级。
 * **PRO/AUPRO**：融合后 **95.31** 与 SubspaceAD（95.1）同档，高于 AnomalyDINO（93.4）与 FoundAD（93.5）。
 * **P-AP / P-F1 / I-F1 / I-AP**：上表多数论文**不报告**，本版全部给出（`-` 表示论文未报告）。
+
+### 分年最好值 vs 本项目（4-shot / MVTec / 单类）
+
+| 年份 | 该年最好 I-AUROC | 该年最好 P-AUROC | 该年最好 PRO/AUPRO | 代表方法 |
+|---|---|---|---|---|
+| 2024 | 96.6 | 96.5 | 90.5 | PromptAD（CVPR'24）、AnomalyGPT（AAAI'24）、FOCT（MM'24） |
+| 2025 | 97.7 | 97.2 | 93.4 | AnomalyDINO（WACV'25）、KAG-prompt（AAAI'25）、IIPAD |
+| 2026 | 98.0 | 97.9 | 95.1 | SubspaceAD（CVPR'26）、FoundAD（ICLR'26） |
+| **vpt3.5（本项目）** | **98.06** | **97.81** | **95.31** | 改善型 mapping ⊕ 原版 MemoryBank |
+
+* 对 2024 年最好结果（96.6 / 96.5 / 90.5）本方法**三项均领先**：+1.46 / +1.31 / +4.81；
+* 对 2025 年最好结果（97.7 / 97.2 / 93.4）本方法**三项均领先**：+0.36 / +0.61 / +1.91；
+* 对 2026 年最好的 SubspaceAD（training-free，672 分辨率），本方法 I-AUROC 高 0.06、P-AUROC 低 0.09、
+  AUPRO 高 0.21 —— **基本同档，互有胜负**；
+* 需要注意 SubspaceAD 是 training-free（零训练），本方法需要 35 轮训练 + 合成异常，**代价不同**。
 
 ---
 
@@ -73,8 +99,66 @@
 | SeaS / DualAnoDiff / AnomalyDiffusion / MAGIC / GroundingAnomaly 等 | 2024–26 | 异常**生成**方法 | - | - | - | - | -（报 FID/IS 或下游增量） |
 | TailedCore / One-to-Normal | CVPR'25 / NeurIPS'24 | 长尾噪声 / 个性化 | - | - | - | - | - |
 | MVREC / Hyperbolic Defect Feat. Synth. | AAAI'25 / CVPR'26 | 少样本缺陷**分类** | - | - | - | - | - |
+| One-for-All（Instance-Induced Prompt Learning） | ICLR'25 | 多类 instance-induced prompt | - | - | - | - | - |
+| Dinomaly2 | arXiv'25 | 多类/多视图/多模态/少样本统一框架 | - | - | - | - | - |
+| FIND（normal-only multi-modal） | ICCV'25 | 少样本**多模态**（仅正常样本） | - | - | - | - | - |
+| ReMP-AD（retrieval-enhanced multi-modal prompt） | ICCV'25 | 少样本**多模态** | - | - | - | - | - |
+| G2SF | ICCV'25 | MVTec-**3D** | - | - | - | - | - |
+| Remove the Ambiguity（Crossmodal Feature Replacers） | ICML'26 | 少样本**多模态** AD | - | - | - | - | - |
+| Defect Cue-Preserved Structural Feature Refinement | CVPR'26 | 结构特征精修（少样本 AD） | - | - | - | - | - |
+| Dual Distillation | ICLR'26 | 少样本蒸馏 | - | - | - | - | - |
+| AnoGen（anomaly-driven generation） | ECCV'24 | 少样本异常**生成** | - | - | - | - | - |
+| PSAD（few-shot part segmentation） | AAAI'24 | MVTec-**LOCO** 逻辑异常 | - | - | - | - | - |
+| SOFS（small object few-shot seg.） | 2024 | 小目标少样本分割（非 MVTec） | - | - | - | - | - |
+| SEM-CLIP | 2025 | SEM 纳米缺陷（非 MVTec） | - | - | - | - | - |
 
 > `-` 有两种含义：①论文未报告该指标；②论文评测协议不同（多类/多模态/分类），数值不可与表 1 比较。
+
+---
+
+## 表 4 · 2024–2026 "少样本"顶会条目的完整收录清单（来源：awesome-industrial-anomaly-detection）
+
+共筛出 **31 条**少样本相关条目（ECCV / ICML / CVPR / ICLR / AAAI / NeurIPS / ICCV / MM / WACV），逐条给出"能否与表 1 直接对齐"：
+
+| 归属 | 条目 | 能否与表 1 直接比较 |
+|---|---|---|
+| CVPR'26 | SubspaceAD（training-free 少样本） | ✅ 已进表 1（4-shot，672，不裁） |
+| ICLR'26 | FoundAD（foundation encoder 少样本） | ✅ 已进表 1（4-shot，518，不裁） |
+| CVPR'26 | FastRef（Fast Prototype Refinement） | ✅ 已进表 1（加到 WinCLIP 上） |
+| AAAI'25 | KAG-prompt（kernel-aware graph prompt） | ✅ 已进表 1（4-shot） |
+| 2024/25 | AnomalyDINO（training-free） | ✅ 已进表 1（4-shot） |
+| 2025 | IIPAD | ✅ 已进表 1（4-shot） |
+| CVPR'24 | PromptAD（只用正常样本学 prompt） | ✅ 已进表 1（4-shot） |
+| AAAI'24 | AnomalyGPT（LVLM） | ✅ 已进表 1（4-shot） |
+| ACM MM'24 | FOCT（foreground-aware online conditional transport） | ✅ 已进表 1（4-shot） |
+| CVPR'24 | InCTRL（in-context residual learning） | ⚠ 跨数据集 in-context → 表 3 |
+| ICCV'25 | DictAS（dictionary lookup，跨类泛化） | ⚠ 1-shot / 跨类 → 表 2 + 表 3 |
+| CVPR'25 | UniVAD（training-free 跨域） | ⚠ 1-shot / 跨域 → 表 2 + 表 3 |
+| ICLR'25 | One-for-All（instance-induced prompt learning） | ⚠ 多类 → 表 3 |
+| CVPR'26 | AnoPLe / Bidirectional Multimodal Prompt Learning（多类 + 尺度感知训练） | ⚠ 多类 → 表 3 |
+| ECCV'26 | CMDS-AD（RGB+3D 双流解耦） | ⚠ MVTec 3D-AD → 表 3 |
+| AAAI'26 | CIF（hypergraph-enhanced memory，RGB+3D） | ⚠ MVTec 3D-AD → 表 3 |
+| ICCV'25 | ReMP-AD（retrieval-enhanced multi-modal prompt） | ⚠ 多模态 → 表 3 |
+| ICCV'25 | FIND（normal-only multi-modal） | ⚠ 多模态 → 表 3 |
+| ICCV'25 | G2SF | ⚠ MVTec-3D → 表 3 |
+| ICML'26 | Remove the Ambiguity（crossmodal feature replacers） | ⚠ 多模态 → 表 3 |
+| CVPR'26 | Defect Cue-Preserved Structural Feature Refinement | ⚠ 未见可对齐的 4-shot MVTec 数字 |
+| CVPR'26 | MAGIC（mask-guided anomaly inpainting） | ⚠ 生成任务 → 表 3 |
+| CVPR'26 | Hyperbolic Defect Feature Synthesis | ⚠ 缺陷分类 → 表 3 |
+| ICLR'26 | Dual Distillation for Few-Shot AD | ⚠ 未报告本表口径数字 |
+| CVPR'25 / ICCV'25 | DualAnoDiff / SeaS（少样本异常生成） | ⚠ 报 FID/IS 或下游增量 → 表 3 |
+| AAAI'24 / ECCV'26 | AnomalyDiffusion / GroundingAnomaly | ⚠ 生成任务 → 表 3 |
+| ECCV'24 | AnoGen（few-shot anomaly-driven generation） | ⚠ 生成任务 → 表 3 |
+| CVPR'25 | TailedCore（长尾+噪声少样本） | ⚠ 长尾协议 → 表 3 |
+| NeurIPS'24 | One-to-Normal（异常个性化） | ⚠ 协议不同 → 表 3 |
+| AAAI'25 / CVPR'26 | MVREC / Hyperbolic Defect Feature Synthesis | ⚠ 缺陷**分类** → 表 3 |
+| AAAI'24 | PSAD（few-shot part segmentation，逻辑异常） | ⚠ MVTec-LOCO → 表 3 |
+| 2024 / 2025 | SOFS（小目标少样本分割）/ SEM-CLIP（SEM 纳米缺陷） | ⚠ 其他数据集/任务 → 表 3 |
+| arXiv'25 | Dinomaly2（多类/多视图/多模态/少样本统一框架） | ⚠ 多类 → 表 3 |
+
+**结论**：与本项目**完全同设置**（4-shot + MVTec + 单类 + 无监督 + 像素定位）的可比条目共 **9 个**
+（SubspaceAD / FoundAD / FastRef / KAG-prompt / AnomalyDINO / IIPAD / PromptAD / AnomalyGPT / FOCT），
+其余 22 条因多类、多模态、生成、分类或换数据集而**不可直接排名**，只能作为趋势参考。
 
 ---
 
