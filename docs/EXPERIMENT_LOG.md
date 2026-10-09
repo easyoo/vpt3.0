@@ -1632,3 +1632,29 @@ Q = normalize( token_mapping( 可学习原型 ) )  ⊕  normalize( token_mapping
 
 > 说明：`code_vpt2/`、`code_norm/`、`code_gate/`、`code_dice/` 等**历史副本**里仍有各自的 shot 抽样，
 > 但它们不在当前 mapping⊕bank 主路径上（`code_vpt2` 仅被用来取 `augmentation`/`MemoryBank` 类，其抽样函数不会被调用）。
+
+## §38 【磁盘清理】删除 vpt3.5 之前所有变体的冗余权重（保留 vpt3.5 正式权重 / 指标 CSV / 日志）
+
+### 38.1 背景
+`audit_mapping/results` 累积了 421 GB 的 `*.pth`（1294 个），其中绝大多数是早已被否决的历史变体
+（M1/M13/M4/M5/M6 单点消融、regA–D2 正则扫描、dice/gate/jitter/norm/control 对照组、各版融合对照，
+以及 `m4m6r3_15` 自身 5–30 轮的中间轮次）。磁盘已用到 94%（可用 239 GB），影响后续实验。
+
+### 38.2 规则（沿用既定约定）
+* **保留**：vpt3.5 正式交付权重 `results/vpt4/m4m6r3_15/model_<cls>_35.pth`（15 类，统一 epoch 35，共 5.0 GB）；
+* **保留**：**所有** `metrics_*.csv`、`log.txt`、`report_*.md` —— 指标与日志一律不删；
+* **删除**：其余**全部** `*.pth`（vpt3.5 之前的所有变体 + `m4m6r3_15` 的 5/10/15/20/25/30 轮）。
+
+### 38.3 执行与结果
+| 项 | 值 |
+|---|---|
+| 删除前 `results/` | 423 GB（`*.pth` 1294 个 / 421 GB） |
+| 删除的文件数 | **1279** 个 `*.pth`（417 GB） |
+| 删除后 `results/` | **5.6 GB**（仅剩 15 个 335 MB 的 epoch-35 权重） |
+| `audit_mapping/` 总量 | 431 GB → **8.3 GB** |
+| 文件系统 | 可用 239 GB（94%）→ **655 GB（82%）** |
+| 保留校验 | 15 类 × `model_<cls>_35.pth` 齐全；每个被清理目录的 `metrics_*.csv` + `log.txt` 均在 ✔ |
+
+> 说明：vpt3.5 的复现只需要 epoch-35 权重 + `.maps_nocrop448_m4m6r3/` + `.errmap_nocrop448/`（异常图缓存），
+> 三者均未受影响；被删变体的指标已全部落在各目录的 CSV 与 `results/vpt4/FUSION_REPORT_*.md` 中，
+> 需要时可用 `tools/q_rotate_train.sh` 按记录的超参重训。
