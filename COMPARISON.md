@@ -65,7 +65,7 @@
 
 ---
 
-## 表 2 · 同设置的 1-shot / 2-shot（说明"4-shot 档位"的量级；本项目当前只交付 4-shot）
+## 表 2 · 同设置的 1-shot / 2-shot（本项目已交付 4-shot 与 **2-shot**；1-shot 未跑）
 
 | 方法 | 1-shot I-AUROC | 1-shot I-AP | 1-shot P-AUROC | 1-shot PRO | 2-shot I-AUROC | 2-shot I-AP | 2-shot P-AUROC | 2-shot PRO |
 |---|---|---|---|---|---|---|---|---|
@@ -80,9 +80,13 @@
 | FoundAD | 96.1 | 97.9 | 96.8 | 92.8 | 96.8 | 98.3 | 97.0 | 93.3 |
 | AnomalyGPT | 94.1 | - | 95.3 | - | 95.5 | - | 95.6 | - |
 | APRIL-GAN | 92.0 | - | 95.1 | - | 92.4 | - | 95.0 | - |
-| **vpt3.5** | - | - | - | - | - | - | - | -（当前只交付 4-shot） |
+| **vpt3.5 mapping-only（2-shot）** | - | - | - | - | **95.51** | **98.00** | **96.49** | **92.19** |
+| **vpt3.5 mapping ⊕ bank（2-shot）** | - | - | - | - | **96.18** | **98.39** | **97.53** | **94.61** |
 
 来源：SubspaceAD 表 8、KAG-prompt 表 17、FoundAD 表 9。
+本项目 2-shot 行：15 类平均、官方 adeval、训练裁剪 392 / 测试不裁剪 448；`PRO` 列即我们的 `P-AUPRO`
+（已与 MVTec 官方 / SubspaceAD 实现互验，差 ≤0.0002）；1-shot 未跑故为 `-`。
+完整对照（含名次与 shot 敏感度分析）见 [`docs/2SHOT_RESULTS.md`](docs/2SHOT_RESULTS.md)。
 
 ---
 
