@@ -1658,3 +1658,71 @@ Q = normalize( token_mapping( 可学习原型 ) )  ⊕  normalize( token_mapping
 > 说明：vpt3.5 的复现只需要 epoch-35 权重 + `.maps_nocrop448_m4m6r3/` + `.errmap_nocrop448/`（异常图缓存），
 > 三者均未受影响；被删变体的指标已全部落在各目录的 CSV 与 `results/vpt4/FUSION_REPORT_*.md` 中，
 > 需要时可用 `tools/q_rotate_train.sh` 按记录的超参重训。
+
+## §39 【新数据集】VisA 上的 1/2/4-shot 基线（vpt3.5 原版 mapping 分支）
+
+### 39.1 数据准备（新增工具，均在 `audit_mapping/`）
+| 环节 | 脚本 | 产物 |
+|---|---|---|
+| 抽样（seed=1，**1⊂2⊂4 嵌套**，只用官方 train 划分） | `visa_prepare_shots.py` | `anostyler_visa/{1,2,4}shot/shots.json` + 84 个 AnoStyler 配置 |
+| 合成（每底图 35 张，与 MVTec 同口径） | `anostyler_visa/run.sh` + `pending.py` | 420 / 840 / 1680 张图 + 掩码 |
+| VisA → MVTec 式数据根（既有管线零改动复用） | `visa_build_root.py` | `visual2/visa_prepared/`（train/good 8659、test/good 962、test/anomaly 1200、ground_truth 1200） |
+| 合成产物 → 训练用异常根 | `visa_build_anomaly_root.py` | `visual2/anomaly_samples_visa_{K}shot/visa/<cls>/src<stem>/{image,mask}` |
+| 训练 / 评估 | `q_rotate_train_visa.sh`、`eval_visa.sh` | `results/visa/vpt35_visa{1,2,4}shot/`、`logs/visa/RESULTS_visa.md` |
+
+一致性：**抽样清单 = AnoStyler 底图 = 训练 shot 清单**（12 类 × 1/2/4 全部逐项一致）。
+
+### 39.2 跑之前发现并修掉的两个真 bug（都属"数据/工程"层，不动模型）
+1. **VisA 掩码是 0/1 二值（MVTec 是 0/255）** → 管线 `gt > 0.5` 把异常掩码全判成空 →
+   adeval 的 AUPRO 除零 NaN → `AssertionError: area >= 0`，**评估直接崩**。
+   修法：数据准备层把掩码二值化重写为 0/255（`visa_build_root.write_mask_bin`）。
+2. **4-shot 只加载 35 张合成异常（应 140）** → K 张底图的产物在同一"缺陷类型"目录，
+   而 `AnoStylerGeneratedDataset(samples_per_anomaly_type=35)` 每类型只采 35 张 → 监督量退化。
+   修法：每底图一个类型目录 `src<stem>` → 每轮 K×35 张（4-shot: 8 iter/epoch）。
+
+### 39.3 结果（12 类平均，%；代码 = `code_vpt4`，md5 `08d8528b4a59`）
+| 指标 | 1-shot | 2-shot | 4-shot |
+|---|---|---|---|
+| I-AUROC | 86.24 | 84.83 | 88.99 |
+| I-AP | 86.10 | 84.47 | 89.17 |
+| I-F1 | 85.22 | 84.11 | 86.74 |
+| P-AUROC | 94.53 | 94.59 | 96.48 |
+| P-AP | 31.21 | 33.28 | 34.64 |
+| P-F1 | 37.76 | 39.96 | 43.07 |
+| P-AUPRO | 85.81 | 86.00 | 89.61 |
+| **7 项平均** | **72.41** | **72.46** | **75.53** |
+
+**结论**：① VisA 上 **1-shot ≈ 2-shot**（+0.05），与 MVTec 不同；② **4-shot 明显更好**（+3.1）；
+③ **P-AP/P-F1 是三档共同的短板**（31–43，其余五项 85–96），与 MVTec 的结论一致；
+④ VisA 明显比 MVTec 难（4-shot：75.53 vs 85.43），差距集中在 P-AP/P-F1。
+完整逐类明细见 `logs/visa/RESULTS_visa.md`。
+
+---
+
+## §40 【目标结论】mapping 分支 +3.5%（5 类）/+3%（15 类）在给定约束下不可达
+
+在"**不改合成异常 + 不用推理期技巧 + 保持现架构与 392 训练几何**"三条约束下，
+共验证 **31 个配置**（记录与逐项结论见 `logs/v5/RESULTS_v5.md`）：
+
+* **纯算法/模型/训练侧 17 个**：只有 **M22 软化 AP 损失**为正 —— 5 类 **+0.45%**、15 类 **+0.22%**
+  （图像级三项 +0.49/+0.29/+0.44、P-AUPRO +0.44，P-AP/P-F1 基本不动）；
+  其余（M11 尾部排序、M14 仿射、M15 容量×2、M20 尾部钉住、M23 部署混合 AP、M27 子空间打分、
+  M30 可学习层权重、M31 原型 dropout、M32 训练几何对齐、M33 学习率/轮数、M6/M7 消融）**全部为负**；
+* 合成数据侧 13 个（M24/M26/M28）在用户裁定"不得用合成异常路线"后关闭，最好 M24 +0.79% @5 类；
+* 支柱证据：交付配置在两级验证集上都是**尖峰局部最优**（加任何模块都掉、去掉任何机制也不涨）；
+  占提升空间 80% 的 **P-AP/P-F1 对所有损失侧设计零响应**；更久训练（70 轮）与更低学习率均变差。
+
+⇒ 该目标已按规则标记 **blocked**；突破口只能来自放宽某条约束
+（推理期多尺度/TTA、架构骨干与训练分辨率、或合成监督多样性），需用户裁定。
+
+## §41 【磁盘清理 2】MVTec 机制搜索的 28 个变体权重 + 全目录中间轮次
+
+| | 清理前 | 清理后 |
+|---|---|---|
+| `results/vpt4` | **443 GB / 1354 个 `.pth`** | **17 GB / 49 个 `.pth`** |
+| 磁盘可用 | 86 GB（98%） | **512 GB（86%）** |
+
+保留：`m4m6r3_15`（vpt3.5 交付，15×epoch35）、`m4m6r3_2shot`（15×35）、
+`v5_ap10_2s15`（唯一为正机制 M22，15×35）、`ctrl4shot_bottle*`（代码版本对照证据 4 个）；
+**所有目录的 `metrics_*.csv` 与 `log.txt` 一律保留**（抽查 6 个被清空目录：pth=0 / csv=1 / log=1 ✔）。
+VisA 三档权重同期也按同规则只保留 epoch 35（84 GB → 12 GB）。
