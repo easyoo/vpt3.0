@@ -1,0 +1,2 @@
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=2000MiB util=2%
+[23:24:58] train transistor on 3bf0407c (save=m4m6)

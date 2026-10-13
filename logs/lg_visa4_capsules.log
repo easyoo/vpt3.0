@@ -1,0 +1,22 @@
+[shot_utils] capsules shot4 hash=9cf53634f920 picks=['147.JPG', '072.JPG', '289.JPG', '130.JPG']
+=== capsules (save=vpt35_visa4shot shot=4) ===
+  raw_min       I-AUROC=0.9453  I-AP=0.9639  I-F1=0.9390  P-AUROC=0.9714  P-AP=0.3335  P-F1=0.4062  P-AUPRO=0.9304
+  CSV,capsules,raw_min,0.9453,0.9639,0.9390,0.9714,0.3335,0.4062,0.9304
+  raw_min_rawonlyI-AUROC=0.9453  I-AP=0.9639  I-F1=0.9390  P-AUROC=0.9714  P-AP=0.3334  P-F1=0.4061  P-AUPRO=0.9304
+  CSV,capsules,raw_min_rawonly,0.9453,0.9639,0.9390,0.9714,0.3334,0.4061,0.9304
+  raw_geom      I-AUROC=0.9332  I-AP=0.9567  I-F1=0.9118  P-AUROC=0.9746  P-AP=0.3384  P-F1=0.4122  P-AUPRO=0.9371
+  CSV,capsules,raw_geom,0.9332,0.9567,0.9118,0.9746,0.3384,0.4122,0.9371
+  raw_geom_rawonlyI-AUROC=0.9328  I-AP=0.9565  I-F1=0.9118  P-AUROC=0.9745  P-AP=0.3380  P-F1=0.4120  P-AUPRO=0.9370
+  CSV,capsules,raw_geom_rawonly,0.9328,0.9565,0.9118,0.9745,0.3380,0.4120,0.9370
+  learn_min     I-AUROC=0.9453  I-AP=0.9639  I-F1=0.9390  P-AUROC=0.9714  P-AP=0.3335  P-F1=0.4062  P-AUPRO=0.9304
+  CSV,capsules,learn_min,0.9453,0.9639,0.9390,0.9714,0.3335,0.4062,0.9304
+  learn_min_learnonlyI-AUROC=0.9870  I-AP=0.9937  I-F1=0.9700  P-AUROC=0.9066  P-AP=0.2777  P-F1=0.4144  P-AUPRO=0.9235
+  CSV,capsules,learn_min_learnonly,0.9870,0.9937,0.9700,0.9066,0.2777,0.4144,0.9235
+  learn_geom    I-AUROC=0.9453  I-AP=0.9639  I-F1=0.9390  P-AUROC=0.9714  P-AP=0.3334  P-F1=0.4062  P-AUPRO=0.9304
+  CSV,capsules,learn_geom,0.9453,0.9639,0.9390,0.9714,0.3334,0.4062,0.9304
+  learn_geom_learnonlyI-AUROC=0.9868  I-AP=0.9937  I-F1=0.9648  P-AUROC=0.9041  P-AP=0.2890  P-F1=0.4223  P-AUPRO=0.9217
+  CSV,capsules,learn_geom_learnonly,0.9868,0.9937,0.9648,0.9041,0.2890,0.4223,0.9217
+  learn_geom_bankI-AUROC=0.9458  I-AP=0.9643  I-F1=0.9390  P-AUROC=0.9714  P-AP=0.3343  P-F1=0.4068  P-AUPRO=0.9313
+  CSV,capsules,learn_geom_bank,0.9458,0.9643,0.9390,0.9714,0.3343,0.4068,0.9313
+  learn_geom_bank_learnonlyI-AUROC=0.9967  I-AP=0.9981  I-F1=0.9802  P-AUROC=0.9756  P-AP=0.3588  P-F1=0.4637  P-AUPRO=0.9790
+  CSV,capsules,learn_geom_bank_learnonly,0.9967,0.9981,0.9802,0.9756,0.3588,0.4637,0.9790

@@ -1,0 +1,2 @@
+[shot_utils] cashew shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[grids] 保存 .grids_visa4/cashew.npz  keys=37 raw_min__v0 shape=(150, 48, 48)

@@ -1,0 +1,3 @@
+[shot_utils] grid shot4 hash=be3d4e70cade picks=['068.png', '032.png', '130.png', '060.png']
+[sub] 全局分位数用 1024/4096 个 patch 子采样估计
+[grids2] 保存 .grids2_mv4/grid.npz  keys=57

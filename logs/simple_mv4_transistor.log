@@ -1,0 +1,6 @@
+[shot_utils] transistor shot4 hash=d0c4c927f728 picks=['034.png', '145.png', '205.png', '195.png']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_mv4/transistor.map shape=(100, 1, 448, 448)
+[v3] transistor  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.9475  I-AP=0.9328  I-F1=0.8434  P-AUROC=0.8883  P-AP=0.3823  P-F1=0.4763  P-AUPRO=0.6490
+  CSV:0.9475,0.9328,0.8434,0.8883,0.3823,0.4763,0.6490

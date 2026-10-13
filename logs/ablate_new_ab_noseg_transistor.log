@@ -1,0 +1,5 @@
+[shot_utils] transistor shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+  [maps] 保存 .maps_v3_ablate_ab_noseg/transistor.map shape=(100, 1, 448, 448)
+[v3] transistor  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9683  I-AP=0.9464  I-F1=0.9000  P-AUROC=0.8737  P-AP=0.3747  P-F1=0.4447  P-AUPRO=0.6310
+  CSV:0.9683,0.9464,0.9000,0.8737,0.3747,0.4447,0.6310

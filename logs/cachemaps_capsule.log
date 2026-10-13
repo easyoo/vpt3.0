@@ -1,0 +1,6 @@
+[skip] bank 图已存在: /home/jjquan/experiment/visual/audit_mapping/.errmap_audit/capsule.map
+mapping-map:   0%|                    | 0/9 [00:00<?, ?it/s]mapping-map:  11%|█▎          | 1/9 [00:01<00:14,  1.81s/it]mapping-map:  22%|██▋         | 2/9 [00:02<00:06,  1.09it/s]mapping-map:  33%|████        | 3/9 [00:02<00:03,  1.58it/s]mapping-map:  44%|█████▎      | 4/9 [00:02<00:02,  2.01it/s]mapping-map:  56%|██████▋     | 5/9 [00:02<00:01,  2.41it/s]mapping-map:  67%|████████    | 6/9 [00:03<00:01,  2.73it/s]mapping-map:  78%|█████████▎  | 7/9 [00:03<00:00,  3.03it/s]mapping-map:  89%|██████████▋ | 8/9 [00:03<00:00,  3.29it/s]mapping-map: 100%|████████████| 9/9 [00:03<00:00,  2.33it/s]
+[mapping] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/capsule_mapping.map
+[gt] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/capsule_gt.map
+[meta] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/capsule_meta.json
+  样本数 = 132（两个分支共用同一次 DataLoader 遍历 → 顺序一致）

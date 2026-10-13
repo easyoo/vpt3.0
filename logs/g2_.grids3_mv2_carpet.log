@@ -1,0 +1,3 @@
+[shot_utils] carpet shot2 hash=da98989cce0f picks=['068.png', '032.png']
+[sub] 全局分位数用 1024/2048 个子采样估计
+[grids3] 保存 .grids3_mv2/carpet.npz  keys=31

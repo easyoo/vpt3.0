@@ -1,0 +1,11 @@
+[19:28:26] ab_noglobal/transistor start on 3bf0407c
+[19:34:43] ab_noglobal/transistor 结束 exit=0
+[19:34:43] ab_noglobal/screw start on 3bf0407c
+[19:41:38] ab_noglobal/screw 结束 exit=0
+[19:41:38] ab_noglobal/capsule start on 3bf0407c
+[19:46:32] ab_noglobal/capsule 结束 exit=0
+[19:46:32] ab_noglobal/metal_nut start on 3bf0407c
+[19:52:02] ab_noglobal/metal_nut 结束 exit=0
+[19:52:02] ab_noglobal/wood start on 3bf0407c
+[19:57:08] ab_noglobal/wood 结束 exit=0
+[2026-10-13 19:57:08] ABLATE_DONE save=ab_noglobal

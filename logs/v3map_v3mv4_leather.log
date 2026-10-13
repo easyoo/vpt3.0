@@ -1,0 +1,5 @@
+[shot_utils] leather shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 保存 .maps_v3_nocrop448_mv4/leather.map shape=(124, 1, 448, 448)
+[v3] leather  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9854  P-AP=0.3506  P-F1=0.3765  P-AUPRO=0.9781
+  CSV:1.0000,1.0000,1.0000,0.9854,0.3506,0.3765,0.9781

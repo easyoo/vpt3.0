@@ -1,0 +1,6 @@
+[shot_utils] macaroni1 shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_visa4/macaroni1.map shape=(200, 1, 448, 448)
+[v3] macaroni1  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.7871  I-AP=0.7746  I-F1=0.7476  P-AUROC=0.9950  P-AP=0.2166  P-F1=0.3106  P-AUPRO=0.9557
+  CSV:0.7871,0.7746,0.7476,0.9950,0.2166,0.3106,0.9557

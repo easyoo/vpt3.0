@@ -1,0 +1,15 @@
+[shot_utils] cable shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+[bank] cable: 4 shot → 增强 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3759.44it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+  batch 0 done
+  batch 1 done
+  batch 2 done
+  batch 3 done
+  batch 4 done
+  batch 5 done
+  batch 6 done
+  batch 7 done

@@ -1,0 +1,10 @@
+/home/jjquan/miniconda3/envs/vpt/lib/python3.10/site-packages/torch/cuda/__init__.py:766: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=3bf0407c-aa78-8aab-cd2f-1c7b3356c5be
+[gpu_guard] 校验通过
+[20:50:56] eval transistor 完成
+[20:51:27] eval screw 完成
+[20:51:55] eval capsule 完成
+[20:52:20] eval metal_nut 完成
+[20:52:41] eval wood 完成
+[2026-10-08 20:52:41] VPT4_EVAL_DONE

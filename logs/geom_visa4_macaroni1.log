@@ -1,0 +1,4 @@
+[shot_utils] macaroni1 shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_visa4/macaroni1.map  shape=(200, 1, 448, 448)
+[geom448-geom] macaroni1  I-AUROC=0.7827  I-AP=0.7653  I-F1=0.7633  P-AUROC=0.9921  P-AP=0.2038  P-F1=0.2787  P-AUPRO=0.9430
+  CSV:0.7827,0.7653,0.7633,0.9921,0.2038,0.2787,0.9430

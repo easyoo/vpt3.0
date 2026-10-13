@@ -1,0 +1,5 @@
+[shot_utils] cable shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+  [maps] 保存 .maps_v3_nocrop448_mv2/cable.map shape=(150, 1, 448, 448)
+[v3] cable  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.8821  I-AP=0.9407  I-F1=0.8488  P-AUROC=0.9554  P-AP=0.6257  P-F1=0.6451  P-AUPRO=0.8531
+  CSV:0.8821,0.9407,0.8488,0.9554,0.6257,0.6451,0.8531

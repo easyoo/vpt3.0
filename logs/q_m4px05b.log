@@ -1,0 +1,40 @@
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=1MiB util=0%
+[22:50:55] train transistor on 3bf0407c (save=m4px05)
+[22:55:07] transistor exit=0
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 8436, 0), ('1', 1, 30)]），休眠 120s 后重试
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=1MiB util=0%
+[22:57:08] train screw on 3bf0407c (save=m4px05)
+[23:00:55] screw exit=0
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 8436, 0), ('1', 1, 76)]），休眠 120s 后重试
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=1MiB util=0%
+[23:02:55] train capsule on 3bf0407c (save=m4px05)
+[23:06:31] capsule exit=0
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 8538, 0), ('1', 1, 100)]），休眠 120s 后重试
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:08:31] train metal_nut on 0e3a7e1c (save=m4px05)
+[23:12:00] metal_nut exit=0
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=4MiB util=0%
+[23:12:00] train wood on 3bf0407c (save=m4px05)
+[23:16:02] wood exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:16:02] train -- on 0e3a7e1c (save=m4px05)
+[23:16:09] -- exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:16:09] train --global_proto on 0e3a7e1c (save=m4px05)
+[23:16:17] --global_proto exit=0
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=1MiB util=0%
+[23:16:17] train 1 on 3bf0407c (save=m4px05)
+[23:16:24] 1 exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:16:24] train --w_div on 0e3a7e1c (save=m4px05)
+[23:16:31] --w_div exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:16:31] train 0.1 on 0e3a7e1c (save=m4px05)
+[23:16:38] 0.1 exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:16:38] train --w_pixel on 0e3a7e1c (save=m4px05)
+[23:16:45] --w_pixel exit=0
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:16:45] train 0.5 on 0e3a7e1c (save=m4px05)
+[23:16:52] 0.5 exit=0
+[2026-10-08 23:16:52] ROTATE_TRAIN_DONE

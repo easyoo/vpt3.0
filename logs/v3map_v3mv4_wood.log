@@ -1,0 +1,5 @@
+[shot_utils] wood shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 保存 .maps_v3_nocrop448_mv4/wood.map shape=(79, 1, 448, 448)
+[v3] wood  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9387  P-AP=0.6582  P-F1=0.6522  P-AUPRO=0.9519
+  CSV:1.0000,1.0000,1.0000,0.9387,0.6582,0.6522,0.9519

@@ -1,0 +1,4 @@
+[shot_utils] capsules shot4 hash=9cf53634f920 picks=['147.JPG', '072.JPG', '289.JPG', '130.JPG']
+  [maps] 已保存(未平滑) .maps_nocrop448_visa4/capsules.map  shape=(160, 1, 448, 448)
+[nocrop448] capsules  I-AUROC=0.9453  I-AP=0.9639  I-F1=0.9390  P-AUROC=0.9714  P-AP=0.3335  P-F1=0.4062  P-AUPRO=0.9304
+  CSV:0.9453,0.9639,0.9390,0.9714,0.3335,0.4062,0.9304

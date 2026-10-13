@@ -1,0 +1,18 @@
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=8e8231eb-4e9c-ebff-f292-178b6259f844
+[gpu_guard] 校验通过
+[2026-10-08 13:20:35] fast2view carpet@10 done
+[2026-10-08 13:20:43] fast2view grid@10 done
+[2026-10-08 13:20:52] fast2view leather@5 done
+[2026-10-08 13:21:00] fast2view tile@10 done
+[2026-10-08 13:21:09] fast2view wood@10 done
+[2026-10-08 13:21:17] fast2view bottle@10 done
+[2026-10-08 13:21:26] fast2view cable@10 done
+[2026-10-08 13:21:34] fast2view capsule@10 done
+[2026-10-08 13:21:43] fast2view hazelnut@20 done
+[2026-10-08 13:21:51] fast2view metal_nut@35 done
+[2026-10-08 13:21:59] fast2view pill@30 done
+[2026-10-08 13:22:08] fast2view screw@25 done
+[2026-10-08 13:22:17] fast2view toothbrush@10 done
+[2026-10-08 13:22:25] fast2view transistor@5 done
+[2026-10-08 13:22:34] fast2view zipper@20 done
+[2026-10-08 13:22:34] FAST_DONE

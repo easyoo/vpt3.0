@@ -1,0 +1,5 @@
+[shot_utils] screw shot2 hash=6b916f0c5fcb picks=['068.png', '291.png']
+  [maps] 保存 .maps_v3_ablate_ab_nometric/screw.map shape=(160, 1, 448, 448)
+[v3] screw  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.8778  I-AP=0.9585  I-F1=0.8898  P-AUROC=0.9854  P-AP=0.3498  P-F1=0.3727  P-AUPRO=0.9354
+  CSV:0.8778,0.9585,0.8898,0.9854,0.3498,0.3727,0.9354

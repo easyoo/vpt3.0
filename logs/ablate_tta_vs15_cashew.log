@@ -1,0 +1,4 @@
+[shot_utils] cashew shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[v3] cashew  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.8752  I-AP=0.9377  I-F1=0.8785  P-AUROC=0.9954  P-AP=0.7225  P-F1=0.7064  P-AUPRO=0.9780
+  CSV:0.8752,0.9377,0.8785,0.9954,0.7225,0.7064,0.9780

@@ -1,0 +1,4 @@
+[shot_utils] metal_nut shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+[v3] metal_nut  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9654  P-AP=0.7305  P-F1=0.7543  P-AUPRO=0.9298
+  CSV:1.0000,1.0000,1.0000,0.9654,0.7305,0.7543,0.9298

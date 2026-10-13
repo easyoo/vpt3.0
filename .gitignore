@@ -1,0 +1,28 @@
+# 大文件与产物一律不入库（只保留代码 + 文本日志）
+__pycache__/
+*.py[cod]
+*.pth
+*.pt
+*.map
+*.npy
+*.npz
+results/
+.maps_audit/
+.errmap_audit/
+.maps_nocrop*/
+.errmap_nocrop*/
+.both_nocrop*/
+.shots/
+visualization/
+# [vpt3.6 新增] 打分搜索框架的中间产物（分量网格/参考库诊断），体积大且可由脚本重建
+.grids*/
+.grids2*/
+.grids3*/
+.bgrid*/
+.bgrid_candle/
+.trash_grids/
+.maps_v3_nocrop*/
+.maps_geom_nocrop*/
+# AnoStyler 生成的图像/掩码不入库（配置与 shot 清单在 data_prep/ 已保留）
+data_prep/anostyler_visa/*/genbyAnoStyler/
+*.log.tmp

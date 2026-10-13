@@ -1,0 +1,3 @@
+[shot_utils] cable shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+[sub] 全局分位数用 1024/4096 个 patch 子采样估计
+[grids2] 保存 .grids2_mv4/cable.npz  keys=57

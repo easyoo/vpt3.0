@@ -1,0 +1,2 @@
+[shot_utils] pcb2 shot4 hash=3e7679014ad1 picks=['0146.JPG', '0639.JPG', '0961.JPG', '0909.JPG']
+[grids] 保存 .grids_visa4/pcb2.npz  keys=37 raw_min__v0 shape=(200, 48, 48)

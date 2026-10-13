@@ -1,0 +1,4 @@
+[shot_utils] candle shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+[v3] candle  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9283  I-AP=0.9026  I-F1=0.8976  P-AUROC=0.9845  P-AP=0.3275  P-F1=0.3991  P-AUPRO=0.9541
+  CSV:0.9283,0.9026,0.8976,0.9845,0.3275,0.3991,0.9541

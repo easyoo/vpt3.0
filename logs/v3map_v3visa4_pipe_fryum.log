@@ -1,0 +1,5 @@
+[shot_utils] pipe_fryum shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+  [maps] 保存 .maps_v3_nocrop448_visa4/pipe_fryum.map shape=(150, 1, 448, 448)
+[v3] pipe_fryum  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9726  I-AP=0.9868  I-F1=0.9412  P-AUROC=0.9926  P-AP=0.5000  P-F1=0.6072  P-AUPRO=0.9701
+  CSV:0.9726,0.9868,0.9412,0.9926,0.5000,0.6072,0.9701

@@ -1,0 +1,11 @@
+[18:04:02] ab_nops/transistor start on 3bf0407c
+[18:11:43] ab_nops/transistor 结束 exit=0
+[18:11:43] ab_nops/screw start on 3bf0407c
+[18:19:34] ab_nops/screw 结束 exit=0
+[18:19:34] ab_nops/capsule start on 3bf0407c
+[18:25:21] ab_nops/capsule 结束 exit=0
+[18:25:21] ab_nops/metal_nut start on 3bf0407c
+[18:30:22] ab_nops/metal_nut 结束 exit=0
+[18:30:22] ab_nops/wood start on 3bf0407c
+[18:34:41] ab_nops/wood 结束 exit=0
+[2026-10-13 18:34:41] ABLATE_DONE save=ab_nops

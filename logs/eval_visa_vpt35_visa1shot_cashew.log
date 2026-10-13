@@ -1,0 +1,3 @@
+[shot_utils] cashew shot1 hash=0653693f9be3 picks=['073.JPG']
+[nocrop448] cashew  I-AUROC=0.9276  I-AP=0.9628  I-F1=0.9082  P-AUROC=0.9759  P-AP=0.4649  P-F1=0.5382  P-AUPRO=0.9447
+  CSV:0.9276,0.9628,0.9082,0.9759,0.4649,0.5382,0.9447

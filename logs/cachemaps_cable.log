@@ -1,0 +1,6 @@
+[skip] bank 图已存在: /home/jjquan/experiment/visual/audit_mapping/.errmap_audit/cable.map
+mapping-map:   0%|                   | 0/10 [00:00<?, ?it/s]mapping-map:  10%|█          | 1/10 [00:01<00:16,  1.79s/it]mapping-map:  20%|██▏        | 2/10 [00:02<00:07,  1.12it/s]mapping-map:  30%|███▎       | 3/10 [00:02<00:04,  1.65it/s]mapping-map:  40%|████▍      | 4/10 [00:02<00:02,  2.13it/s]mapping-map:  50%|█████▌     | 5/10 [00:02<00:02,  2.49it/s]mapping-map:  60%|██████▌    | 6/10 [00:03<00:01,  2.79it/s]mapping-map:  70%|███████▋   | 7/10 [00:03<00:00,  3.01it/s]mapping-map:  80%|████████▊  | 8/10 [00:03<00:00,  3.26it/s]mapping-map:  90%|█████████▉ | 9/10 [00:03<00:00,  3.43it/s]mapping-map: 100%|██████████| 10/10 [00:04<00:00,  2.44it/s]
+[mapping] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/cable_mapping.map
+[gt] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/cable_gt.map
+[meta] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/cable_meta.json
+  样本数 = 150（两个分支共用同一次 DataLoader 遍历 → 顺序一致）

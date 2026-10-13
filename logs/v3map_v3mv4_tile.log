@@ -1,0 +1,5 @@
+[shot_utils] tile shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 保存 .maps_v3_nocrop448_mv4/tile.map shape=(117, 1, 448, 448)
+[v3] tile  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9418  P-AP=0.6080  P-F1=0.5865  P-AUPRO=0.8429
+  CSV:1.0000,1.0000,1.0000,0.9418,0.6080,0.5865,0.8429

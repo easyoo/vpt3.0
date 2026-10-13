@@ -1,0 +1,643 @@
+===== [2026-10-09 03:55:45] train save=m4m6r2_15 class=leather gpu=3bf0407c owner=1665830 code_md5=642add77a55b =====
+cmd: /home/jjquan/miniconda3/envs/vpt/bin/python code_vpt4/main-fewshot-vpt4.py --train_class leather --total_epochs 35 --internal 5 --map_only --batch_size 16 --seed 1 --token_init_std 0.02 --res_mapping 0 --save_dir results/vpt4 --save_name m4m6r2_15 --global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.06 --rank_margin 0.25 --rank_norm 1
+[audit] device = cuda:0
+
+
+
+
+
+=======================================☆☆☆ Configuration Information ☆☆☆========================================
+--Running Time:2026-10-09 03:55:53
+
+--train_class leather
+--learnable_layers 1
+--learnable_num_per_layer 32
+--fused_layer [1, 2, 3, 4, 6, 8, 11]
+--fused_layer_learnable [0]
+--total_epochs 35
+--internal 5
+--batch_size 16
+--shot 4
+--temperature 0.07
+--scaled_factor 3
+========================================☆☆☆☆☆ End ☆☆☆☆☆=======================================================
+
+[audit] 预训练权重: /home/jjquan/Downloads/dinov2_vitb14_reg4_pretrain.pth
+train image number:88
+Total samples loaded: 140 from 1 categories
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [1/35], total_loss:1.4393, cos_loss:0.7844, mse_loss:0.3163, neg_push_loss:0.0000, seg_loss:0.5291
+  [aux-loss] div:0.2205 rank:2.9930
+ 12%|█████▋                                       | 1/8 [00:02<00:18,  2.69s/it]epoch [1/35], total_loss:1.4442, cos_loss:0.7869, mse_loss:0.3152, neg_push_loss:0.0000, seg_loss:0.5284
+  [aux-loss] div:0.2205 rank:3.1750
+ 25%|███████████▎                                 | 2/8 [00:03<00:11,  1.86s/it]epoch [1/35], total_loss:1.4382, cos_loss:0.7863, mse_loss:0.3151, neg_push_loss:0.0000, seg_loss:0.5273
+  [aux-loss] div:0.2205 rank:2.8607
+ 38%|████████████████▉                            | 3/8 [00:05<00:07,  1.60s/it]epoch [1/35], total_loss:1.4157, cos_loss:0.7722, mse_loss:0.3120, neg_push_loss:0.0000, seg_loss:0.5260
+  [aux-loss] div:0.2205 rank:2.2749
+ 50%|██████████████████████▌                      | 4/8 [00:06<00:05,  1.48s/it]epoch [1/35], total_loss:1.3953, cos_loss:0.7521, mse_loss:0.3079, neg_push_loss:0.0000, seg_loss:0.5228
+  [aux-loss] div:0.2205 rank:2.5655
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.40s/it]epoch [1/35], total_loss:1.3750, cos_loss:0.7362, mse_loss:0.3039, neg_push_loss:0.0000, seg_loss:0.5201
+  [aux-loss] div:0.2205 rank:2.2164
+ 75%|█████████████████████████████████▊           | 6/8 [00:09<00:02,  1.38s/it]epoch [1/35], total_loss:1.3436, cos_loss:0.7119, mse_loss:0.2988, neg_push_loss:0.0000, seg_loss:0.5172
+  [aux-loss] div:0.2205 rank:1.3695
+ 88%|███████████████████████████████████████▍     | 7/8 [00:10<00:01,  1.38s/it]epoch [1/35], total_loss:1.3157, cos_loss:0.6909, mse_loss:0.2937, neg_push_loss:0.0000, seg_loss:0.5152
+  [aux-loss] div:0.2205 rank:1.1248
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.36s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.50s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [2/35], total_loss:1.0965, cos_loss:0.4984, mse_loss:0.2432, neg_push_loss:0.0000, seg_loss:0.4752
+  [aux-loss] div:0.2205 rank:1.7809
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.80s/it]epoch [2/35], total_loss:1.0527, cos_loss:0.4748, mse_loss:0.2368, neg_push_loss:0.0000, seg_loss:0.4744
+  [aux-loss] div:0.2205 rank:0.9557
+ 25%|███████████▎                                 | 2/8 [00:03<00:08,  1.50s/it]epoch [2/35], total_loss:1.0184, cos_loss:0.4564, mse_loss:0.2295, neg_push_loss:0.0000, seg_loss:0.4705
+  [aux-loss] div:0.2205 rank:0.6653
+ 38%|████████████████▉                            | 3/8 [00:04<00:06,  1.40s/it]epoch [2/35], total_loss:0.9872, cos_loss:0.4387, mse_loss:0.2225, neg_push_loss:0.0000, seg_loss:0.4666
+  [aux-loss] div:0.2205 rank:0.3797
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [2/35], total_loss:0.9617, cos_loss:0.4222, mse_loss:0.2151, neg_push_loss:0.0000, seg_loss:0.4637
+  [aux-loss] div:0.2205 rank:0.3688
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.37s/it]epoch [2/35], total_loss:0.9403, cos_loss:0.4097, mse_loss:0.2079, neg_push_loss:0.0000, seg_loss:0.4621
+  [aux-loss] div:0.2206 rank:0.1909
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.37s/it]epoch [2/35], total_loss:0.9180, cos_loss:0.3931, mse_loss:0.2009, neg_push_loss:0.0000, seg_loss:0.4602
+  [aux-loss] div:0.2206 rank:0.1362
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.34s/it]epoch [2/35], total_loss:0.8962, cos_loss:0.3808, mse_loss:0.1942, neg_push_loss:0.0000, seg_loss:0.4543
+  [aux-loss] div:0.2206 rank:0.2188
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.31s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [3/35], total_loss:0.6864, cos_loss:0.2363, mse_loss:0.1335, neg_push_loss:0.0000, seg_loss:0.3861
+  [aux-loss] div:0.2206 rank:0.4437
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.84s/it]epoch [3/35], total_loss:0.6589, cos_loss:0.2139, mse_loss:0.1279, neg_push_loss:0.0000, seg_loss:0.3809
+  [aux-loss] div:0.2206 rank:0.2612
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.54s/it]epoch [3/35], total_loss:0.6440, cos_loss:0.2134, mse_loss:0.1236, neg_push_loss:0.0001, seg_loss:0.3729
+  [aux-loss] div:0.2206 rank:0.2308
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.42s/it]epoch [3/35], total_loss:0.6216, cos_loss:0.2014, mse_loss:0.1185, neg_push_loss:0.0003, seg_loss:0.3622
+  [aux-loss] div:0.2208 rank:0.2584
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.36s/it]epoch [3/35], total_loss:0.5950, cos_loss:0.1938, mse_loss:0.1136, neg_push_loss:0.0007, seg_loss:0.3445
+  [aux-loss] div:0.2213 rank:0.2403
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.34s/it]epoch [3/35], total_loss:0.5701, cos_loss:0.1823, mse_loss:0.1090, neg_push_loss:0.0019, seg_loss:0.3299
+  [aux-loss] div:0.2219 rank:0.1751
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.32s/it]epoch [3/35], total_loss:0.5429, cos_loss:0.1700, mse_loss:0.1049, neg_push_loss:0.0031, seg_loss:0.3127
+  [aux-loss] div:0.2225 rank:0.1414
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.31s/it]epoch [3/35], total_loss:0.5118, cos_loss:0.1577, mse_loss:0.1007, neg_push_loss:0.0033, seg_loss:0.2919
+  [aux-loss] div:0.2231 rank:0.2452
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.30s/it]100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.37s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [4/35], total_loss:0.3052, cos_loss:0.0916, mse_loss:0.0648, neg_push_loss:0.0089, seg_loss:0.1433
+  [aux-loss] div:0.2236 rank:0.3337
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.84s/it]epoch [4/35], total_loss:0.2730, cos_loss:0.0716, mse_loss:0.0624, neg_push_loss:0.0069, seg_loss:0.1277
+  [aux-loss] div:0.2240 rank:0.2578
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.52s/it]epoch [4/35], total_loss:0.2614, cos_loss:0.0681, mse_loss:0.0597, neg_push_loss:0.0086, seg_loss:0.1185
+  [aux-loss] div:0.2244 rank:0.3122
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.41s/it]epoch [4/35], total_loss:0.2468, cos_loss:0.0603, mse_loss:0.0573, neg_push_loss:0.0088, seg_loss:0.1073
+  [aux-loss] div:0.2246 rank:0.4875
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.36s/it]epoch [4/35], total_loss:0.2341, cos_loss:0.0556, mse_loss:0.0550, neg_push_loss:0.0100, seg_loss:0.0985
+  [aux-loss] div:0.2247 rank:0.3049
+ 62%|████████████████████████████▏                | 5/8 [00:06<00:03,  1.33s/it]epoch [4/35], total_loss:0.2227, cos_loss:0.0539, mse_loss:0.0527, neg_push_loss:0.0102, seg_loss:0.0915
+  [aux-loss] div:0.2247 rank:0.2097
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.32s/it]epoch [4/35], total_loss:0.2152, cos_loss:0.0523, mse_loss:0.0503, neg_push_loss:0.0112, seg_loss:0.0856
+  [aux-loss] div:0.2249 rank:0.3619
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.31s/it]epoch [4/35], total_loss:0.2110, cos_loss:0.0552, mse_loss:0.0481, neg_push_loss:0.0118, seg_loss:0.0809
+  [aux-loss] div:0.2248 rank:0.4136
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.30s/it]100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.37s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [5/35], total_loss:0.1551, cos_loss:0.0535, mse_loss:0.0297, neg_push_loss:0.0180, seg_loss:0.0456
+  [aux-loss] div:0.2247 rank:0.2103
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.78s/it]epoch [5/35], total_loss:0.1530, cos_loss:0.0423, mse_loss:0.0283, neg_push_loss:0.0159, seg_loss:0.0489
+  [aux-loss] div:0.2246 rank:0.3319
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.53s/it]epoch [5/35], total_loss:0.1513, cos_loss:0.0357, mse_loss:0.0267, neg_push_loss:0.0172, seg_loss:0.0481
+  [aux-loss] div:0.2245 rank:0.4082
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.42s/it]epoch [5/35], total_loss:0.1483, cos_loss:0.0350, mse_loss:0.0255, neg_push_loss:0.0166, seg_loss:0.0476
+  [aux-loss] div:0.2244 rank:0.2850
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.36s/it]epoch [5/35], total_loss:0.1456, cos_loss:0.0319, mse_loss:0.0244, neg_push_loss:0.0167, seg_loss:0.0463
+  [aux-loss] div:0.2243 rank:0.4089
+ 62%|████████████████████████████▏                | 5/8 [00:06<00:03,  1.33s/it]epoch [5/35], total_loss:0.1436, cos_loss:0.0315, mse_loss:0.0235, neg_push_loss:0.0162, seg_loss:0.0467
+  [aux-loss] div:0.2243 rank:0.2453
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.32s/it]epoch [5/35], total_loss:0.1441, cos_loss:0.0297, mse_loss:0.0227, neg_push_loss:0.0171, seg_loss:0.0471
+  [aux-loss] div:0.2243 rank:0.4408
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.29s/it]epoch [5/35], total_loss:0.1427, cos_loss:0.0284, mse_loss:0.0218, neg_push_loss:0.0176, seg_loss:0.0463
+  [aux-loss] div:0.2243 rank:0.3812
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.28s/it]100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.36s/it]
+   Class      I-Auroc       I-AP        I-F1      P-AUROC       P-AP        P-F1      P-AUPRO   
+  0%|                                                     | 0/8 [00:00<?, ?it/s] 12%|█████▋                                       | 1/8 [00:01<00:12,  1.76s/it] 25%|███████████▎                                 | 2/8 [00:02<00:05,  1.04it/s] 38%|████████████████▉                            | 3/8 [00:02<00:03,  1.39it/s] 50%|██████████████████████▌                      | 4/8 [00:02<00:02,  1.80it/s] 62%|████████████████████████████▏                | 5/8 [00:03<00:01,  1.94it/s] 75%|█████████████████████████████████▊           | 6/8 [00:03<00:00,  2.07it/s] 88%|███████████████████████████████████████▍     | 7/8 [00:04<00:00,  2.36it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  2.46it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  1.76it/s]
+  leather      0.1016      0.5789      0.8519      0.0238      0.0042      0.0164       nan     
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [6/35], total_loss:0.1688, cos_loss:0.0192, mse_loss:0.0141, neg_push_loss:0.0245, seg_loss:0.0435
+  [aux-loss] div:0.2243 rank:0.9126
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.91s/it]epoch [6/35], total_loss:0.1476, cos_loss:0.0186, mse_loss:0.0136, neg_push_loss:0.0224, seg_loss:0.0399
+  [aux-loss] div:0.2243 rank:0.4204
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.54s/it]epoch [6/35], total_loss:0.1367, cos_loss:0.0208, mse_loss:0.0132, neg_push_loss:0.0213, seg_loss:0.0391
+  [aux-loss] div:0.2243 rank:0.1836
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [6/35], total_loss:0.1328, cos_loss:0.0207, mse_loss:0.0129, neg_push_loss:0.0218, seg_loss:0.0382
+  [aux-loss] div:0.2244 rank:0.2969
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.36s/it]epoch [6/35], total_loss:0.1330, cos_loss:0.0187, mse_loss:0.0124, neg_push_loss:0.0222, seg_loss:0.0389
+  [aux-loss] div:0.2244 rank:0.4889
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:03,  1.33s/it]epoch [6/35], total_loss:0.1278, cos_loss:0.0171, mse_loss:0.0119, neg_push_loss:0.0221, seg_loss:0.0380
+  [aux-loss] div:0.2244 rank:0.1783
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [6/35], total_loss:0.1269, cos_loss:0.0167, mse_loss:0.0116, neg_push_loss:0.0219, seg_loss:0.0399
+  [aux-loss] div:0.2243 rank:0.1789
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.31s/it]epoch [6/35], total_loss:0.1234, cos_loss:0.0157, mse_loss:0.0112, neg_push_loss:0.0220, seg_loss:0.0394
+  [aux-loss] div:0.2242 rank:0.0799
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.30s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.38s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [7/35], total_loss:0.1059, cos_loss:0.0150, mse_loss:0.0086, neg_push_loss:0.0221, seg_loss:0.0323
+  [aux-loss] div:0.2240 rank:0.2164
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.87s/it]epoch [7/35], total_loss:0.1062, cos_loss:0.0148, mse_loss:0.0084, neg_push_loss:0.0205, seg_loss:0.0347
+  [aux-loss] div:0.2239 rank:0.2113
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.52s/it]epoch [7/35], total_loss:0.1007, cos_loss:0.0160, mse_loss:0.0084, neg_push_loss:0.0181, seg_loss:0.0338
+  [aux-loss] div:0.2237 rank:0.0721
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.41s/it]epoch [7/35], total_loss:0.0985, cos_loss:0.0160, mse_loss:0.0082, neg_push_loss:0.0151, seg_loss:0.0347
+  [aux-loss] div:0.2237 rank:0.1811
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.36s/it]epoch [7/35], total_loss:0.1006, cos_loss:0.0165, mse_loss:0.0081, neg_push_loss:0.0136, seg_loss:0.0377
+  [aux-loss] div:0.2236 rank:0.1982
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.33s/it]epoch [7/35], total_loss:0.0970, cos_loss:0.0167, mse_loss:0.0080, neg_push_loss:0.0127, seg_loss:0.0363
+  [aux-loss] div:0.2236 rank:0.0429
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.32s/it]epoch [7/35], total_loss:0.0960, cos_loss:0.0169, mse_loss:0.0080, neg_push_loss:0.0130, seg_loss:0.0357
+  [aux-loss] div:0.2235 rank:0.0693
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.31s/it]epoch [7/35], total_loss:0.0975, cos_loss:0.0158, mse_loss:0.0077, neg_push_loss:0.0144, seg_loss:0.0361
+  [aux-loss] div:0.2233 rank:0.2141
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.30s/it]100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.37s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [8/35], total_loss:0.0961, cos_loss:0.0055, mse_loss:0.0073, neg_push_loss:0.0258, seg_loss:0.0324
+  [aux-loss] div:0.2231 rank:0.0920
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.92s/it]epoch [8/35], total_loss:0.0976, cos_loss:0.0075, mse_loss:0.0072, neg_push_loss:0.0232, seg_loss:0.0356
+  [aux-loss] div:0.2231 rank:0.0928
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.55s/it]epoch [8/35], total_loss:0.0946, cos_loss:0.0076, mse_loss:0.0065, neg_push_loss:0.0185, seg_loss:0.0347
+  [aux-loss] div:0.2231 rank:0.2539
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [8/35], total_loss:0.0895, cos_loss:0.0084, mse_loss:0.0064, neg_push_loss:0.0148, seg_loss:0.0342
+  [aux-loss] div:0.2231 rank:0.0654
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.37s/it]epoch [8/35], total_loss:0.0881, cos_loss:0.0091, mse_loss:0.0064, neg_push_loss:0.0126, seg_loss:0.0343
+  [aux-loss] div:0.2230 rank:0.1648
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.34s/it]epoch [8/35], total_loss:0.0840, cos_loss:0.0093, mse_loss:0.0062, neg_push_loss:0.0109, seg_loss:0.0326
+  [aux-loss] div:0.2229 rank:0.0644
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [8/35], total_loss:0.0825, cos_loss:0.0091, mse_loss:0.0062, neg_push_loss:0.0098, seg_loss:0.0324
+  [aux-loss] div:0.2228 rank:0.1102
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [8/35], total_loss:0.0820, cos_loss:0.0096, mse_loss:0.0062, neg_push_loss:0.0090, seg_loss:0.0328
+  [aux-loss] div:0.2227 rank:0.0800
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.31s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [9/35], total_loss:0.0718, cos_loss:0.0144, mse_loss:0.0048, neg_push_loss:0.0062, seg_loss:0.0294
+  [aux-loss] div:0.2227 rank:0.0336
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.96s/it]epoch [9/35], total_loss:0.0767, cos_loss:0.0134, mse_loss:0.0053, neg_push_loss:0.0065, seg_loss:0.0305
+  [aux-loss] div:0.2226 rank:0.1460
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.58s/it]epoch [9/35], total_loss:0.0755, cos_loss:0.0102, mse_loss:0.0050, neg_push_loss:0.0067, seg_loss:0.0312
+  [aux-loss] div:0.2224 rank:0.0823
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.45s/it]epoch [9/35], total_loss:0.0719, cos_loss:0.0083, mse_loss:0.0049, neg_push_loss:0.0058, seg_loss:0.0302
+  [aux-loss] div:0.2221 rank:0.0454
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.42s/it]epoch [9/35], total_loss:0.0708, cos_loss:0.0077, mse_loss:0.0049, neg_push_loss:0.0050, seg_loss:0.0299
+  [aux-loss] div:0.2219 rank:0.1013
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.39s/it]epoch [9/35], total_loss:0.0690, cos_loss:0.0073, mse_loss:0.0047, neg_push_loss:0.0043, seg_loss:0.0298
+  [aux-loss] div:0.2215 rank:0.0296
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.36s/it]epoch [9/35], total_loss:0.0679, cos_loss:0.0071, mse_loss:0.0046, neg_push_loss:0.0038, seg_loss:0.0297
+  [aux-loss] div:0.2208 rank:0.0317
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.33s/it]epoch [9/35], total_loss:0.0685, cos_loss:0.0068, mse_loss:0.0046, neg_push_loss:0.0036, seg_loss:0.0296
+  [aux-loss] div:0.2199 rank:0.2153
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.33s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.42s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [10/35], total_loss:0.0608, cos_loss:0.0025, mse_loss:0.0040, neg_push_loss:0.0058, seg_loss:0.0260
+  [aux-loss] div:0.2181 rank:0.0304
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.90s/it]epoch [10/35], total_loss:0.0688, cos_loss:0.0030, mse_loss:0.0039, neg_push_loss:0.0113, seg_loss:0.0285
+  [aux-loss] div:0.2151 rank:0.0317
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.55s/it]epoch [10/35], total_loss:0.0698, cos_loss:0.0040, mse_loss:0.0039, neg_push_loss:0.0116, seg_loss:0.0281
+  [aux-loss] div:0.2111 rank:0.0764
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [10/35], total_loss:0.0679, cos_loss:0.0049, mse_loss:0.0037, neg_push_loss:0.0093, seg_loss:0.0281
+  [aux-loss] div:0.2041 rank:0.0686
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [10/35], total_loss:0.0905, cos_loss:0.0059, mse_loss:0.0036, neg_push_loss:0.0078, seg_loss:0.0302
+  [aux-loss] div:0.2015 rank:1.8724
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [10/35], total_loss:0.0881, cos_loss:0.0054, mse_loss:0.0036, neg_push_loss:0.0065, seg_loss:0.0316
+  [aux-loss] div:0.2020 rank:0.1988
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.32s/it]epoch [10/35], total_loss:0.0841, cos_loss:0.0050, mse_loss:0.0036, neg_push_loss:0.0056, seg_loss:0.0314
+  [aux-loss] div:0.2032 rank:0.0866
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.31s/it]epoch [10/35], total_loss:0.0846, cos_loss:0.0056, mse_loss:0.0035, neg_push_loss:0.0050, seg_loss:0.0334
+  [aux-loss] div:0.2040 rank:0.1856
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.31s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.38s/it]
+   Class      I-Auroc       I-AP        I-F1      P-AUROC       P-AP        P-F1      P-AUPRO   
+  0%|                                                     | 0/8 [00:00<?, ?it/s] 12%|█████▋                                       | 1/8 [00:01<00:13,  1.89s/it] 25%|███████████▎                                 | 2/8 [00:02<00:06,  1.00s/it] 38%|████████████████▉                            | 3/8 [00:02<00:03,  1.35it/s] 50%|██████████████████████▌                      | 4/8 [00:03<00:02,  1.63it/s] 62%|████████████████████████████▏                | 5/8 [00:03<00:01,  1.98it/s] 75%|█████████████████████████████████▊           | 6/8 [00:03<00:00,  2.00it/s] 88%|███████████████████████████████████████▍     | 7/8 [00:04<00:00,  2.02it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  2.41it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  1.68it/s]
+  leather      1.0000      1.0000      1.0000      0.5697      0.0618      0.1320      0.2085   
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [11/35], total_loss:0.0507, cos_loss:0.0040, mse_loss:0.0036, neg_push_loss:0.0000, seg_loss:0.0229
+  [aux-loss] div:0.2063 rank:0.0246
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.94s/it]epoch [11/35], total_loss:0.0771, cos_loss:0.0041, mse_loss:0.0032, neg_push_loss:0.0002, seg_loss:0.0469
+  [aux-loss] div:0.2049 rank:0.1142
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.55s/it]epoch [11/35], total_loss:0.0986, cos_loss:0.0034, mse_loss:0.0041, neg_push_loss:0.0006, seg_loss:0.0663
+  [aux-loss] div:0.2042 rank:0.1318
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [11/35], total_loss:0.0916, cos_loss:0.0031, mse_loss:0.0049, neg_push_loss:0.0015, seg_loss:0.0585
+  [aux-loss] div:0.2042 rank:0.0435
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [11/35], total_loss:0.0891, cos_loss:0.0033, mse_loss:0.0045, neg_push_loss:0.0034, seg_loss:0.0541
+  [aux-loss] div:0.2033 rank:0.0982
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [11/35], total_loss:0.0929, cos_loss:0.0036, mse_loss:0.0046, neg_push_loss:0.0076, seg_loss:0.0536
+  [aux-loss] div:0.1998 rank:0.0943
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [11/35], total_loss:0.0951, cos_loss:0.0040, mse_loss:0.0046, neg_push_loss:0.0130, seg_loss:0.0502
+  [aux-loss] div:0.1944 rank:0.0778
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [11/35], total_loss:0.0976, cos_loss:0.0043, mse_loss:0.0045, neg_push_loss:0.0175, seg_loss:0.0477
+  [aux-loss] div:0.1866 rank:0.1804
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.31s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [12/35], total_loss:0.1291, cos_loss:0.0023, mse_loss:0.0051, neg_push_loss:0.0256, seg_loss:0.0719
+  [aux-loss] div:0.1820 rank:0.1206
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.91s/it]epoch [12/35], total_loss:0.1134, cos_loss:0.0024, mse_loss:0.0048, neg_push_loss:0.0152, seg_loss:0.0666
+  [aux-loss] div:0.1763 rank:0.1353
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.54s/it]epoch [12/35], total_loss:0.1101, cos_loss:0.0063, mse_loss:0.0046, neg_push_loss:0.0227, seg_loss:0.0544
+  [aux-loss] div:0.1640 rank:0.1359
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [12/35], total_loss:0.1119, cos_loss:0.0055, mse_loss:0.0050, neg_push_loss:0.0332, seg_loss:0.0475
+  [aux-loss] div:0.1486 rank:0.0504
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.37s/it]epoch [12/35], total_loss:0.1249, cos_loss:0.0058, mse_loss:0.0049, neg_push_loss:0.0465, seg_loss:0.0480
+  [aux-loss] div:0.1495 rank:0.0739
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.34s/it]epoch [12/35], total_loss:0.1350, cos_loss:0.0064, mse_loss:0.0050, neg_push_loss:0.0589, seg_loss:0.0461
+  [aux-loss] div:0.1470 rank:0.0690
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.32s/it]epoch [12/35], total_loss:0.1408, cos_loss:0.0063, mse_loss:0.0053, neg_push_loss:0.0650, seg_loss:0.0450
+  [aux-loss] div:0.1457 rank:0.1693
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.31s/it]epoch [12/35], total_loss:0.1486, cos_loss:0.0061, mse_loss:0.0054, neg_push_loss:0.0711, seg_loss:0.0470
+  [aux-loss] div:0.1425 rank:0.0941
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.31s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.38s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [13/35], total_loss:0.2368, cos_loss:0.0069, mse_loss:0.0033, neg_push_loss:0.1210, seg_loss:0.0910
+  [aux-loss] div:0.1454 rank:0.0570
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.88s/it]epoch [13/35], total_loss:0.2344, cos_loss:0.0064, mse_loss:0.0053, neg_push_loss:0.1389, seg_loss:0.0694
+  [aux-loss] div:0.1506 rank:0.0374
+ 25%|███████████▎                                 | 2/8 [00:02<00:07,  1.32s/it]epoch [13/35], total_loss:0.2413, cos_loss:0.0070, mse_loss:0.0049, neg_push_loss:0.1607, seg_loss:0.0551
+  [aux-loss] div:0.1526 rank:0.0144
+ 38%|████████████████▉                            | 3/8 [00:03<00:05,  1.07s/it]epoch [13/35], total_loss:0.2594, cos_loss:0.0056, mse_loss:0.0047, neg_push_loss:0.1754, seg_loss:0.0592
+  [aux-loss] div:0.1534 rank:0.0413
+ 50%|██████████████████████▌                      | 4/8 [00:04<00:03,  1.04it/s]epoch [13/35], total_loss:0.2760, cos_loss:0.0047, mse_loss:0.0048, neg_push_loss:0.1833, seg_loss:0.0604
+  [aux-loss] div:0.1541 rank:0.6867
+ 62%|████████████████████████████▏                | 5/8 [00:05<00:02,  1.12it/s]epoch [13/35], total_loss:0.2709, cos_loss:0.0042, mse_loss:0.0049, neg_push_loss:0.1820, seg_loss:0.0571
+  [aux-loss] div:0.1542 rank:0.1223
+ 75%|█████████████████████████████████▊           | 6/8 [00:05<00:01,  1.17it/s]epoch [13/35], total_loss:0.2620, cos_loss:0.0037, mse_loss:0.0047, neg_push_loss:0.1772, seg_loss:0.0541
+  [aux-loss] div:0.1537 rank:0.0723
+ 88%|███████████████████████████████████████▍     | 7/8 [00:06<00:00,  1.20it/s]epoch [13/35], total_loss:0.2560, cos_loss:0.0034, mse_loss:0.0045, neg_push_loss:0.1719, seg_loss:0.0541
+  [aux-loss] div:0.1527 rank:0.1161
+100%|█████████████████████████████████████████████| 8/8 [00:08<00:00,  1.02it/s]100%|█████████████████████████████████████████████| 8/8 [00:08<00:00,  1.02s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [14/35], total_loss:0.1906, cos_loss:0.0008, mse_loss:0.0041, neg_push_loss:0.1286, seg_loss:0.0387
+  [aux-loss] div:0.1496 rank:0.0635
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.90s/it]epoch [14/35], total_loss:0.1796, cos_loss:0.0009, mse_loss:0.0041, neg_push_loss:0.1206, seg_loss:0.0364
+  [aux-loss] div:0.1469 rank:0.0419
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.55s/it]epoch [14/35], total_loss:0.1796, cos_loss:0.0010, mse_loss:0.0038, neg_push_loss:0.1151, seg_loss:0.0426
+  [aux-loss] div:0.1459 rank:0.0340
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [14/35], total_loss:0.1726, cos_loss:0.0012, mse_loss:0.0035, neg_push_loss:0.1143, seg_loss:0.0372
+  [aux-loss] div:0.1442 rank:0.0154
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [14/35], total_loss:0.1739, cos_loss:0.0017, mse_loss:0.0034, neg_push_loss:0.1118, seg_loss:0.0404
+  [aux-loss] div:0.1416 rank:0.0779
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [14/35], total_loss:0.1759, cos_loss:0.0027, mse_loss:0.0035, neg_push_loss:0.1111, seg_loss:0.0428
+  [aux-loss] div:0.1367 rank:0.0426
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [14/35], total_loss:0.1731, cos_loss:0.0026, mse_loss:0.0035, neg_push_loss:0.1107, seg_loss:0.0407
+  [aux-loss] div:0.1342 rank:0.0212
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [14/35], total_loss:0.1722, cos_loss:0.0027, mse_loss:0.0035, neg_push_loss:0.1104, seg_loss:0.0403
+  [aux-loss] div:0.1318 rank:0.0325
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [15/35], total_loss:0.1473, cos_loss:0.0098, mse_loss:0.0038, neg_push_loss:0.0958, seg_loss:0.0274
+  [aux-loss] div:0.1291 rank:0.0427
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.95s/it]epoch [15/35], total_loss:0.1495, cos_loss:0.0061, mse_loss:0.0038, neg_push_loss:0.0897, seg_loss:0.0353
+  [aux-loss] div:0.1259 rank:0.1182
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.57s/it]epoch [15/35], total_loss:0.1435, cos_loss:0.0051, mse_loss:0.0040, neg_push_loss:0.0888, seg_loss:0.0318
+  [aux-loss] div:0.1228 rank:0.0264
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.45s/it]epoch [15/35], total_loss:0.1522, cos_loss:0.0054, mse_loss:0.0038, neg_push_loss:0.0917, seg_loss:0.0377
+  [aux-loss] div:0.1189 rank:0.0732
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [15/35], total_loss:0.1584, cos_loss:0.0051, mse_loss:0.0040, neg_push_loss:0.0940, seg_loss:0.0423
+  [aux-loss] div:0.1138 rank:0.0195
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.36s/it]epoch [15/35], total_loss:0.1561, cos_loss:0.0047, mse_loss:0.0040, neg_push_loss:0.0949, seg_loss:0.0397
+  [aux-loss] div:0.1082 rank:0.0376
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [15/35], total_loss:0.1745, cos_loss:0.0043, mse_loss:0.0040, neg_push_loss:0.0938, seg_loss:0.0597
+  [aux-loss] div:0.1000 rank:0.0431
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.33s/it]epoch [15/35], total_loss:0.1880, cos_loss:0.0041, mse_loss:0.0044, neg_push_loss:0.0927, seg_loss:0.0746
+  [aux-loss] div:0.0938 rank:0.0149
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.40s/it]
+   Class      I-Auroc       I-AP        I-F1      P-AUROC       P-AP        P-F1      P-AUPRO   
+  0%|                                                     | 0/8 [00:00<?, ?it/s] 12%|█████▋                                       | 1/8 [00:01<00:13,  1.92s/it] 25%|███████████▎                                 | 2/8 [00:02<00:05,  1.01it/s] 38%|████████████████▉                            | 3/8 [00:02<00:03,  1.39it/s] 50%|██████████████████████▌                      | 4/8 [00:03<00:02,  1.59it/s] 62%|████████████████████████████▏                | 5/8 [00:03<00:01,  1.82it/s] 75%|█████████████████████████████████▊           | 6/8 [00:03<00:00,  2.03it/s] 88%|███████████████████████████████████████▍     | 7/8 [00:04<00:00,  2.19it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  2.32it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  1.65it/s]
+  leather      0.0819      0.5503      0.8519      0.0205      0.0042      0.0164       nan     
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [16/35], total_loss:0.1499, cos_loss:0.0027, mse_loss:0.0100, neg_push_loss:0.0905, seg_loss:0.0378
+  [aux-loss] div:0.0889 rank:0.0244
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.89s/it]epoch [16/35], total_loss:0.1621, cos_loss:0.0025, mse_loss:0.0084, neg_push_loss:0.0920, seg_loss:0.0504
+  [aux-loss] div:0.0852 rank:0.0177
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.54s/it]epoch [16/35], total_loss:0.2064, cos_loss:0.0024, mse_loss:0.0075, neg_push_loss:0.0940, seg_loss:0.0937
+  [aux-loss] div:0.0826 rank:0.0340
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [16/35], total_loss:0.2237, cos_loss:0.0025, mse_loss:0.0067, neg_push_loss:0.0938, seg_loss:0.1118
+  [aux-loss] div:0.0806 rank:0.0461
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [16/35], total_loss:0.2109, cos_loss:0.0022, mse_loss:0.0059, neg_push_loss:0.0926, seg_loss:0.1011
+  [aux-loss] div:0.0794 rank:0.0256
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [16/35], total_loss:0.1925, cos_loss:0.0021, mse_loss:0.0055, neg_push_loss:0.0858, seg_loss:0.0893
+  [aux-loss] div:0.0791 rank:0.1031
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [16/35], total_loss:0.1827, cos_loss:0.0021, mse_loss:0.0052, neg_push_loss:0.0773, seg_loss:0.0881
+  [aux-loss] div:0.0791 rank:0.0744
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [16/35], total_loss:0.1749, cos_loss:0.0020, mse_loss:0.0050, neg_push_loss:0.0692, seg_loss:0.0879
+  [aux-loss] div:0.0791 rank:0.1480
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.33s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [17/35], total_loss:0.0579, cos_loss:0.0013, mse_loss:0.0048, neg_push_loss:0.0045, seg_loss:0.0327
+  [aux-loss] div:0.0789 rank:0.1215
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.91s/it]epoch [17/35], total_loss:0.0579, cos_loss:0.0021, mse_loss:0.0043, neg_push_loss:0.0108, seg_loss:0.0283
+  [aux-loss] div:0.0760 rank:0.0649
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.59s/it]epoch [17/35], total_loss:0.0819, cos_loss:0.0037, mse_loss:0.0038, neg_push_loss:0.0188, seg_loss:0.0435
+  [aux-loss] div:0.0739 rank:0.1284
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.48s/it]epoch [17/35], total_loss:0.0942, cos_loss:0.0061, mse_loss:0.0040, neg_push_loss:0.0247, seg_loss:0.0487
+  [aux-loss] div:0.0768 rank:0.0955
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.41s/it]epoch [17/35], total_loss:0.0941, cos_loss:0.0055, mse_loss:0.0038, neg_push_loss:0.0288, seg_loss:0.0453
+  [aux-loss] div:0.0774 rank:0.0713
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.37s/it]epoch [17/35], total_loss:0.0955, cos_loss:0.0048, mse_loss:0.0036, neg_push_loss:0.0334, seg_loss:0.0425
+  [aux-loss] div:0.0748 rank:0.1119
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [17/35], total_loss:0.1048, cos_loss:0.0045, mse_loss:0.0037, neg_push_loss:0.0400, seg_loss:0.0457
+  [aux-loss] div:0.0711 rank:0.0726
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.33s/it]epoch [17/35], total_loss:0.1158, cos_loss:0.0040, mse_loss:0.0040, neg_push_loss:0.0481, seg_loss:0.0486
+  [aux-loss] div:0.0695 rank:0.0881
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.40s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [18/35], total_loss:0.2015, cos_loss:0.0014, mse_loss:0.0046, neg_push_loss:0.1350, seg_loss:0.0491
+  [aux-loss] div:0.0699 rank:0.0857
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.92s/it]epoch [18/35], total_loss:0.2073, cos_loss:0.0013, mse_loss:0.0039, neg_push_loss:0.1499, seg_loss:0.0396
+  [aux-loss] div:0.0705 rank:0.1215
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.56s/it]epoch [18/35], total_loss:0.2233, cos_loss:0.0012, mse_loss:0.0039, neg_push_loss:0.1621, seg_loss:0.0430
+  [aux-loss] div:0.0697 rank:0.1247
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.47s/it]epoch [18/35], total_loss:0.2333, cos_loss:0.0011, mse_loss:0.0037, neg_push_loss:0.1694, seg_loss:0.0465
+  [aux-loss] div:0.0685 rank:0.0819
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.40s/it]epoch [18/35], total_loss:0.2316, cos_loss:0.0013, mse_loss:0.0035, neg_push_loss:0.1732, seg_loss:0.0421
+  [aux-loss] div:0.0674 rank:0.0211
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.37s/it]epoch [18/35], total_loss:0.2309, cos_loss:0.0015, mse_loss:0.0034, neg_push_loss:0.1736, seg_loss:0.0408
+  [aux-loss] div:0.0663 rank:0.1145
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.38s/it]epoch [18/35], total_loss:0.2286, cos_loss:0.0016, mse_loss:0.0035, neg_push_loss:0.1718, seg_loss:0.0404
+  [aux-loss] div:0.0660 rank:0.0596
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.36s/it]epoch [18/35], total_loss:0.2256, cos_loss:0.0015, mse_loss:0.0034, neg_push_loss:0.1692, seg_loss:0.0404
+  [aux-loss] div:0.0655 rank:0.0505
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.37s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.43s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [19/35], total_loss:0.1991, cos_loss:0.0006, mse_loss:0.0025, neg_push_loss:0.1509, seg_loss:0.0300
+  [aux-loss] div:0.0648 rank:0.1488
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.92s/it]epoch [19/35], total_loss:0.1971, cos_loss:0.0009, mse_loss:0.0025, neg_push_loss:0.1490, seg_loss:0.0317
+  [aux-loss] div:0.0642 rank:0.0870
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.56s/it]epoch [19/35], total_loss:0.1956, cos_loss:0.0007, mse_loss:0.0023, neg_push_loss:0.1479, seg_loss:0.0334
+  [aux-loss] div:0.0625 rank:0.0292
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [19/35], total_loss:0.1912, cos_loss:0.0007, mse_loss:0.0023, neg_push_loss:0.1459, seg_loss:0.0319
+  [aux-loss] div:0.0609 rank:0.0406
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [19/35], total_loss:0.1869, cos_loss:0.0007, mse_loss:0.0022, neg_push_loss:0.1435, seg_loss:0.0306
+  [aux-loss] div:0.0605 rank:0.0277
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.38s/it]epoch [19/35], total_loss:0.1850, cos_loss:0.0006, mse_loss:0.0022, neg_push_loss:0.1419, seg_loss:0.0304
+  [aux-loss] div:0.0596 rank:0.0656
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.37s/it]epoch [19/35], total_loss:0.1842, cos_loss:0.0007, mse_loss:0.0021, neg_push_loss:0.1411, seg_loss:0.0305
+  [aux-loss] div:0.0590 rank:0.0578
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.35s/it]epoch [19/35], total_loss:0.1842, cos_loss:0.0007, mse_loss:0.0021, neg_push_loss:0.1413, seg_loss:0.0306
+  [aux-loss] div:0.0580 rank:0.0345
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.34s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.41s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [20/35], total_loss:0.2153, cos_loss:0.0025, mse_loss:0.0025, neg_push_loss:0.1664, seg_loss:0.0384
+  [aux-loss] div:0.0574 rank:0.0156
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.96s/it]epoch [20/35], total_loss:0.2127, cos_loss:0.0029, mse_loss:0.0027, neg_push_loss:0.1715, seg_loss:0.0304
+  [aux-loss] div:0.0562 rank:0.0176
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.57s/it]epoch [20/35], total_loss:0.2153, cos_loss:0.0021, mse_loss:0.0026, neg_push_loss:0.1738, seg_loss:0.0309
+  [aux-loss] div:0.0550 rank:0.0325
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [20/35], total_loss:0.2206, cos_loss:0.0017, mse_loss:0.0023, neg_push_loss:0.1771, seg_loss:0.0333
+  [aux-loss] div:0.0543 rank:0.0318
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [20/35], total_loss:0.2214, cos_loss:0.0017, mse_loss:0.0023, neg_push_loss:0.1783, seg_loss:0.0330
+  [aux-loss] div:0.0534 rank:0.0226
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.36s/it]epoch [20/35], total_loss:0.2165, cos_loss:0.0015, mse_loss:0.0022, neg_push_loss:0.1746, seg_loss:0.0321
+  [aux-loss] div:0.0518 rank:0.0199
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.36s/it]epoch [20/35], total_loss:0.2106, cos_loss:0.0014, mse_loss:0.0022, neg_push_loss:0.1683, seg_loss:0.0322
+  [aux-loss] div:0.0510 rank:0.0716
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.34s/it]epoch [20/35], total_loss:0.2092, cos_loss:0.0013, mse_loss:0.0021, neg_push_loss:0.1681, seg_loss:0.0311
+  [aux-loss] div:0.0504 rank:0.0276
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.34s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.41s/it]
+   Class      I-Auroc       I-AP        I-F1      P-AUROC       P-AP        P-F1      P-AUPRO   
+  0%|                                                     | 0/8 [00:00<?, ?it/s] 12%|█████▋                                       | 1/8 [00:01<00:13,  1.93s/it] 25%|███████████▎                                 | 2/8 [00:02<00:06,  1.06s/it] 38%|████████████████▉                            | 3/8 [00:02<00:03,  1.38it/s] 50%|██████████████████████▌                      | 4/8 [00:03<00:02,  1.67it/s] 62%|████████████████████████████▏                | 5/8 [00:03<00:01,  1.97it/s] 75%|█████████████████████████████████▊           | 6/8 [00:03<00:00,  2.19it/s] 88%|███████████████████████████████████████▍     | 7/8 [00:04<00:00,  2.30it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  2.61it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  1.73it/s]
+  leather      0.6562      0.8363      0.8519      0.0204      0.0042      0.0164       nan     
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [21/35], total_loss:0.2954, cos_loss:0.0009, mse_loss:0.0019, neg_push_loss:0.2531, seg_loss:0.0331
+  [aux-loss] div:0.0498 rank:0.0289
+ 12%|█████▋                                       | 1/8 [00:02<00:14,  2.07s/it]epoch [21/35], total_loss:0.3345, cos_loss:0.0009, mse_loss:0.0019, neg_push_loss:0.2967, seg_loss:0.0286
+  [aux-loss] div:0.0521 rank:0.0290
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.62s/it]epoch [21/35], total_loss:0.3571, cos_loss:0.0010, mse_loss:0.0020, neg_push_loss:0.3192, seg_loss:0.0281
+  [aux-loss] div:0.0527 rank:0.0555
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.47s/it]epoch [21/35], total_loss:0.3149, cos_loss:0.0012, mse_loss:0.0022, neg_push_loss:0.2754, seg_loss:0.0295
+  [aux-loss] div:0.0566 rank:0.0179
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.41s/it]epoch [21/35], total_loss:0.2841, cos_loss:0.0013, mse_loss:0.0021, neg_push_loss:0.2450, seg_loss:0.0287
+  [aux-loss] div:0.0765 rank:0.0206
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.38s/it]epoch [21/35], total_loss:0.2620, cos_loss:0.0011, mse_loss:0.0021, neg_push_loss:0.2233, seg_loss:0.0280
+  [aux-loss] div:0.0740 rank:0.0483
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.36s/it]epoch [21/35], total_loss:0.2481, cos_loss:0.0010, mse_loss:0.0021, neg_push_loss:0.2090, seg_loss:0.0286
+  [aux-loss] div:0.0563 rank:0.0179
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.34s/it]epoch [21/35], total_loss:0.2512, cos_loss:0.0010, mse_loss:0.0020, neg_push_loss:0.2135, seg_loss:0.0275
+  [aux-loss] div:0.0469 rank:0.0302
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.42s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [22/35], total_loss:0.4028, cos_loss:0.0004, mse_loss:0.0016, neg_push_loss:0.3730, seg_loss:0.0221
+  [aux-loss] div:0.0517 rank:0.0116
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.89s/it]epoch [22/35], total_loss:0.4069, cos_loss:0.0005, mse_loss:0.0019, neg_push_loss:0.3769, seg_loss:0.0220
+  [aux-loss] div:0.0511 rank:0.0140
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.54s/it]epoch [22/35], total_loss:0.4094, cos_loss:0.0005, mse_loss:0.0018, neg_push_loss:0.3800, seg_loss:0.0215
+  [aux-loss] div:0.0497 rank:0.0102
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [22/35], total_loss:0.4117, cos_loss:0.0005, mse_loss:0.0017, neg_push_loss:0.3802, seg_loss:0.0229
+  [aux-loss] div:0.0487 rank:0.0678
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [22/35], total_loss:0.4032, cos_loss:0.0005, mse_loss:0.0017, neg_push_loss:0.3713, seg_loss:0.0235
+  [aux-loss] div:0.0459 rank:0.0207
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [22/35], total_loss:0.3893, cos_loss:0.0006, mse_loss:0.0017, neg_push_loss:0.3557, seg_loss:0.0248
+  [aux-loss] div:0.0472 rank:0.0641
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [22/35], total_loss:0.3721, cos_loss:0.0007, mse_loss:0.0017, neg_push_loss:0.3392, seg_loss:0.0241
+  [aux-loss] div:0.0478 rank:0.0359
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [22/35], total_loss:0.3564, cos_loss:0.0008, mse_loss:0.0017, neg_push_loss:0.3239, seg_loss:0.0237
+  [aux-loss] div:0.0478 rank:0.0129
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.31s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [23/35], total_loss:0.2482, cos_loss:0.0007, mse_loss:0.0016, neg_push_loss:0.2200, seg_loss:0.0208
+  [aux-loss] div:0.0470 rank:0.0122
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.92s/it]epoch [23/35], total_loss:0.2593, cos_loss:0.0006, mse_loss:0.0014, neg_push_loss:0.2311, seg_loss:0.0207
+  [aux-loss] div:0.0462 rank:0.0251
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.57s/it]epoch [23/35], total_loss:0.2723, cos_loss:0.0008, mse_loss:0.0014, neg_push_loss:0.2444, seg_loss:0.0203
+  [aux-loss] div:0.0460 rank:0.0251
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.45s/it]epoch [23/35], total_loss:0.2839, cos_loss:0.0007, mse_loss:0.0014, neg_push_loss:0.2538, seg_loss:0.0222
+  [aux-loss] div:0.0458 rank:0.0437
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [23/35], total_loss:0.2894, cos_loss:0.0007, mse_loss:0.0014, neg_push_loss:0.2601, seg_loss:0.0212
+  [aux-loss] div:0.0454 rank:0.0331
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.36s/it]epoch [23/35], total_loss:0.2945, cos_loss:0.0007, mse_loss:0.0014, neg_push_loss:0.2644, seg_loss:0.0219
+  [aux-loss] div:0.0450 rank:0.0546
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [23/35], total_loss:0.2992, cos_loss:0.0007, mse_loss:0.0013, neg_push_loss:0.2670, seg_loss:0.0235
+  [aux-loss] div:0.0447 rank:0.0899
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.33s/it]epoch [23/35], total_loss:0.3015, cos_loss:0.0007, mse_loss:0.0013, neg_push_loss:0.2689, seg_loss:0.0240
+  [aux-loss] div:0.0446 rank:0.0449
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.40s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [24/35], total_loss:0.3142, cos_loss:0.0011, mse_loss:0.0013, neg_push_loss:0.2792, seg_loss:0.0259
+  [aux-loss] div:0.0445 rank:0.0478
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.90s/it]epoch [24/35], total_loss:0.3116, cos_loss:0.0014, mse_loss:0.0012, neg_push_loss:0.2743, seg_loss:0.0270
+  [aux-loss] div:0.0442 rank:0.0850
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.55s/it]epoch [24/35], total_loss:0.3044, cos_loss:0.0017, mse_loss:0.0013, neg_push_loss:0.2704, seg_loss:0.0243
+  [aux-loss] div:0.0439 rank:0.0213
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [24/35], total_loss:0.3012, cos_loss:0.0014, mse_loss:0.0013, neg_push_loss:0.2687, seg_loss:0.0235
+  [aux-loss] div:0.0436 rank:0.0202
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [24/35], total_loss:0.3012, cos_loss:0.0013, mse_loss:0.0013, neg_push_loss:0.2690, seg_loss:0.0237
+  [aux-loss] div:0.0433 rank:0.0159
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.36s/it]epoch [24/35], total_loss:0.3012, cos_loss:0.0013, mse_loss:0.0013, neg_push_loss:0.2698, seg_loss:0.0231
+  [aux-loss] div:0.0433 rank:0.0140
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.35s/it]epoch [24/35], total_loss:0.3012, cos_loss:0.0012, mse_loss:0.0013, neg_push_loss:0.2693, seg_loss:0.0236
+  [aux-loss] div:0.0432 rank:0.0448
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.33s/it]epoch [24/35], total_loss:0.2986, cos_loss:0.0012, mse_loss:0.0012, neg_push_loss:0.2674, seg_loss:0.0230
+  [aux-loss] div:0.0428 rank:0.0259
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.33s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.40s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [25/35], total_loss:0.2715, cos_loss:0.0023, mse_loss:0.0011, neg_push_loss:0.2388, seg_loss:0.0227
+  [aux-loss] div:0.0423 rank:0.0582
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.80s/it]epoch [25/35], total_loss:0.2639, cos_loss:0.0021, mse_loss:0.0014, neg_push_loss:0.2328, seg_loss:0.0221
+  [aux-loss] div:0.0420 rank:0.0209
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.54s/it]epoch [25/35], total_loss:0.2632, cos_loss:0.0021, mse_loss:0.0014, neg_push_loss:0.2304, seg_loss:0.0239
+  [aux-loss] div:0.0417 rank:0.0304
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [25/35], total_loss:0.2640, cos_loss:0.0024, mse_loss:0.0014, neg_push_loss:0.2306, seg_loss:0.0245
+  [aux-loss] div:0.0415 rank:0.0362
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [25/35], total_loss:0.2646, cos_loss:0.0027, mse_loss:0.0014, neg_push_loss:0.2307, seg_loss:0.0249
+  [aux-loss] div:0.0412 rank:0.0287
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.36s/it]epoch [25/35], total_loss:0.2639, cos_loss:0.0031, mse_loss:0.0015, neg_push_loss:0.2305, seg_loss:0.0240
+  [aux-loss] div:0.0407 rank:0.0359
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [25/35], total_loss:0.2638, cos_loss:0.0028, mse_loss:0.0015, neg_push_loss:0.2304, seg_loss:0.0241
+  [aux-loss] div:0.0401 rank:0.0571
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.33s/it]epoch [25/35], total_loss:0.2643, cos_loss:0.0025, mse_loss:0.0015, neg_push_loss:0.2313, seg_loss:0.0240
+  [aux-loss] div:0.0395 rank:0.0191
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.33s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+   Class      I-Auroc       I-AP        I-F1      P-AUROC       P-AP        P-F1      P-AUPRO   
+  0%|                                                     | 0/8 [00:00<?, ?it/s] 12%|█████▋                                       | 1/8 [00:01<00:11,  1.71s/it] 25%|███████████▎                                 | 2/8 [00:02<00:05,  1.05it/s] 38%|████████████████▉                            | 3/8 [00:02<00:03,  1.55it/s] 50%|██████████████████████▌                      | 4/8 [00:02<00:02,  1.76it/s] 62%|████████████████████████████▏                | 5/8 [00:03<00:01,  2.04it/s] 75%|█████████████████████████████████▊           | 6/8 [00:03<00:00,  2.26it/s] 88%|███████████████████████████████████████▍     | 7/8 [00:03<00:00,  2.29it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  2.72it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  1.84it/s]
+  leather      0.0020      0.5330      0.8519      0.0275      0.0042      0.0164       nan     
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [26/35], total_loss:0.2858, cos_loss:0.0029, mse_loss:0.0014, neg_push_loss:0.2521, seg_loss:0.0239
+  [aux-loss] div:0.0389 rank:0.0516
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.84s/it]epoch [26/35], total_loss:0.2906, cos_loss:0.0018, mse_loss:0.0012, neg_push_loss:0.2546, seg_loss:0.0257
+  [aux-loss] div:0.0385 rank:0.0936
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.53s/it]epoch [26/35], total_loss:0.2903, cos_loss:0.0017, mse_loss:0.0013, neg_push_loss:0.2555, seg_loss:0.0251
+  [aux-loss] div:0.0383 rank:0.0431
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.42s/it]epoch [26/35], total_loss:0.2909, cos_loss:0.0017, mse_loss:0.0013, neg_push_loss:0.2553, seg_loss:0.0263
+  [aux-loss] div:0.0384 rank:0.0326
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.37s/it]epoch [26/35], total_loss:0.2901, cos_loss:0.0017, mse_loss:0.0013, neg_push_loss:0.2555, seg_loss:0.0259
+  [aux-loss] div:0.0384 rank:0.0130
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [26/35], total_loss:0.2902, cos_loss:0.0017, mse_loss:0.0013, neg_push_loss:0.2573, seg_loss:0.0243
+  [aux-loss] div:0.0381 rank:0.0200
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.35s/it]epoch [26/35], total_loss:0.2930, cos_loss:0.0019, mse_loss:0.0014, neg_push_loss:0.2600, seg_loss:0.0245
+  [aux-loss] div:0.0381 rank:0.0236
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.36s/it]epoch [26/35], total_loss:0.2949, cos_loss:0.0023, mse_loss:0.0014, neg_push_loss:0.2623, seg_loss:0.0239
+  [aux-loss] div:0.0381 rank:0.0284
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.36s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.40s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [27/35], total_loss:0.3136, cos_loss:0.0053, mse_loss:0.0020, neg_push_loss:0.2743, seg_loss:0.0282
+  [aux-loss] div:0.0378 rank:0.0450
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.84s/it]epoch [27/35], total_loss:0.3033, cos_loss:0.0032, mse_loss:0.0017, neg_push_loss:0.2692, seg_loss:0.0248
+  [aux-loss] div:0.0376 rank:0.0322
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.52s/it]epoch [27/35], total_loss:0.3005, cos_loss:0.0025, mse_loss:0.0015, neg_push_loss:0.2661, seg_loss:0.0249
+  [aux-loss] div:0.0376 rank:0.0745
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.42s/it]epoch [27/35], total_loss:0.2993, cos_loss:0.0028, mse_loss:0.0015, neg_push_loss:0.2654, seg_loss:0.0247
+  [aux-loss] div:0.0373 rank:0.0221
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.37s/it]epoch [27/35], total_loss:0.2994, cos_loss:0.0025, mse_loss:0.0014, neg_push_loss:0.2665, seg_loss:0.0239
+  [aux-loss] div:0.0371 rank:0.0329
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [27/35], total_loss:0.3002, cos_loss:0.0024, mse_loss:0.0014, neg_push_loss:0.2678, seg_loss:0.0233
+  [aux-loss] div:0.0372 rank:0.0605
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.36s/it]epoch [27/35], total_loss:0.3006, cos_loss:0.0024, mse_loss:0.0014, neg_push_loss:0.2686, seg_loss:0.0232
+  [aux-loss] div:0.0369 rank:0.0249
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [27/35], total_loss:0.3020, cos_loss:0.0024, mse_loss:0.0014, neg_push_loss:0.2691, seg_loss:0.0236
+  [aux-loss] div:0.0369 rank:0.0934
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [28/35], total_loss:0.3108, cos_loss:0.0021, mse_loss:0.0015, neg_push_loss:0.2784, seg_loss:0.0223
+  [aux-loss] div:0.0367 rank:0.0655
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.85s/it]epoch [28/35], total_loss:0.3087, cos_loss:0.0027, mse_loss:0.0015, neg_push_loss:0.2800, seg_loss:0.0197
+  [aux-loss] div:0.0365 rank:0.0159
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.53s/it]epoch [28/35], total_loss:0.3093, cos_loss:0.0033, mse_loss:0.0017, neg_push_loss:0.2812, seg_loss:0.0190
+  [aux-loss] div:0.0363 rank:0.0281
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.42s/it]epoch [28/35], total_loss:0.3110, cos_loss:0.0035, mse_loss:0.0018, neg_push_loss:0.2823, seg_loss:0.0193
+  [aux-loss] div:0.0361 rank:0.0413
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.37s/it]epoch [28/35], total_loss:0.3126, cos_loss:0.0030, mse_loss:0.0017, neg_push_loss:0.2829, seg_loss:0.0207
+  [aux-loss] div:0.0359 rank:0.0311
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [28/35], total_loss:0.3130, cos_loss:0.0027, mse_loss:0.0016, neg_push_loss:0.2834, seg_loss:0.0210
+  [aux-loss] div:0.0357 rank:0.0140
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [28/35], total_loss:0.3133, cos_loss:0.0026, mse_loss:0.0016, neg_push_loss:0.2838, seg_loss:0.0208
+  [aux-loss] div:0.0355 rank:0.0559
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [28/35], total_loss:0.3148, cos_loss:0.0023, mse_loss:0.0016, neg_push_loss:0.2840, seg_loss:0.0223
+  [aux-loss] div:0.0353 rank:0.0336
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.38s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [29/35], total_loss:0.3083, cos_loss:0.0010, mse_loss:0.0015, neg_push_loss:0.2823, seg_loss:0.0197
+  [aux-loss] div:0.0350 rank:0.0143
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.82s/it]epoch [29/35], total_loss:0.3065, cos_loss:0.0010, mse_loss:0.0015, neg_push_loss:0.2805, seg_loss:0.0197
+  [aux-loss] div:0.0349 rank:0.0130
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.53s/it]epoch [29/35], total_loss:0.3068, cos_loss:0.0009, mse_loss:0.0014, neg_push_loss:0.2794, seg_loss:0.0207
+  [aux-loss] div:0.0348 rank:0.0398
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.42s/it]epoch [29/35], total_loss:0.3064, cos_loss:0.0010, mse_loss:0.0014, neg_push_loss:0.2792, seg_loss:0.0207
+  [aux-loss] div:0.0344 rank:0.0140
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.34s/it]epoch [29/35], total_loss:0.3059, cos_loss:0.0011, mse_loss:0.0013, neg_push_loss:0.2792, seg_loss:0.0203
+  [aux-loss] div:0.0342 rank:0.0046
+ 62%|████████████████████████████▏                | 5/8 [00:06<00:03,  1.32s/it]epoch [29/35], total_loss:0.3064, cos_loss:0.0013, mse_loss:0.0014, neg_push_loss:0.2792, seg_loss:0.0206
+  [aux-loss] div:0.0340 rank:0.0253
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [29/35], total_loss:0.3070, cos_loss:0.0015, mse_loss:0.0014, neg_push_loss:0.2791, seg_loss:0.0210
+  [aux-loss] div:0.0338 rank:0.0415
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [29/35], total_loss:0.3063, cos_loss:0.0014, mse_loss:0.0014, neg_push_loss:0.2788, seg_loss:0.0207
+  [aux-loss] div:0.0334 rank:0.0131
+100%|█████████████████████████████████████████████| 8/8 [00:10<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.38s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [30/35], total_loss:0.3104, cos_loss:0.0006, mse_loss:0.0011, neg_push_loss:0.2782, seg_loss:0.0263
+  [aux-loss] div:0.0332 rank:0.0192
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.87s/it]epoch [30/35], total_loss:0.3065, cos_loss:0.0013, mse_loss:0.0012, neg_push_loss:0.2779, seg_loss:0.0224
+  [aux-loss] div:0.0331 rank:0.0139
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.52s/it]epoch [30/35], total_loss:0.3069, cos_loss:0.0010, mse_loss:0.0012, neg_push_loss:0.2769, seg_loss:0.0238
+  [aux-loss] div:0.0328 rank:0.0300
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.46s/it]epoch [30/35], total_loss:0.3044, cos_loss:0.0011, mse_loss:0.0012, neg_push_loss:0.2761, seg_loss:0.0222
+  [aux-loss] div:0.0327 rank:0.0081
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [30/35], total_loss:0.3028, cos_loss:0.0012, mse_loss:0.0012, neg_push_loss:0.2756, seg_loss:0.0212
+  [aux-loss] div:0.0325 rank:0.0082
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.36s/it]epoch [30/35], total_loss:0.3034, cos_loss:0.0013, mse_loss:0.0012, neg_push_loss:0.2757, seg_loss:0.0214
+  [aux-loss] div:0.0324 rank:0.0385
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [30/35], total_loss:0.3037, cos_loss:0.0013, mse_loss:0.0012, neg_push_loss:0.2759, seg_loss:0.0216
+  [aux-loss] div:0.0323 rank:0.0122
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.33s/it]epoch [30/35], total_loss:0.3044, cos_loss:0.0015, mse_loss:0.0012, neg_push_loss:0.2757, seg_loss:0.0223
+  [aux-loss] div:0.0321 rank:0.0211
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+   Class      I-Auroc       I-AP        I-F1      P-AUROC       P-AP        P-F1      P-AUPRO   
+  0%|                                                     | 0/8 [00:00<?, ?it/s] 12%|█████▋                                       | 1/8 [00:01<00:13,  1.93s/it] 25%|███████████▎                                 | 2/8 [00:02<00:05,  1.01it/s] 38%|████████████████▉                            | 3/8 [00:02<00:03,  1.41it/s] 50%|██████████████████████▌                      | 4/8 [00:03<00:02,  1.74it/s] 62%|████████████████████████████▏                | 5/8 [00:03<00:01,  2.06it/s] 75%|█████████████████████████████████▊           | 6/8 [00:03<00:00,  2.09it/s] 88%|███████████████████████████████████████▍     | 7/8 [00:04<00:00,  2.37it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  2.53it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  1.76it/s]
+  leather      0.5554      0.7794      0.8638      0.0319      0.0042      0.0164      0.0001   
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [31/35], total_loss:0.3011, cos_loss:0.0036, mse_loss:0.0016, neg_push_loss:0.2705, seg_loss:0.0232
+  [aux-loss] div:0.0321 rank:0.0116
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.82s/it]epoch [31/35], total_loss:0.3015, cos_loss:0.0038, mse_loss:0.0017, neg_push_loss:0.2705, seg_loss:0.0231
+  [aux-loss] div:0.0318 rank:0.0252
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.51s/it]epoch [31/35], total_loss:0.3006, cos_loss:0.0028, mse_loss:0.0015, neg_push_loss:0.2706, seg_loss:0.0229
+  [aux-loss] div:0.0317 rank:0.0106
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.41s/it]epoch [31/35], total_loss:0.2996, cos_loss:0.0023, mse_loss:0.0014, neg_push_loss:0.2710, seg_loss:0.0218
+  [aux-loss] div:0.0316 rank:0.0235
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.39s/it]epoch [31/35], total_loss:0.2986, cos_loss:0.0024, mse_loss:0.0014, neg_push_loss:0.2711, seg_loss:0.0207
+  [aux-loss] div:0.0314 rank:0.0109
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [31/35], total_loss:0.2988, cos_loss:0.0022, mse_loss:0.0014, neg_push_loss:0.2709, seg_loss:0.0211
+  [aux-loss] div:0.0313 rank:0.0402
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [31/35], total_loss:0.2985, cos_loss:0.0021, mse_loss:0.0014, neg_push_loss:0.2704, seg_loss:0.0212
+  [aux-loss] div:0.0311 rank:0.0230
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.35s/it]epoch [31/35], total_loss:0.2985, cos_loss:0.0021, mse_loss:0.0013, neg_push_loss:0.2700, seg_loss:0.0217
+  [aux-loss] div:0.0307 rank:0.0152
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.34s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [32/35], total_loss:0.2857, cos_loss:0.0022, mse_loss:0.0012, neg_push_loss:0.2644, seg_loss:0.0147
+  [aux-loss] div:0.0305 rank:0.0198
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.86s/it]epoch [32/35], total_loss:0.2876, cos_loss:0.0020, mse_loss:0.0012, neg_push_loss:0.2637, seg_loss:0.0176
+  [aux-loss] div:0.0302 rank:0.0162
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.55s/it]epoch [32/35], total_loss:0.2897, cos_loss:0.0024, mse_loss:0.0013, neg_push_loss:0.2631, seg_loss:0.0198
+  [aux-loss] div:0.0298 rank:0.0302
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [32/35], total_loss:0.2901, cos_loss:0.0028, mse_loss:0.0014, neg_push_loss:0.2627, seg_loss:0.0203
+  [aux-loss] div:0.0298 rank:0.0192
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.40s/it]epoch [32/35], total_loss:0.2906, cos_loss:0.0032, mse_loss:0.0015, neg_push_loss:0.2625, seg_loss:0.0207
+  [aux-loss] div:0.0298 rank:0.0318
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.36s/it]epoch [32/35], total_loss:0.2899, cos_loss:0.0028, mse_loss:0.0014, neg_push_loss:0.2622, seg_loss:0.0206
+  [aux-loss] div:0.0297 rank:0.0090
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.34s/it]epoch [32/35], total_loss:0.2902, cos_loss:0.0026, mse_loss:0.0014, neg_push_loss:0.2621, seg_loss:0.0210
+  [aux-loss] div:0.0297 rank:0.0434
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [32/35], total_loss:0.2897, cos_loss:0.0027, mse_loss:0.0014, neg_push_loss:0.2620, seg_loss:0.0206
+  [aux-loss] div:0.0296 rank:0.0148
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.31s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [33/35], total_loss:0.2882, cos_loss:0.0009, mse_loss:0.0011, neg_push_loss:0.2592, seg_loss:0.0232
+  [aux-loss] div:0.0295 rank:0.0229
+ 12%|█████▋                                       | 1/8 [00:01<00:13,  1.89s/it]epoch [33/35], total_loss:0.2835, cos_loss:0.0014, mse_loss:0.0012, neg_push_loss:0.2581, seg_loss:0.0195
+  [aux-loss] div:0.0294 rank:0.0129
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.57s/it]epoch [33/35], total_loss:0.2821, cos_loss:0.0017, mse_loss:0.0012, neg_push_loss:0.2573, seg_loss:0.0188
+  [aux-loss] div:0.0293 rank:0.0139
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [33/35], total_loss:0.2824, cos_loss:0.0019, mse_loss:0.0013, neg_push_loss:0.2563, seg_loss:0.0195
+  [aux-loss] div:0.0293 rank:0.0411
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [33/35], total_loss:0.2814, cos_loss:0.0019, mse_loss:0.0013, neg_push_loss:0.2558, seg_loss:0.0192
+  [aux-loss] div:0.0292 rank:0.0103
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [33/35], total_loss:0.2817, cos_loss:0.0022, mse_loss:0.0013, neg_push_loss:0.2553, seg_loss:0.0197
+  [aux-loss] div:0.0291 rank:0.0334
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [33/35], total_loss:0.2819, cos_loss:0.0025, mse_loss:0.0013, neg_push_loss:0.2550, seg_loss:0.0201
+  [aux-loss] div:0.0291 rank:0.0145
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.32s/it]epoch [33/35], total_loss:0.2822, cos_loss:0.0028, mse_loss:0.0014, neg_push_loss:0.2547, seg_loss:0.0205
+  [aux-loss] div:0.0291 rank:0.0300
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.32s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.39s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [34/35], total_loss:0.2787, cos_loss:0.0013, mse_loss:0.0012, neg_push_loss:0.2504, seg_loss:0.0226
+  [aux-loss] div:0.0290 rank:0.0160
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.83s/it]epoch [34/35], total_loss:0.2762, cos_loss:0.0012, mse_loss:0.0012, neg_push_loss:0.2499, seg_loss:0.0208
+  [aux-loss] div:0.0290 rank:0.0112
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.56s/it]epoch [34/35], total_loss:0.2756, cos_loss:0.0021, mse_loss:0.0013, neg_push_loss:0.2492, seg_loss:0.0204
+  [aux-loss] div:0.0289 rank:0.0105
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.44s/it]epoch [34/35], total_loss:0.2747, cos_loss:0.0018, mse_loss:0.0013, neg_push_loss:0.2482, seg_loss:0.0201
+  [aux-loss] div:0.0289 rank:0.0454
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.40s/it]epoch [34/35], total_loss:0.2741, cos_loss:0.0018, mse_loss:0.0013, neg_push_loss:0.2476, seg_loss:0.0200
+  [aux-loss] div:0.0289 rank:0.0294
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.38s/it]epoch [34/35], total_loss:0.2728, cos_loss:0.0019, mse_loss:0.0013, neg_push_loss:0.2469, seg_loss:0.0195
+  [aux-loss] div:0.0288 rank:0.0137
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.36s/it]epoch [34/35], total_loss:0.2723, cos_loss:0.0020, mse_loss:0.0013, neg_push_loss:0.2461, seg_loss:0.0197
+  [aux-loss] div:0.0289 rank:0.0272
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.34s/it]epoch [34/35], total_loss:0.2719, cos_loss:0.0020, mse_loss:0.0013, neg_push_loss:0.2456, seg_loss:0.0198
+  [aux-loss] div:0.0288 rank:0.0261
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.33s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.40s/it]
+  0%|                                                     | 0/8 [00:00<?, ?it/s]epoch [35/35], total_loss:0.2662, cos_loss:0.0037, mse_loss:0.0014, neg_push_loss:0.2404, seg_loss:0.0190
+  [aux-loss] div:0.0287 rank:0.0107
+ 12%|█████▋                                       | 1/8 [00:01<00:12,  1.81s/it]epoch [35/35], total_loss:0.2694, cos_loss:0.0038, mse_loss:0.0015, neg_push_loss:0.2404, seg_loss:0.0217
+  [aux-loss] div:0.0287 rank:0.0253
+ 25%|███████████▎                                 | 2/8 [00:03<00:09,  1.53s/it]epoch [35/35], total_loss:0.2673, cos_loss:0.0041, mse_loss:0.0016, neg_push_loss:0.2402, seg_loss:0.0196
+  [aux-loss] div:0.0286 rank:0.0097
+ 38%|████████████████▉                            | 3/8 [00:04<00:07,  1.43s/it]epoch [35/35], total_loss:0.2649, cos_loss:0.0034, mse_loss:0.0015, neg_push_loss:0.2396, seg_loss:0.0184
+  [aux-loss] div:0.0286 rank:0.0099
+ 50%|██████████████████████▌                      | 4/8 [00:05<00:05,  1.38s/it]epoch [35/35], total_loss:0.2634, cos_loss:0.0030, mse_loss:0.0014, neg_push_loss:0.2390, seg_loss:0.0178
+  [aux-loss] div:0.0286 rank:0.0153
+ 62%|████████████████████████████▏                | 5/8 [00:07<00:04,  1.35s/it]epoch [35/35], total_loss:0.2645, cos_loss:0.0031, mse_loss:0.0015, neg_push_loss:0.2385, seg_loss:0.0187
+  [aux-loss] div:0.0285 rank:0.0670
+ 75%|█████████████████████████████████▊           | 6/8 [00:08<00:02,  1.33s/it]epoch [35/35], total_loss:0.2648, cos_loss:0.0028, mse_loss:0.0014, neg_push_loss:0.2380, seg_loss:0.0196
+  [aux-loss] div:0.0286 rank:0.0351
+ 88%|███████████████████████████████████████▍     | 7/8 [00:09<00:01,  1.35s/it]epoch [35/35], total_loss:0.2643, cos_loss:0.0028, mse_loss:0.0014, neg_push_loss:0.2375, seg_loss:0.0197
+  [aux-loss] div:0.0285 rank:0.0194
+100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.35s/it]100%|█████████████████████████████████████████████| 8/8 [00:11<00:00,  1.40s/it]
+   Class      I-Auroc       I-AP        I-F1      P-AUROC       P-AP        P-F1      P-AUPRO   
+  0%|                                                     | 0/8 [00:00<?, ?it/s] 12%|█████▋                                       | 1/8 [00:01<00:12,  1.82s/it] 25%|███████████▎                                 | 2/8 [00:02<00:05,  1.04it/s] 38%|████████████████▉                            | 3/8 [00:02<00:03,  1.47it/s] 50%|██████████████████████▌                      | 4/8 [00:02<00:02,  1.73it/s] 62%|████████████████████████████▏                | 5/8 [00:03<00:01,  2.13it/s] 75%|█████████████████████████████████▊           | 6/8 [00:03<00:00,  2.16it/s] 88%|███████████████████████████████████████▍     | 7/8 [00:04<00:00,  2.33it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  2.61it/s]100%|█████████████████████████████████████████████| 8/8 [00:04<00:00,  1.81it/s]
+  leather      0.9660      0.9893      0.9497      0.0837      0.0043      0.0165      0.0027   

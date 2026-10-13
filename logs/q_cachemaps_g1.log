@@ -1,0 +1,8 @@
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=0e3a7e1c-105c-997d-921f-b4247b4dc822
+[gpu_guard] 校验通过
+[16:15:55] cache carpet 完成
+[16:16:08] cache grid 完成
+[16:16:22] cache leather 完成
+[16:16:36] cache tile 完成
+[16:16:49] cache wood 完成
+[2026-10-08 16:16:49] CACHE_GROUP1_DONE

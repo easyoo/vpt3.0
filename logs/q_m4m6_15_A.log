@@ -1,0 +1,25 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 0), ('1', 3186, 55)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 3186, 89)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 11677, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 11677, 51)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 0), ('1', 11537, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 0), ('1', 11677, 90)]），休眠 120s 后重试
+[pick_gpu] 选中 共享卡（已用 3186MiB / 共 24576MiB，剩余 21390MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=90% tag=train:m4m6_15:capsule
+[01:55:21] train capsule on 3bf0407c (save=m4m6_15)
+[01:59:49] train capsule 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6_15:carpet
+[01:59:49] train carpet on 3bf0407c (save=m4m6_15)
+[02:03:28] train carpet 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6_15:grid
+[02:03:28] train grid on 3bf0407c (save=m4m6_15)
+[02:06:43] train grid 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6_15:hazelnut
+[02:06:43] train hazelnut on 3bf0407c (save=m4m6_15)
+[02:11:11] train hazelnut 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=88% tag=train:m4m6_15:leather
+[02:11:11] train leather on 3bf0407c (save=m4m6_15)
+[02:16:26] train leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6_15:metal_nut
+[02:16:26] train metal_nut on 3bf0407c (save=m4m6_15)
+[02:19:59] train metal_nut 结束 exit=0
+[2026-10-09 02:19:59] ROTATE_TRAIN_DONE save=m4m6_15

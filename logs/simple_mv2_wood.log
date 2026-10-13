@@ -1,0 +1,6 @@
+[shot_utils] wood shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_mv2/wood.map shape=(79, 1, 448, 448)
+[v3] wood  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9060  P-AP=0.6136  P-F1=0.6399  P-AUPRO=0.9388
+  CSV:1.0000,1.0000,1.0000,0.9060,0.6136,0.6399,0.9388

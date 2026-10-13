@@ -1,0 +1,5 @@
+[shot_utils] wood shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+  [maps] 保存 .maps_v3_ablate_ab_base/wood.map shape=(79, 1, 448, 448)
+[v3] wood  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9338  P-AP=0.6594  P-F1=0.6604  P-AUPRO=0.9489
+  CSV:1.0000,1.0000,1.0000,0.9338,0.6594,0.6604,0.9489

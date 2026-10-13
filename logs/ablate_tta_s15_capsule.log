@@ -1,0 +1,4 @@
+[shot_utils] capsule shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+[v3] capsule  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.7188  I-AP=0.9202  I-F1=0.9270  P-AUROC=0.9787  P-AP=0.2667  P-F1=0.3758  P-AUPRO=0.9624
+  CSV:0.7188,0.9202,0.9270,0.9787,0.2667,0.3758,0.9624

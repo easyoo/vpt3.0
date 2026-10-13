@@ -1,0 +1,3 @@
+[shot_utils] transistor shot4 hash=d0c4c927f728 picks=['034.png', '145.png', '205.png', '195.png']
+[sub] 全局分位数用 1024/4096 个子采样估计
+[grids3] 保存 .grids3_mv4/transistor.npz  keys=31

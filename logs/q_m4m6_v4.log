@@ -1,0 +1,17 @@
+[pick_gpu] 选中 共享卡（已用 3186MiB / 共 24576MiB，剩余 21390MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=96% tag=train:m4m6:transistor
+[23:52:37] train transistor on 3bf0407c (save=m4m6)
+[23:58:49] train transistor 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3186MiB / 共 24576MiB，剩余 21390MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6:screw
+[23:58:49] train screw on 3bf0407c (save=m4m6)
+[00:04:07] train screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3186MiB / 共 24576MiB，剩余 21390MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6:capsule
+[00:04:07] train capsule on 3bf0407c (save=m4m6)
+[00:08:17] train capsule 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=99% tag=train:m4m6:metal_nut
+[00:08:17] train metal_nut on 3bf0407c (save=m4m6)
+[00:11:45] train metal_nut 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6:wood
+[00:11:45] train wood on 3bf0407c (save=m4m6)
+[00:15:53] train wood 结束 exit=0
+q_rotate_train.sh: line 54: syntax error near unexpected token `fi'
+q_rotate_train.sh: line 54: `o "[$(date +%H:%M:%S)] 严重错误：$cls 训练失败（exit=$rc），中止本轮"; exit 5; fi'

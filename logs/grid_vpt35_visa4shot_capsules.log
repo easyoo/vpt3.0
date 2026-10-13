@@ -1,0 +1,2 @@
+[shot_utils] capsules shot4 hash=9cf53634f920 picks=['147.JPG', '072.JPG', '289.JPG', '130.JPG']
+[grids] 保存 .grids_visa4/capsules.npz  keys=37 raw_min__v0 shape=(160, 48, 48)

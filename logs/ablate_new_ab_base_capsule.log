@@ -1,0 +1,5 @@
+[shot_utils] capsule shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+  [maps] 保存 .maps_v3_ablate_ab_base/capsule.map shape=(132, 1, 448, 448)
+[v3] capsule  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.7140  I-AP=0.9178  I-F1=0.9251  P-AUROC=0.9787  P-AP=0.2622  P-F1=0.3748  P-AUPRO=0.9629
+  CSV:0.7140,0.9178,0.9251,0.9787,0.2622,0.3748,0.9629

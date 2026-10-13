@@ -1,0 +1,4 @@
+[shot_utils] carpet shot2 hash=da98989cce0f picks=['068.png', '032.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_2shot/carpet.map  shape=(117, 1, 448, 448)
+[geom448-geom] carpet  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9920  P-AP=0.5778  P-F1=0.6539  P-AUPRO=0.9801
+  CSV:1.0000,1.0000,1.0000,0.9920,0.5778,0.6539,0.9801

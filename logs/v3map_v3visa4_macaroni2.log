@@ -1,0 +1,5 @@
+[shot_utils] macaroni2 shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+  [maps] 保存 .maps_v3_nocrop448_visa4/macaroni2.map shape=(200, 1, 448, 448)
+[v3] macaroni2  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.8350  I-AP=0.8606  I-F1=0.7647  P-AUROC=0.9930  P-AP=0.2025  P-F1=0.2905  P-AUPRO=0.9794
+  CSV:0.8350,0.8606,0.7647,0.9930,0.2025,0.2905,0.9794

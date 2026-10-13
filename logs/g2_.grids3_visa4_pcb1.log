@@ -1,0 +1,3 @@
+[shot_utils] pcb1 shot4 hash=3e7679014ad1 picks=['0146.JPG', '0639.JPG', '0961.JPG', '0909.JPG']
+[sub] 全局分位数用 1024/4096 个子采样估计
+[grids3] 保存 .grids3_visa4/pcb1.npz  keys=31

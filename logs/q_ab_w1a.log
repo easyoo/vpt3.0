@@ -1,0 +1,11 @@
+[17:32:55] ab_base/transistor start on 0e3a7e1c
+[17:38:00] ab_base/transistor 结束 exit=0
+[17:38:00] ab_base/screw start on 0e3a7e1c
+[17:43:31] ab_base/screw 结束 exit=0
+[17:43:31] ab_base/capsule start on 0e3a7e1c
+[17:49:36] ab_base/capsule 结束 exit=0
+[17:49:36] ab_base/metal_nut start on 0e3a7e1c
+[17:55:05] ab_base/metal_nut 结束 exit=0
+[17:55:05] ab_base/wood start on 0e3a7e1c
+[17:59:05] ab_base/wood 结束 exit=0
+[2026-10-13 17:59:05] ABLATE_DONE save=ab_base

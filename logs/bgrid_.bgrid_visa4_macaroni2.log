@@ -1,0 +1,18 @@
+[shot_utils] macaroni2 shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+[bank] macaroni2: 4 shot → 增强 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3100.57it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+  batch 0 done
+  batch 1 done
+  batch 2 done
+  batch 3 done
+  batch 4 done
+  batch 5 done
+  batch 6 done
+  batch 7 done
+  batch 8 done
+  batch 9 done
+  batch 10 done

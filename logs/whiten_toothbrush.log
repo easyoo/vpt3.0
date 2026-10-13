@@ -1,0 +1,10 @@
+[shot_utils] toothbrush shot2 hash=d8f107688ae1 picks=['008.png', '036.png']
+=== toothbrush (save=m4m6r3_2shot shot=2 lam=0.1 k=3) ===
+  base      I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9940  P-AP=0.6845  P-F1=0.6981  P-AUPRO=0.9712
+  CSV,toothbrush,base,1.0000,1.0000,1.0000,0.9940,0.6845,0.6981,0.9712
+  knn       I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9941  P-AP=0.6873  P-F1=0.6983  P-AUPRO=0.9723
+  CSV,toothbrush,knn,1.0000,1.0000,1.0000,0.9941,0.6873,0.6983,0.9723
+  white     I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9930  P-AP=0.6286  P-F1=0.6806  P-AUPRO=0.9703
+  CSV,toothbrush,white,1.0000,1.0000,1.0000,0.9930,0.6286,0.6806,0.9703
+  white_knn I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9930  P-AP=0.6292  P-F1=0.6792  P-AUPRO=0.9703
+  CSV,toothbrush,white_knn,1.0000,1.0000,1.0000,0.9930,0.6292,0.6792,0.9703

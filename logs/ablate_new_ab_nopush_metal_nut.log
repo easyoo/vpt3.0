@@ -1,0 +1,5 @@
+[shot_utils] metal_nut shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+  [maps] 保存 .maps_v3_ablate_ab_nopush/metal_nut.map shape=(115, 1, 448, 448)
+[v3] metal_nut  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9966  I-AP=0.9992  I-F1=0.9894  P-AUROC=0.9564  P-AP=0.7162  P-F1=0.7274  P-AUPRO=0.9272
+  CSV:0.9966,0.9992,0.9894,0.9564,0.7162,0.7274,0.9272

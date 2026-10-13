@@ -1,0 +1,4 @@
+[shot_utils] zipper shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/zipper.map  shape=(151, 1, 448, 448)
+[geom448-geom] zipper  I-AUROC=0.9806  I-AP=0.9953  I-F1=0.9702  P-AUROC=0.9788  P-AP=0.6233  P-F1=0.6185  P-AUPRO=0.9393
+  CSV:0.9806,0.9953,0.9702,0.9788,0.6233,0.6185,0.9393

@@ -1,0 +1,4 @@
+[shot_utils] candle shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+  [maps] 已保存(未平滑) .maps_nocrop448_visa4/candle.map  shape=(200, 1, 448, 448)
+[nocrop448] candle  I-AUROC=0.9068  I-AP=0.8747  I-F1=0.8792  P-AUROC=0.9645  P-AP=0.2982  P-F1=0.3803  P-AUPRO=0.9205
+  CSV:0.9068,0.8747,0.8792,0.9645,0.2982,0.3803,0.9205

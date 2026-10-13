@@ -1,0 +1,33 @@
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=0e3a7e1c-105c-997d-921f-b4247b4dc822
+[gpu_guard] 校验通过
+[2026-10-08 10:55:42] screw (epoch 25) base
+[2026-10-08 10:56:07] screw (epoch 25) bankAll
+[2026-10-08 10:56:29] screw (epoch 25) bankAll_w03
+[2026-10-08 10:56:52] screw (epoch 25) bankAll_z
+[2026-10-08 10:57:18] screw (epoch 25) bankAll_ms
+[2026-10-08 10:58:10] screw (epoch 25) bankAll_w03_ms
+[2026-10-08 10:59:04] hazelnut (epoch 20) base
+[2026-10-08 10:59:24] hazelnut (epoch 20) bankAll
+[2026-10-08 10:59:46] hazelnut (epoch 20) bankAll_w03
+[2026-10-08 11:00:10] hazelnut (epoch 20) bankAll_z
+[2026-10-08 11:00:31] hazelnut (epoch 20) bankAll_ms
+[2026-10-08 11:01:11] hazelnut (epoch 20) bankAll_w03_ms
+[2026-10-08 11:02:02] wood (epoch 10) base
+[2026-10-08 11:02:24] wood (epoch 10) bankAll
+[2026-10-08 11:02:45] wood (epoch 10) bankAll_w03
+[2026-10-08 11:03:08] wood (epoch 10) bankAll_z
+[2026-10-08 11:03:28] wood (epoch 10) bankAll_ms
+[2026-10-08 11:04:08] wood (epoch 10) bankAll_w03_ms
+[2026-10-08 11:04:50] capsule (epoch 10) base
+[2026-10-08 11:05:14] capsule (epoch 10) bankAll
+[2026-10-08 11:05:43] capsule (epoch 10) bankAll_w03
+[2026-10-08 11:06:10] capsule (epoch 10) bankAll_z
+[2026-10-08 11:06:35] capsule (epoch 10) bankAll_ms
+[2026-10-08 11:07:30] capsule (epoch 10) bankAll_w03_ms
+[2026-10-08 11:08:26] metal_nut (epoch 35) base
+[2026-10-08 11:08:50] metal_nut (epoch 35) bankAll
+[2026-10-08 11:09:22] metal_nut (epoch 35) bankAll_w03
+[2026-10-08 11:09:46] metal_nut (epoch 35) bankAll_z
+[2026-10-08 11:10:09] metal_nut (epoch 35) bankAll_ms
+[2026-10-08 11:10:54] metal_nut (epoch 35) bankAll_w03_ms
+[2026-10-08 11:11:43] FUSE_QUEUE_DONE

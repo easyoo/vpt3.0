@@ -1,0 +1,16 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 0), ('1', 8438, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 8438, 99)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 8438, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 8438, 90)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 4, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 8438, 100)]），休眠 120s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=train:regA:leather
+[02:52:47] train leather on 3bf0407c (save=regA)
+[02:58:13] train leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:regA:pill
+[02:58:13] train pill on 3bf0407c (save=regA)
+[03:02:13] train pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:regA:zipper
+[03:02:13] train zipper on 3bf0407c (save=regA)
+[03:07:53] train zipper 结束 exit=0
+[2026-10-09 03:07:53] ROTATE_TRAIN_DONE save=regA

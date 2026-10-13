@@ -1,0 +1,6 @@
+[shot_utils] pill shot4 hash=be3d4e70cade picks=['068.png', '032.png', '130.png', '060.png']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_mv4/pill.map shape=(167, 1, 448, 448)
+[v3] pill  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.9812  I-AP=0.9965  I-F1=0.9712  P-AUROC=0.9516  P-AP=0.5878  P-F1=0.6144  P-AUPRO=0.9734
+  CSV:0.9812,0.9965,0.9712,0.9516,0.5878,0.6144,0.9734

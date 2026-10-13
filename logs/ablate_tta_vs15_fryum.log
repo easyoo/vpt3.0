@@ -1,0 +1,4 @@
+[shot_utils] fryum shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[v3] fryum  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9620  I-AP=0.9800  I-F1=0.9490  P-AUROC=0.9714  P-AP=0.3988  P-F1=0.4782  P-AUPRO=0.9553
+  CSV:0.9620,0.9800,0.9490,0.9714,0.3988,0.4782,0.9553

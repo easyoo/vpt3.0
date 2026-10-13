@@ -1,0 +1,5 @@
+[shot_utils] pcb3 shot4 hash=3e7679014ad1 picks=['0146.JPG', '0639.JPG', '0961.JPG', '0909.JPG']
+  [maps] 保存 .maps_v3_nocrop448_visa4/pcb3.map shape=(201, 1, 448, 448)
+[v3] pcb3  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9375  I-AP=0.9448  I-F1=0.8800  P-AUROC=0.9598  P-AP=0.2617  P-F1=0.3491  P-AUPRO=0.8887
+  CSV:0.9375,0.9448,0.8800,0.9598,0.2617,0.3491,0.8887

@@ -1,0 +1,6 @@
+[shot_utils] capsule shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_mv4/capsule.map shape=(132, 1, 448, 448)
+[v3] capsule  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.9314  I-AP=0.9844  I-F1=0.9507  P-AUROC=0.9863  P-AP=0.5342  P-F1=0.5267  P-AUPRO=0.9673
+  CSV:0.9314,0.9844,0.9507,0.9863,0.5342,0.5267,0.9673

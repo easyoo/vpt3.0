@@ -1,0 +1,15 @@
+2026-10-09 05:10:45	pill	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:14:43	screw	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:18:52	tile	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:22:31	toothbrush	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:24:38	transistor	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:28:46	bottle	3bf0407c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:28:58	wood	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:33:10	zipper	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:40:02	cable	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:43:44	capsule	3bf0407c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:48:25	carpet	3bf0407c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:53:29	grid	3bf0407c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 05:56:34	hazelnut	3bf0407c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 06:00:48	leather	0e3a7e1c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5
+2026-10-09 06:05:52	metal_nut	3bf0407c	81741839698c	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1 --w_img_rank 0.02 --img_rank_margin 0.5

@@ -1,0 +1,5 @@
+[shot_utils] screw shot4 hash=8dda33d23322 picks=['068.png', '291.png', '032.png', '130.png']
+  [maps] 保存 .maps_v3_nocrop448_mv4/screw.map shape=(160, 1, 448, 448)
+[v3] screw  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.8280  I-AP=0.9301  I-F1=0.8880  P-AUROC=0.9887  P-AP=0.4539  P-F1=0.4888  P-AUPRO=0.9564
+  CSV:0.8280,0.9301,0.8880,0.9887,0.4539,0.4888,0.9564

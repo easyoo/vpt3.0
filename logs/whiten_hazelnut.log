@@ -1,0 +1,10 @@
+[shot_utils] hazelnut shot2 hash=6b916f0c5fcb picks=['068.png', '291.png']
+=== hazelnut (save=m4m6r3_2shot shot=2 lam=0.1 k=3) ===
+  base      I-AUROC=0.9896  I-AP=0.9945  I-F1=0.9718  P-AUROC=0.9961  P-AP=0.8214  P-F1=0.8143  P-AUPRO=0.9799
+  CSV,hazelnut,base,0.9896,0.9945,0.9718,0.9961,0.8214,0.8143,0.9799
+  knn       I-AUROC=0.9896  I-AP=0.9945  I-F1=0.9718  P-AUROC=0.9960  P-AP=0.8140  P-F1=0.8136  P-AUPRO=0.9797
+  CSV,hazelnut,knn,0.9896,0.9945,0.9718,0.9960,0.8140,0.8136,0.9797
+  white     I-AUROC=0.9957  I-AP=0.9976  I-F1=0.9714  P-AUROC=0.9963  P-AP=0.8210  P-F1=0.8089  P-AUPRO=0.9810
+  CSV,hazelnut,white,0.9957,0.9976,0.9714,0.9963,0.8210,0.8089,0.9810
+  white_knn I-AUROC=0.9950  I-AP=0.9972  I-F1=0.9706  P-AUROC=0.9963  P-AP=0.8189  P-F1=0.8088  P-AUPRO=0.9808
+  CSV,hazelnut,white_knn,0.9950,0.9972,0.9706,0.9963,0.8189,0.8088,0.9808

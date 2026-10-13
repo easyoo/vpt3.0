@@ -1,0 +1,3 @@
+[shot_utils] capsules shot4 hash=9cf53634f920 picks=['147.JPG', '072.JPG', '289.JPG', '130.JPG']
+[sub] 全局分位数用 1024/4096 个 patch 子采样估计
+[grids2] 保存 .grids2_visa4/capsules.npz  keys=57

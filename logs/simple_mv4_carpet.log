@@ -1,0 +1,6 @@
+[shot_utils] carpet shot4 hash=be3d4e70cade picks=['068.png', '032.png', '130.png', '060.png']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_mv4/carpet.map shape=(117, 1, 448, 448)
+[v3] carpet  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9924  P-AP=0.6322  P-F1=0.6525  P-AUPRO=0.9822
+  CSV:1.0000,1.0000,1.0000,0.9924,0.6322,0.6525,0.9822

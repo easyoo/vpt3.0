@@ -1,0 +1,81 @@
+{
+ "dataset": "VisA",
+ "shots": 4,
+ "seed": 1,
+ "num_gen": 35,
+ "defect_type": "defect",
+ "picks": {
+  "candle": [
+   "candle/Data/Images/Normal/0146.JPG",
+   "candle/Data/Images/Normal/0639.JPG",
+   "candle/Data/Images/Normal/0910.JPG",
+   "candle/Data/Images/Normal/0961.JPG"
+  ],
+  "capsules": [
+   "capsules/Data/Images/Normal/072.JPG",
+   "capsules/Data/Images/Normal/130.JPG",
+   "capsules/Data/Images/Normal/147.JPG",
+   "capsules/Data/Images/Normal/289.JPG"
+  ],
+  "cashew": [
+   "cashew/Data/Images/Normal/073.JPG",
+   "cashew/Data/Images/Normal/318.JPG",
+   "cashew/Data/Images/Normal/454.JPG",
+   "cashew/Data/Images/Normal/480.JPG"
+  ],
+  "chewinggum": [
+   "chewinggum/Data/Images/Normal/072.JPG",
+   "chewinggum/Data/Images/Normal/317.JPG",
+   "chewinggum/Data/Images/Normal/453.JPG",
+   "chewinggum/Data/Images/Normal/479.JPG"
+  ],
+  "fryum": [
+   "fryum/Data/Images/Normal/073.JPG",
+   "fryum/Data/Images/Normal/318.JPG",
+   "fryum/Data/Images/Normal/454.JPG",
+   "fryum/Data/Images/Normal/480.JPG"
+  ],
+  "macaroni1": [
+   "macaroni1/Data/Images/Normal/0146.JPG",
+   "macaroni1/Data/Images/Normal/0639.JPG",
+   "macaroni1/Data/Images/Normal/0910.JPG",
+   "macaroni1/Data/Images/Normal/0961.JPG"
+  ],
+  "macaroni2": [
+   "macaroni2/Data/Images/Normal/0146.JPG",
+   "macaroni2/Data/Images/Normal/0639.JPG",
+   "macaroni2/Data/Images/Normal/0910.JPG",
+   "macaroni2/Data/Images/Normal/0961.JPG"
+  ],
+  "pcb1": [
+   "pcb1/Data/Images/Normal/0146.JPG",
+   "pcb1/Data/Images/Normal/0639.JPG",
+   "pcb1/Data/Images/Normal/0909.JPG",
+   "pcb1/Data/Images/Normal/0961.JPG"
+  ],
+  "pcb2": [
+   "pcb2/Data/Images/Normal/0146.JPG",
+   "pcb2/Data/Images/Normal/0639.JPG",
+   "pcb2/Data/Images/Normal/0909.JPG",
+   "pcb2/Data/Images/Normal/0961.JPG"
+  ],
+  "pcb3": [
+   "pcb3/Data/Images/Normal/0146.JPG",
+   "pcb3/Data/Images/Normal/0639.JPG",
+   "pcb3/Data/Images/Normal/0909.JPG",
+   "pcb3/Data/Images/Normal/0961.JPG"
+  ],
+  "pcb4": [
+   "pcb4/Data/Images/Normal/0146.JPG",
+   "pcb4/Data/Images/Normal/0639.JPG",
+   "pcb4/Data/Images/Normal/0909.JPG",
+   "pcb4/Data/Images/Normal/0961.JPG"
+  ],
+  "pipe_fryum": [
+   "pipe_fryum/Data/Images/Normal/073.JPG",
+   "pipe_fryum/Data/Images/Normal/318.JPG",
+   "pipe_fryum/Data/Images/Normal/454.JPG",
+   "pipe_fryum/Data/Images/Normal/480.JPG"
+  ]
+ }
+}

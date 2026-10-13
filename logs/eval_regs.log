@@ -1,0 +1,61 @@
+=== eval regA start 03:11:40 ===
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 4, 0), ('1', 8436, 66)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3966, 95), ('1', 8436, 100)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3970, 0), ('1', 8456, 100)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 4, 0), ('1', 8456, 96)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3966, 95), ('1', 8456, 100)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3970, 0), ('1', 8456, 100)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3970, 0), ('1', 8456, 0)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 2644, 40), ('1', 8456, 0)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3970, 0), ('1', 8456, 94)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 3970, 0), ('1', 8456, 100)]），休眠 15s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 884, 26), ('1', 8456, 0)]），休眠 15s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:regA:leather
+[03:14:26] eval leather on 0e3a7e1c (save=regA tag=vpt4regA)
+[03:15:05] eval leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=eval:regA:pill
+[03:15:05] eval pill on 0e3a7e1c (save=regA tag=vpt4regA)
+[03:15:43] eval pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=79% tag=eval:regA:zipper
+[03:15:43] eval zipper on 0e3a7e1c (save=regA tag=vpt4regA)
+[03:16:21] eval zipper 结束 exit=0
+[2026-10-09 03:16:21] ROTATE_EVAL_DONE save=regA
+=== eval regA done 03:16:21 ===
+=== eval regB start 03:26:21 ===
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8476, 0), ('1', 8456, 0)]），休眠 15s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:regB:leather
+[03:26:36] eval leather on 3bf0407c (save=regB tag=vpt4regB)
+[03:27:10] eval leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=93% tag=eval:regB:pill
+[03:27:10] eval pill on 3bf0407c (save=regB tag=vpt4regB)
+[03:27:47] eval pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=52% tag=eval:regB:zipper
+[03:27:47] eval zipper on 3bf0407c (save=regB tag=vpt4regB)
+[03:28:25] eval zipper 结束 exit=0
+[2026-10-09 03:28:25] ROTATE_EVAL_DONE save=regB
+=== eval regB done 03:28:25 ===
+=== eval regC start 03:51:26 ===
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=91% tag=eval:regC:leather
+[03:51:26] eval leather on 3bf0407c (save=regC tag=vpt4regC)
+[03:52:06] eval leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=eval:regC:pill
+[03:52:06] eval pill on 3bf0407c (save=regC tag=vpt4regC)
+[03:52:52] eval pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=eval:regC:zipper
+[03:52:52] eval zipper on 3bf0407c (save=regC tag=vpt4regC)
+[03:53:33] eval zipper 结束 exit=0
+[2026-10-09 03:53:33] ROTATE_EVAL_DONE save=regC
+=== eval regC done 03:53:33 ===
+=== eval regD start 03:53:33 ===
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=93% tag=eval:regD:leather
+[03:53:34] eval leather on 3bf0407c (save=regD tag=vpt4regD)
+[03:54:10] eval leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=61% tag=eval:regD:pill
+[03:54:10] eval pill on 3bf0407c (save=regD tag=vpt4regD)
+[03:54:55] eval pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=98% tag=eval:regD:zipper
+[03:54:55] eval zipper on 3bf0407c (save=regD tag=vpt4regD)
+[03:55:35] eval zipper 结束 exit=0
+[2026-10-09 03:55:35] ROTATE_EVAL_DONE save=regD
+=== eval regD done 03:55:35 ===
+REG_EVAL_DONE

@@ -1,0 +1,27 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 38), ('1', 4, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 38), ('1', 4, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 10), ('1', 8460, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 22191, 100), ('1', 8460, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 22193, 40), ('1', 8420, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 45), ('1', 8460, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 41), ('1', 8420, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 49), ('1', 8460, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 22189, 100), ('1', 8420, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 30), ('1', 8398, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 41), ('1', 8460, 0)]），休眠 120s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=train:m4m5r:transistor
+[00:38:28] train transistor on 3bf0407c (save=m4m5r)
+[00:42:52] train transistor 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m5r:screw
+[00:42:52] train screw on 3bf0407c (save=m4m5r)
+[00:46:49] train screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m5r:capsule
+[00:46:49] train capsule on 3bf0407c (save=m4m5r)
+[00:50:42] train capsule 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m5r:metal_nut
+[00:50:42] train metal_nut on 3bf0407c (save=m4m5r)
+[00:54:31] train metal_nut 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m5r:wood
+[00:54:31] train wood on 3bf0407c (save=m4m5r)
+[00:58:45] train wood 结束 exit=0
+[2026-10-09 00:58:45] ROTATE_TRAIN_DONE save=m4m5r

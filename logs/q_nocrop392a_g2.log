@@ -1,0 +1,7 @@
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:nocrop392a:screw
+[20:40:55] train screw on 0e3a7e1c (save=nocrop392a)
+[20:44:51] train screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:nocrop392a:leather
+[20:44:52] train leather on 0e3a7e1c (save=nocrop392a)
+[20:50:22] train leather 结束 exit=0
+[2026-10-09 20:50:22] ROTATE_TRAIN_DONE save=nocrop392a

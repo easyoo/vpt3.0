@@ -1,0 +1,3 @@
+[shot_utils] fryum shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[sub] 全局分位数用 1024/4096 个子采样估计
+[grids3] 保存 .grids3_visa4/fryum.npz  keys=31

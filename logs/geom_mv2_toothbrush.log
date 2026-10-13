@@ -1,0 +1,4 @@
+[shot_utils] toothbrush shot2 hash=d8f107688ae1 picks=['008.png', '036.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_2shot/toothbrush.map  shape=(42, 1, 448, 448)
+[geom448-geom] toothbrush  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9926  P-AP=0.6764  P-F1=0.6883  P-AUPRO=0.9676
+  CSV:1.0000,1.0000,1.0000,0.9926,0.6764,0.6883,0.9676

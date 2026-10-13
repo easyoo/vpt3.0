@@ -1,0 +1,3 @@
+[shot_utils] toothbrush shot4 hash=bce2317d905f picks=['008.png', '036.png', '054.png', '051.png']
+[sub] 全局分位数用 1024/4096 个 patch 子采样估计
+[grids2] 保存 .grids2_mv4/toothbrush.npz  keys=57

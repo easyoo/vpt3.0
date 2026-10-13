@@ -1,0 +1,6 @@
+[shot_utils] pcb1 shot4 hash=3e7679014ad1 picks=['0146.JPG', '0639.JPG', '0961.JPG', '0909.JPG']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_visa4/pcb1.map shape=(200, 1, 448, 448)
+[v3] pcb1  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.9535  I-AP=0.9486  I-F1=0.8922  P-AUROC=0.9925  P-AP=0.5621  P-F1=0.7200  P-AUPRO=0.9358
+  CSV:0.9535,0.9486,0.8922,0.9925,0.5621,0.7200,0.9358
