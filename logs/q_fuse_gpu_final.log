@@ -1,0 +1,15 @@
+/home/jjquan/miniconda3/envs/vpt/lib/python3.10/site-packages/torch/cuda/__init__.py:766: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+[gpu_guard] 当前 cuda:0 = NVIDIA GeForce RTX 3090 uuid=3bf0407c-aa78-8aab-cd2f-1c7b3356c5be
+[gpu_guard] 校验通过
+=== mapping_only ===
+[mapping_only] 15 类平均: I-AUROC=0.9586  I-AP=0.9719  I-F1=0.9559  P-AUROC=0.9640  P-AP=0.5650  P-F1=0.5950  P-AUPRO=0.9107
+=== bank_only ===
+[bank_only] 15 类平均: I-AUROC=0.9803  I-AP=0.9898  I-F1=0.9721  P-AUROC=0.9666  P-AP=0.6368  P-F1=0.6392  P-AUPRO=0.9327
+=== zwsum:0.3 ===
+[zwsum:0.3] 15 类平均: I-AUROC=0.9802  I-AP=0.9855  I-F1=0.9708  P-AUROC=0.9734  P-AP=0.6420  P-F1=0.6503  P-AUPRO=0.9433
+=== rank_sum ===
+[rank_sum] 15 类平均: I-AUROC=0.9738  I-AP=0.9824  I-F1=0.9671  P-AUROC=0.9740  P-AP=0.6443  P-F1=0.6445  P-AUPRO=0.9347
+=== wsum:0.3 ===
+[wsum:0.3] 15 类平均: I-AUROC=0.9812  I-AP=0.9880  I-F1=0.9721  P-AUROC=0.9711  P-AP=0.6371  P-F1=0.6431  P-AUPRO=0.9386
+[2026-10-08 18:52:24] GPU_FUSE_DONE

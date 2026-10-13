@@ -1,0 +1,4 @@
+[shot_utils] pcb2 shot4 hash=3e7679014ad1 picks=['0146.JPG', '0639.JPG', '0961.JPG', '0909.JPG']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_visa4/pcb2.map  shape=(200, 1, 448, 448)
+[geom448-geom] pcb2  I-AUROC=0.8682  I-AP=0.8065  I-F1=0.8333  P-AUROC=0.9718  P-AP=0.2853  P-F1=0.4012  P-AUPRO=0.8574
+  CSV:0.8682,0.8065,0.8333,0.9718,0.2853,0.4012,0.8574

@@ -1,0 +1,4 @@
+[shot_utils] capsule shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/capsule.map  shape=(132, 1, 448, 448)
+[geom448-geom] capsule  I-AUROC=0.9366  I-AP=0.9862  I-F1=0.9498  P-AUROC=0.9860  P-AP=0.5392  P-F1=0.5275  P-AUPRO=0.9677
+  CSV:0.9366,0.9862,0.9498,0.9860,0.5392,0.5275,0.9677

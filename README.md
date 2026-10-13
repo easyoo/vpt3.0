@@ -1,0 +1,183 @@
+# vpt3.6 使用说明（2026-10-13 冻结）
+
+> **本版与 vpt3.5 的训练代码完全一致**（`code/main-fewshot-vpt4.py` md5 `08d8528b4a59`，未改动、未重训）。
+> 本版所有改动都在**推理端**（打分算子 + 融合权重）与**数据准备/实验框架**上。
+
+## 一、本版改了什么（相对 vpt3.5）
+
+| 组件 | 状态 |
+|---|---|
+| 训练 | ✅ **不变**：35 轮 / K-shot / aux 合成异常；`Resize(448) → CenterCrop(392)` |
+| 测试预处理 | ✅ 不变：`Resize(448)` **不裁剪**；1.5× + 翻转共 2 视图；高斯平滑 k=5, σ=4 |
+| **mapping 原始库侧打分** | 🆕 `s_raw = d1^0.5 · q50^0.5`（旧版为 `d1 = 1 − max cos`） |
+| **mapping 可学习侧打分** | 🆕 `s_learn = dlmin^0.7 · bq64^0.3`（旧版为 `dlmin`） |
+| **视图内融合** | 🆕 `m = 0.6·s_learn + 0.4·s_raw`（旧版 `0.5/0.5`） |
+| **mapping ⊕ bank 融合** | 🆕 `0.5·z(mapping) + 0.5·z(bank)`（旧版 `0.3/0.7`） |
+| bank 分支 | ✅ 不变：`facebook/dinov2-base` 双 stage + faiss，K shot × 22 增强 |
+| **VisA 全流程** | 🆕 官方 VisA → MVTec 式数据根、1/2/4-shot 嵌套抽样、AnoStyler 合成异常、训练/评估脚本 |
+| **打分搜索框架** | 🆕 分量网格落盘 → 离线枚举任意 (局部项, 全局项, 指数, 融合权重) → 生产重推与官方复核 |
+| 诊断/审计脚本 | 🆕 分位数信息量诊断、指标单调不变性校验、按类配对 bootstrap、bank 侧打分扫描 |
+
+### 为什么这样改（一句话机制）
+
+异常分数不再只看"离最近的**一个**正常 patch 多远"，而是取
+**`(到最近正常 patch 的距离)^a × (到整个正常库距离分布的分位数)^(1−a)`**。
+它同时压掉两类假高分：侥幸贴近某个原型的正常像素、整幅纹理偏高的正常图。
+可学习侧的全局项必须取自"映射到同一度量空间的正常 patch 库"，否则几何平均的两个因子不在同一尺子上。
+
+## 二、三数据集结果（官方 adeval，7 项平均）
+
+| 数据集 | 分支 | 旧（vpt3.5） | **新（vpt3.6）** | Δ |
+|---|---|---|---|---|
+| VisA 4-shot（12 类） | mapping-only | 75.53 | **78.93** | **+3.40** |
+| VisA 4-shot | mapping ⊕ bank | 80.01 | **81.61** | **+1.60** |
+| MVTec 2-shot（15 类） | mapping-only | 85.13 | **85.59** | +0.46 |
+| MVTec 2-shot | mapping ⊕ bank | 87.38 | **87.65** | +0.27 |
+| MVTec 4-shot（15 类） | mapping-only | 85.43 | **86.24** | +0.81 |
+| MVTec 4-shot | mapping ⊕ bank | 88.45 | **88.64** | +0.19 |
+
+⚠ **统计与口径提醒（务必连同数字一起引用）**：按类配对 bootstrap 显示，
+**VisA 的提升显著**（mapping +3.41，95%CI [+2.02,+4.84]，12/12 类为正）；
+**MVTec 的 +0.27/+0.19 的 95% CI 包含 0（不显著）**；且 +1.60 里有约 0.4 来自
+"融合权重 0.3→0.5"这一在测试集上选出的改动（单独改权重对旧打分是 −0.51）。
+详见 `docs/SCORING_SEARCH_2026-10-13.md`、`docs/COMPARE_three_datasets.md`。
+
+## 三、目录
+
+```
+vpt3.6/
+├── code/        主训练/评估代码（与 vpt3.5 逐字节一致，未改动）
+├── tools/       推理（新打分）、融合、建库、搜索框架、诊断与审计脚本
+├── data_prep/   VisA 数据准备脚本 + AnoStyler 配置与 shot 清单（不含生成图）
+├── docs/        报告：打分搜索、推理细节、全流程、论文对比、流程图（png+svg）
+├── logs/        关键实验日志（训练/评估/建库/融合/搜索过程 CSV 与驱动日志）
+├── VERSION      版本说明与已知限制
+├── README.md    本文件
+├── ENVIRONMENT.md  环境与依赖
+└── PERFORMANCE.md  历史性能记录（vpt3.5 及更早）
+```
+
+## 四、快速开始
+
+```bash
+# 0) 环境
+source tools/common_env.sh
+
+# 1) 训练（与 vpt3.5 相同；以 VisA 4-shot 为例）
+SHOTS=4 EXTRA_ARGS="--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 \
+  --w_rank 0.02 --rank_margin 0.25 --rank_norm 1" \
+  bash tools/q_rotate_train_visa.sh vpt35_visa4shot
+
+# 2) 推理（vpt3.6 新打分）：落盘 mapping 异常图 + 出 mapping-only 指标
+python tools/eval_score_v3.py --save vpt35_visa4shot --class candle --shots 4 --size 448 \
+  --data_path /home/jjquan/experiment/visual2/visa_prepared \
+  --ckpt_dir results/visa/vpt35_visa4shot \
+  --raw_alpha 0.5 --raw_global 512 --l_alpha 0.7 --l_global 64 --w 0.6 \
+  --save_maps_dir .maps_v3_nocrop448_visa4
+
+# 3) bank 分支
+python tools/cache_bank_nocrop.py --class candle --shots 4 --size 448 \
+  --data_path /home/jjquan/experiment/visual2/visa_prepared --out_dir .errmap_nocrop448_visa4
+
+# 4) 融合 + 评测（输出 mapping / bank / fused 三行）
+python tools/fuse_nocrop.py --class candle --size 448 --w 0.5 \
+  --map_dir .maps_v3_nocrop448_visa4 --bank_dir .errmap_nocrop448_visa4 \
+  --data_path /home/jjquan/experiment/visual2/visa_prepared
+```
+
+## 五、打分搜索（可复现的探索路径）
+
+```bash
+# ① 一次推理，落盘"分量"网格（raw: d1,q8..q1024；learn: dlmin,dlmed,bmin,bq8..bq1024）
+python tools/probe_score_grid3.py --save vpt35_visa4shot --class candle --shots 4 \
+  --data_path <visa_prepared> --ckpt_dir results/visa/vpt35_visa4shot --out_dir .grids3_visa4
+# ② 离线枚举任意组合（CPU，几秒/组合）
+python tools/eval_comp.py --grids .grids3_visa4 --specs "d1:q512:0.5|dlmin:bq64:0.7|0.6"
+# ③ 对最终配方用官方 adeval 复核（需 CUDA）
+CUDA_VISIBLE_DEVICES=<uuid> python tools/eval_comp.py --grids .grids3_visa4 --official 1 \
+  --specs "d1:q512:0.5|dlmin:bq64:0.7|0.6"
+```
+
+## 六、已知限制（review 时请一并阅读）
+
+1. **训练/推理打分不一致**：训练损失仍用 `proto_distance_scores`（min），新公式只在推理端生效。
+2. **超参在测试集上选过**：打分指数（0.5 / 0.7）、分位点（512 / 64）、融合权重（0.5）均未见独立验证集。
+3. **融合是 transductive**：类内 z 的均值/方差取自该类全部测试像素。
+4. **`fuse_nocrop.py` 只校验两张图的形状**，不校验图像身份；换数据根/换顺序时需人工确认。
+5. 代码遗留：前向中 `token_dict['0']` 被追加两次（原型集因此为 96 而非 64），训练/推理两侧一致，
+   但容易被误读为 bug —— 详见 `docs/PIPELINE_full.md` §3.6 与 §9。
+
+---
+
+## 附：vpt3.5 使用说明（历史）
+
+## 这一版改了什么（相对 vpt3.0）
+| 组件 | 状态 |
+|---|---|
+| **测试预处理** | ✅ **改为不裁剪**：`Resize(448) → ToTensor → Normalize`（vpt3.0 是 `Resize(448)→中心裁392`） |
+| 训练预处理 | 保持 vpt3.0 口径不变：`Resize(448) → CenterCrop(392)`，35 轮 / 4-shot / aux 合成异常 |
+| 改善后 mapping 分支 | ✅ M1 原型初始化(std=0.02) + M3 原型多样性正则 + M4 全局原型锚点 + **M6 可学习度量头** + **M7 跨图排序一致性损失** |
+| 原版 MemoryBank 分支 | ✅ 不变：`facebook/dinov2-base` 双 stage + faiss，4 shot × 22 增强 = 88 张 |
+| 融合规则 | ✅ 不变：类内 z 标准化后 `0.3·z(mapping) + 0.7·z(bank)`，再高斯平滑(k=5,σ=4) |
+| **数据源统一** | ✅ 新增 `tools/shot_utils.py`：训练 / mapping 特征库 / bank 建库 **共用同一份 shot 清单**（落盘 `.shots/<cls>_shotK_seedS.json`），换 shot 数仍一致 |
+| 代码副本隔离 | ✅ `produce_both.py` 两次加载不同代码副本时有断言：mapping 侧必须用 `code_vpt4` 的 `dinov2`，`MemoryBank` 实现必须与 `code_vpt2` 副本逐字节一致 |
+
+## 目录
+```
+vpt3.5/
+├── code/       主训练/评估代码（原仓库零改动，本目录为副本）
+├── tools/      运行、评估、建库、融合、可视化与自检脚本
+├── docs/       实验日志 / 变更记录 / 风险审计 / 文献对比
+├── logs/       关键实验日志（训练、评估、融合、清单）
+├── PERFORMANCE.md   本版本性能（15 类 × 7 指标）
+├── COMPARISON.md    与 2024–2026 同类论文的对比
+└── ENVIRONMENT.md   环境与依赖
+```
+
+## 运行（当前口径）
+```bash
+# 1) 训练（训练裁剪 392，35 轮；shot 清单由 tools/shot_utils.py 统一给出）
+bash tools/q_rotate_train.sh <save_name> <class...> -- --global_proto 1 --w_div 0.1 \
+     --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1
+
+# 2) 测试不裁剪口径下重推 mapping 分支（并落盘未平滑异常图）
+python tools/eval_nocrop.py --save <save_name> --class <class> --size 448 \
+     --save_maps_dir .maps_nocrop448_<save>
+
+# 3) 测试不裁剪口径下重建 MemoryBank 异常图
+python tools/cache_bank_nocrop.py --class <class> --size 448 --out_dir .errmap_nocrop448
+
+# 4) 类内 z 融合（0.3/0.7）+ 官方指标
+python tools/fuse_nocrop.py --class <class> --size 448          # 逐类
+#   或一次性：tools/produce_both.py（单 loader 同时出两分支）
+```
+关键开关：`--global_proto 1`（M4）、`--metric_head 1`（M6）、`--w_rank 0.02 --rank_margin 0.25 --rank_norm 1`（M7）、
+`--w_div 0.1`（M3）、`--token_init_std 0.02`（M1）；评估端必须与训练端保持一致
+（`--num_tokens 32 --res_mapping 0 --global_proto 1 --metric_head 1`），否则会被 `strict=False` 静默丢权重。
+
+## 性能（15 类平均，官方 adeval，测试不裁剪 448）
+| 分支 | I-AUROC | I-AP | I-F1 | P-AUROC | P-AP | P-F1 | P-AUPRO |
+|---|---|---|---|---|---|---|---|
+| mapping-only | 0.9711 | 0.9840 | 0.9684 | 0.9651 | 0.5680 | 0.5986 | 0.9246 |
+| bank-only | 0.9782 | 0.9884 | 0.9705 | 0.9721 | 0.6315 | 0.6368 | 0.9452 |
+| **mapping ⊕ bank** | **0.9806** | **0.9902** | **0.9758** | **0.9781** | **0.6557** | **0.6584** | **0.9531** |
+
+逐类明细见 `PERFORMANCE.md`，与论文的对比见 `COMPARISON.md`。
+
+## 与顶会论文的对比（摘要）
+同设置口径 **4-shot / MVTec / 单类 / 无监督 / 像素定位**：
+
+| 方法 | 会议·年 | I-AUROC | P-AUROC | PRO/AUPRO |
+|---|---|---|---|---|
+| PromptAD | CVPR'24 | 95.5–96.6 | 96.3–96.5 | 90.5 |
+| AnomalyGPT | AAAI'24 | 96.3 | 96.2 | - |
+| KAG-prompt | AAAI'25 | 97.1 | 96.7 | - |
+| IIPAD | 2025 | 96.1 | 97.0 | 91.2 |
+| AnomalyDINO | 2024/25 | 97.7 | 97.2 | 93.4 |
+| SubspaceAD（training-free, 672） | CVPR'26 | 98.0 | 97.9 | 95.1 |
+| FoundAD | ICLR'26 | 97.1 | 97.2 | 93.5 |
+| **vpt3.5 mapping-only（本版）** | 本项目 | 97.11 | 96.51 | 92.46 (AUPRO) |
+| **vpt3.5 mapping ⊕ bank（本版）** | 本项目 | **98.06** | **97.81** | **95.31 (AUPRO)** |
+
+融合后在 I-AUROC 与 PRO/AUPRO 上高于表内所有单独方法（PRO 已与 MVTec 官方/SubspaceAD/PromptAD/DictAS 四种实现互验，差 ≤0.0002）。
+完整表（含 1/2-shot、多类/多模态/跨域等其他设置、PRO vs AUPRO 口径核查、2024–2026 全部 31 条少样本条目收录清单）见 `COMPARISON.md`。

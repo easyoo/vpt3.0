@@ -1,0 +1,21 @@
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=4MiB util=0%
+[23:22:47] eval transistor on 3bf0407c
+[23:23:11] transistor exit=0
+[pick_gpu] 候选: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be used=4MiB util=13%
+[23:23:11] eval screw on 3bf0407c
+[23:23:43] screw exit=0
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 17396, 29), ('1', 4, 67)]），休眠 120s 后重试
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:25:44] eval capsule on 0e3a7e1c
+[23:26:12] capsule exit=0
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 1, 100), ('1', 20198, 100)]），休眠 120s 后重试
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:28:13] eval metal_nut on 0e3a7e1c
+[23:28:40] metal_nut exit=0
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 4, 58), ('1', 20242, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 17396, 44), ('1', 20242, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（共 2 张可见，[('0', 17396, 50), ('1', 3176, 30)]），休眠 120s 后重试
+[pick_gpu] 候选: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 used=1MiB util=0%
+[23:34:41] eval wood on 0e3a7e1c
+[23:35:03] wood exit=0
+[2026-10-08 23:35:03] ROTATE_EVAL_DONE

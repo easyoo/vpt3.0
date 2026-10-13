@@ -1,0 +1,18 @@
+[shot_utils] zipper shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+[bank] zipper: 2 shot → 增强 (44, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3840.01it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(45056, 768)
+feature stage-2's shape：(45056, 768)
+Building memory bank finished.
+  batch 0 done
+  batch 1 done
+  batch 2 done
+  batch 3 done
+  batch 4 done
+  batch 5 done
+  batch 6 done
+  batch 7 done
+  batch 8 done
+  batch 9 done
+[bgrid] 保存 .bgrid_mv2/zipper.npz k=1024 keys=17

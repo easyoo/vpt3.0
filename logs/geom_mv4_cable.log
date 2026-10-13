@@ -1,0 +1,4 @@
+[shot_utils] cable shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/cable.map  shape=(150, 1, 448, 448)
+[geom448-geom] cable  I-AUROC=0.9042  I-AP=0.9509  I-F1=0.8696  P-AUROC=0.9582  P-AP=0.6301  P-F1=0.6528  P-AUPRO=0.8729
+  CSV:0.9042,0.9509,0.8696,0.9582,0.6301,0.6528,0.8729

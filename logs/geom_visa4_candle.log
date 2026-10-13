@@ -1,0 +1,4 @@
+[shot_utils] candle shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_visa4/candle.map  shape=(200, 1, 448, 448)
+[geom448-geom] candle  I-AUROC=0.9045  I-AP=0.8707  I-F1=0.8750  P-AUROC=0.9682  P-AP=0.2858  P-F1=0.3808  P-AUPRO=0.9246
+  CSV:0.9045,0.8707,0.8750,0.9682,0.2858,0.3808,0.9246

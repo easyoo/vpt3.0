@@ -1,0 +1,5 @@
+[shot_utils] zipper shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 保存 .maps_v3_nocrop448_mv4/zipper.map shape=(151, 1, 448, 448)
+[v3] zipper  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9761  I-AP=0.9942  I-F1=0.9652  P-AUROC=0.9838  P-AP=0.6558  P-F1=0.6384  P-AUPRO=0.9509
+  CSV:0.9761,0.9942,0.9652,0.9838,0.6558,0.6384,0.9509

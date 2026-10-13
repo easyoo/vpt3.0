@@ -1,0 +1,3 @@
+[shot_utils] toothbrush shot2 hash=d8f107688ae1 picks=['008.png', '036.png']
+[sub] 全局分位数用 1024/2048 个子采样估计
+[grids3] 保存 .grids3_mv2/toothbrush.npz  keys=31

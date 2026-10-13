@@ -1,0 +1,2 @@
+[shot_utils] chewinggum shot4 hash=2a530d2b6a90 picks=['072.JPG', '317.JPG', '479.JPG', '453.JPG']
+[grids] 保存 .grids_visa4/chewinggum.npz  keys=37 raw_min__v0 shape=(150, 48, 48)

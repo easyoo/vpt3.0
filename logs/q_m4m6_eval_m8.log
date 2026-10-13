@@ -1,0 +1,28 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 46), ('1', 8420, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 46), ('1', 8460, 77)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 47), ('1', 8422, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 40), ('1', 8422, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 44), ('1', 8422, 82)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 39), ('1', 8422, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 40), ('1', 8422, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 50), ('1', 8422, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 43), ('1', 8422, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 54), ('1', 8422, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 43), ('1', 8422, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 33), ('1', 8422, 100)]），休眠 120s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:m4m6:transistor
+[00:59:23] eval transistor on 3bf0407c (save=m4m6 tag=vpt4m6bp)
+[00:59:52] eval transistor 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=84% tag=eval:m4m6:screw
+[00:59:52] eval screw on 3bf0407c (save=m4m6 tag=vpt4m6bp)
+[01:00:28] eval screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=73% tag=eval:m4m6:capsule
+[01:00:29] eval capsule on 3bf0407c (save=m4m6 tag=vpt4m6bp)
+[01:01:01] eval capsule 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=1% tag=eval:m4m6:metal_nut
+[01:01:01] eval metal_nut on 3bf0407c (save=m4m6 tag=vpt4m6bp)
+[01:01:29] eval metal_nut 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=69% tag=eval:m4m6:wood
+[01:01:29] eval wood on 3bf0407c (save=m4m6 tag=vpt4m6bp)
+[01:01:53] eval wood 结束 exit=0
+[2026-10-09 01:01:53] ROTATE_EVAL_DONE save=m4m6

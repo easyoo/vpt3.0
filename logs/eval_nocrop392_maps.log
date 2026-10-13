@@ -1,0 +1,47 @@
+  [maps] 已保存 .maps_nocrop392_m4m6r3/transistor.map  shape=(100, 1, 392, 392)
+[nocrop392] transistor  I-AUROC=0.9387  I-AP=0.9158  I-F1=0.8471  P-AUROC=0.8620  P-AP=0.3603  P-F1=0.4573  P-AUPRO=0.6360
+  CSV:0.9387,0.9158,0.8471,0.8620,0.3603,0.4573,0.6360
+  [maps] 已保存 .maps_nocrop392_m4m6r3/leather.map  shape=(124, 1, 392, 392)
+[nocrop392] leather  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9830  P-AP=0.2676  P-F1=0.3129  P-AUPRO=0.9695
+  CSV:1.0000,1.0000,1.0000,0.9830,0.2676,0.3129,0.9695
+  [maps] 已保存 .maps_nocrop392_m4m6r3/bottle.map  shape=(83, 1, 392, 392)
+[nocrop392] bottle  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9901  P-AP=0.8405  P-F1=0.7914  P-AUPRO=0.9593
+  CSV:1.0000,1.0000,1.0000,0.9901,0.8405,0.7914,0.9593
+  [maps] 已保存 .maps_nocrop392_m4m6r3/metal_nut.map  shape=(115, 1, 392, 392)
+[nocrop392] metal_nut  I-AUROC=0.9995  I-AP=0.9999  I-F1=0.9947  P-AUROC=0.9628  P-AP=0.7437  P-F1=0.7862  P-AUPRO=0.9458
+  CSV:0.9995,0.9999,0.9947,0.9628,0.7437,0.7862,0.9458
+  [maps] 已保存 .maps_nocrop392_m4m6r3/cable.map  shape=(150, 1, 392, 392)
+[nocrop392] cable  I-AUROC=0.9327  I-AP=0.9679  I-F1=0.9195  P-AUROC=0.9441  P-AP=0.6047  P-F1=0.6519  P-AUPRO=0.8798
+  CSV:0.9327,0.9679,0.9195,0.9441,0.6047,0.6519,0.8798
+  [maps] 已保存 .maps_nocrop392_m4m6r3/pill.map  shape=(167, 1, 392, 392)
+[nocrop392] pill  I-AUROC=0.9604  I-AP=0.9926  I-F1=0.9625  P-AUROC=0.9315  P-AP=0.5393  P-F1=0.5787  P-AUPRO=0.9674
+  CSV:0.9604,0.9926,0.9625,0.9315,0.5393,0.5787,0.9674
+  [maps] 已保存 .maps_nocrop392_m4m6r3/capsule.map  shape=(132, 1, 392, 392)
+[nocrop392] capsule  I-AUROC=0.9430  I-AP=0.9866  I-F1=0.9596  P-AUROC=0.9789  P-AP=0.5225  P-F1=0.5192  P-AUPRO=0.9593
+  CSV:0.9430,0.9866,0.9596,0.9789,0.5225,0.5192,0.9593
+  [maps] 已保存 .maps_nocrop392_m4m6r3/screw.map  shape=(160, 1, 392, 392)
+[nocrop392] screw  I-AUROC=0.7674  I-AP=0.8777  I-F1=0.8745  P-AUROC=0.9849  P-AP=0.3429  P-F1=0.4110  P-AUPRO=0.9390
+  CSV:0.7674,0.8777,0.8745,0.9849,0.3429,0.4110,0.9390
+  [maps] 已保存 .maps_nocrop392_m4m6r3/carpet.map  shape=(117, 1, 392, 392)
+[nocrop392] carpet  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9913  P-AP=0.5852  P-F1=0.6264  P-AUPRO=0.9782
+  CSV:1.0000,1.0000,1.0000,0.9913,0.5852,0.6264,0.9782
+  [maps] 已保存 .maps_nocrop392_m4m6r3/tile.map  shape=(117, 1, 392, 392)
+[nocrop392] tile  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9358  P-AP=0.5557  P-F1=0.5677  P-AUPRO=0.8099
+  CSV:1.0000,1.0000,1.0000,0.9358,0.5557,0.5677,0.8099
+  [maps] 已保存 .maps_nocrop392_m4m6r3/grid.map  shape=(78, 1, 392, 392)
+[nocrop392] grid  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9906  P-AP=0.3749  P-F1=0.4245  P-AUPRO=0.9475
+  CSV:1.0000,1.0000,1.0000,0.9906,0.3749,0.4245,0.9475
+  [maps] 已保存 .maps_nocrop392_m4m6r3/toothbrush.map  shape=(42, 1, 392, 392)
+[nocrop392] toothbrush  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9936  P-AP=0.6236  P-F1=0.6846  P-AUPRO=0.9726
+  CSV:1.0000,1.0000,1.0000,0.9936,0.6236,0.6846,0.9726
+  [maps] 已保存 .maps_nocrop392_m4m6r3/hazelnut.map  shape=(110, 1, 392, 392)
+[nocrop392] hazelnut  I-AUROC=0.9957  I-AP=0.9976  I-F1=0.9787  P-AUROC=0.9960  P-AP=0.7826  P-F1=0.7915  P-AUPRO=0.9791
+  CSV:0.9957,0.9976,0.9787,0.9960,0.7826,0.7915,0.9791
+DONE GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822
+  [maps] 已保存 .maps_nocrop392_m4m6r3/wood.map  shape=(79, 1, 392, 392)
+[nocrop392] wood  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9400  P-AP=0.6366  P-F1=0.6350  P-AUPRO=0.9443
+  CSV:1.0000,1.0000,1.0000,0.9400,0.6366,0.6350,0.9443
+  [maps] 已保存 .maps_nocrop392_m4m6r3/zipper.map  shape=(151, 1, 392, 392)
+[nocrop392] zipper  I-AUROC=0.9877  I-AP=0.9970  I-F1=0.9750  P-AUROC=0.9741  P-AP=0.5718  P-F1=0.5857  P-AUPRO=0.9321
+  CSV:0.9877,0.9970,0.9750,0.9741,0.5718,0.5857,0.9321
+DONE GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be

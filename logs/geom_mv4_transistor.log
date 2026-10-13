@@ -1,0 +1,4 @@
+[shot_utils] transistor shot4 hash=d0c4c927f728 picks=['034.png', '145.png', '205.png', '195.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/transistor.map  shape=(100, 1, 448, 448)
+[geom448-geom] transistor  I-AUROC=0.9425  I-AP=0.9262  I-F1=0.8409  P-AUROC=0.8811  P-AP=0.3817  P-F1=0.4748  P-AUPRO=0.6430
+  CSV:0.9425,0.9262,0.8409,0.8811,0.3817,0.4748,0.6430

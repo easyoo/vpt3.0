@@ -1,0 +1,4 @@
+[shot_utils] pill shot2 hash=da98989cce0f picks=['068.png', '032.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_2shot/pill.map  shape=(167, 1, 448, 448)
+[geom448-geom] pill  I-AUROC=0.9836  I-AP=0.9970  I-F1=0.9787  P-AUROC=0.9611  P-AP=0.6053  P-F1=0.6246  P-AUPRO=0.9783
+  CSV:0.9836,0.9970,0.9787,0.9611,0.6053,0.6246,0.9783

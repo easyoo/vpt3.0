@@ -1,0 +1,40 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8476, 100), ('1', 8436, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8336, 0), ('1', 8436, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8456, 95), ('1', 8456, 62)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8336, 100), ('1', 3904, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8476, 100), ('1', 10321, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8476, 100), ('1', 10463, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 4, 0), ('1', 10483, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 91), ('1', 10483, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8398, 0), ('1', 2154, 22)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 10605, 32)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8378, 92), ('1', 10605, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 10605, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8398, 100), ('1', 10605, 92)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 10625, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 10625, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 4, 0), ('1', 2154, 94)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 84), ('1', 6119, 93)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 8438, 100), ('1', 6119, 31)]），休眠 120s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:m4m6r2_15:pill
+[03:57:28] train pill on 0e3a7e1c (save=m4m6r2_15)
+[04:01:36] train pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 4MiB / 共 24576MiB，剩余 24572MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r2_15:screw
+[04:01:37] train screw on 0e3a7e1c (save=m4m6r2_15)
+[04:05:32] train screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r2_15:tile
+[04:05:32] train tile on 0e3a7e1c (save=m4m6r2_15)
+[04:09:05] train tile 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=91% tag=train:m4m6r2_15:toothbrush
+[04:09:05] train toothbrush on 3bf0407c (save=m4m6r2_15)
+[04:11:48] train toothbrush 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:m4m6r2_15:transistor
+[04:11:48] train transistor on 0e3a7e1c (save=m4m6r2_15)
+[04:16:11] train transistor 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=train:m4m6r2_15:wood
+[04:16:11] train wood on 3bf0407c (save=m4m6r2_15)
+[04:20:22] train wood 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:m4m6r2_15:zipper
+[04:20:22] train zipper on 0e3a7e1c (save=m4m6r2_15)
+[04:25:56] train zipper 结束 exit=0
+[2026-10-09 04:25:56] ROTATE_TRAIN_DONE save=m4m6r2_15

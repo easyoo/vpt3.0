@@ -1,0 +1,22 @@
+vpt3.6
+# 版本冻结: 2026-10-13
+# = 训练：与 vpt3.5 **完全一致**（同一份代码，md5 08d8528b4a59；35 轮 / K-shot / aux 合成异常）
+#         预处理 Resize(448) → CenterCrop(392)
+# + 测试：Resize(448) 不裁剪；1.5× + 翻转 2 视图 TTA；高斯平滑 k=5,σ=4
+# + 【本版核心改动 · 全部在推理端，不重训】
+#     mapping 原始特征库侧：s_raw   = d1^0.5 · q50^0.5      （d1=最近邻；q50=到 K×1024 个
+#                                                            正常 patch 距离分布的中位数，1024 子采样估计）
+#     mapping 可学习原型侧：s_learn = dlmin^0.7 · bq64^0.3  （dlmin=到最近可学习原型；
+#                                                            bq64=到"映射到同一度量空间的正常 patch 库"
+#                                                            距离分布的第 64/1024 分位）
+#     视图内融合：m = 0.6·s_learn + 0.4·s_raw       （旧版为 0.5·min_learn + 0.5·min_raw）
+# + bank 分支：与原版相同（facebook/dinov2-base 双 stage + faiss，K shot × 22 增强）
+# + 融合：类内 z 标准化后 0.5·z(mapping) + 0.5·z(bank)（vpt3.5 为 0.3/0.7）
+# + 新增 VisA 全流程：数据集转 MVTec 式根、1/2/4-shot 抽样、AnoStyler 合成异常、训练/评估脚本
+# + 新增打分搜索框架：probe_score_grid3.py（分量落盘）→ eval_comp.py（离线枚举）→ eval_score_v3.py（生产重推）
+# + 新增诊断/审计脚本：probe_dbar*.py（分位数信息量）、audit_metric_scale.py（指标单调不变性）、
+#                       audit_bootstrap.py（按类配对 bootstrap）、bank_grid.py/eval_bank_comp.py（bank 侧打分）
+# 已知限制（详见 docs/SCORING_SEARCH_2026-10-13.md 与 docs/PIPELINE_full.md §9）：
+#   * 训练损失仍用 min 打分 → 训练/推理打分口径不一致
+#   * 打分指数(0.5/0.7)、分位点(512/64)、融合权重(0.5) 均在三个测试集上选过，未用独立验证集
+#   * 融合的类内 z 统计量取自测试集（transductive）

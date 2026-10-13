@@ -1,0 +1,4 @@
+[shot_utils] cashew shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_visa4/cashew.map  shape=(150, 1, 448, 448)
+[geom448-geom] cashew  I-AUROC=0.8766  I-AP=0.9401  I-F1=0.8599  P-AUROC=0.9956  P-AP=0.7214  P-F1=0.7032  P-AUPRO=0.9780
+  CSV:0.8766,0.9401,0.8599,0.9956,0.7214,0.7032,0.9780

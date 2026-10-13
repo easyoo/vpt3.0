@@ -1,0 +1,9 @@
+[shot_utils] pipe_fryum shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[bank-nocrop448] pipe_fryum: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4514.51it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/10 [00:00<?, ?it/s]bank448:  10%|█▌             | 1/10 [01:04<09:40, 64.45s/it]bank448:  20%|███            | 2/10 [02:06<08:25, 63.17s/it]bank448:  30%|████▌          | 3/10 [03:06<07:10, 61.47s/it]bank448:  40%|██████         | 4/10 [04:05<06:03, 60.61s/it]bank448:  50%|███████▌       | 5/10 [05:05<05:02, 60.53s/it]bank448:  60%|█████████      | 6/10 [06:05<04:01, 60.36s/it]bank448:  70%|██████████▌    | 7/10 [07:06<03:01, 60.54s/it]bank448:  80%|████████████   | 8/10 [08:06<02:00, 60.14s/it]bank448:  90%|█████████████▌ | 9/10 [09:07<01:00, 60.46s/it]bank448: 100%|██████████████| 10/10 [09:32<00:00, 49.47s/it]bank448: 100%|██████████████| 10/10 [09:32<00:00, 57.22s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448_visa4/pipe_fryum.map shape=(150, 1, 448, 448)

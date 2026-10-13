@@ -1,0 +1,4 @@
+[shot_utils] hazelnut shot4 hash=8dda33d23322 picks=['068.png', '291.png', '032.png', '130.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/hazelnut.map  shape=(110, 1, 448, 448)
+[geom448-geom] hazelnut  I-AUROC=0.9964  I-AP=0.9980  I-F1=0.9790  P-AUROC=0.9959  P-AP=0.7851  P-F1=0.7965  P-AUPRO=0.9810
+  CSV:0.9964,0.9980,0.9790,0.9959,0.7851,0.7965,0.9810

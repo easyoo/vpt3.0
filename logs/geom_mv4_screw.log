@@ -1,0 +1,4 @@
+[shot_utils] screw shot4 hash=8dda33d23322 picks=['068.png', '291.png', '032.png', '130.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/screw.map  shape=(160, 1, 448, 448)
+[geom448-geom] screw  I-AUROC=0.7739  I-AP=0.8972  I-F1=0.8846  P-AUROC=0.9866  P-AP=0.3728  P-F1=0.4263  P-AUPRO=0.9488
+  CSV:0.7739,0.8972,0.8846,0.9866,0.3728,0.4263,0.9488

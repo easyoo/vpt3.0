@@ -1,0 +1,60 @@
+[05:14:48] 等待权重 1/15（已等 5 分钟）
+[05:19:48] 等待权重 2/15（已等 10 分钟）
+[05:24:48] 等待权重 4/15（已等 15 分钟）
+[05:29:48] 等待权重 5/15（已等 20 分钟）
+[05:34:48] 等待权重 7/15（已等 25 分钟）
+[05:39:48] 等待权重 8/15（已等 30 分钟）
+[05:44:48] 等待权重 9/15（已等 35 分钟）
+[05:49:48] 等待权重 10/15（已等 40 分钟）
+[05:54:48] 等待权重 11/15（已等 45 分钟）
+[05:59:48] 等待权重 12/15（已等 50 分钟）
+[06:04:48] 等待权重 13/15（已等 55 分钟）
+[06:09:48] 等待权重 14/15（已等 60 分钟）
+[2026-10-09 06:10:48] 15 类权重齐全，开始评估 save=m4m6rr_15 tag=vpt4m4m6rr_15
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:bottle
+[06:10:48] eval bottle on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:11:11] eval bottle 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3174MiB / 共 24576MiB，剩余 21402MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=44% tag=eval:m4m6rr_15:cable
+[06:11:11] eval cable on 3bf0407c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:11:51] eval cable 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:capsule
+[06:11:51] eval capsule on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:12:20] eval capsule 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3174MiB / 共 24576MiB，剩余 21402MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=79% tag=eval:m4m6rr_15:carpet
+[06:12:20] eval carpet on 3bf0407c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:12:54] eval carpet 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:grid
+[06:12:54] eval grid on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:13:15] eval grid 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3174MiB / 共 24576MiB，剩余 21402MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=64% tag=eval:m4m6rr_15:hazelnut
+[06:13:15] eval hazelnut on 3bf0407c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:13:47] eval hazelnut 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:leather
+[06:13:48] eval leather on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:14:15] eval leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3174MiB / 共 24576MiB，剩余 21402MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:m4m6rr_15:metal_nut
+[06:14:15] eval metal_nut on 3bf0407c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:14:40] eval metal_nut 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:pill
+[06:14:41] eval pill on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:15:14] eval pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3174MiB / 共 24576MiB，剩余 21402MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:m4m6rr_15:screw
+[06:15:14] eval screw on 3bf0407c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:15:46] eval screw 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:tile
+[06:15:46] eval tile on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:16:12] eval tile 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3174MiB / 共 24576MiB，剩余 21402MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:m4m6rr_15:toothbrush
+[06:16:12] eval toothbrush on 3bf0407c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:16:29] eval toothbrush 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:transistor
+[06:16:29] eval transistor on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:16:54] eval transistor 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 3174MiB / 共 24576MiB，剩余 21402MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:m4m6rr_15:wood
+[06:16:54] eval wood on 3bf0407c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:17:16] eval wood 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:m4m6rr_15:zipper
+[06:17:16] eval zipper on 0e3a7e1c (save=m4m6rr_15 tag=vpt4m4m6rr_15)
+[06:17:47] eval zipper 结束 exit=0
+[2026-10-09 06:17:47] ROTATE_EVAL_DONE save=m4m6rr_15
+[2026-10-09 06:17:47] 15 类评估结束 save=m4m6rr_15

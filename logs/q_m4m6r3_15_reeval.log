@@ -1,0 +1,10 @@
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:m4m6r3_15:pill
+[06:01:49] eval pill on 3bf0407c (save=m4m6r3_15 tag=vpt4m4m6r3_15)
+[06:02:23] eval pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=42% tag=eval:m4m6r3_15:screw
+[06:02:23] eval screw on 3bf0407c (save=m4m6r3_15 tag=vpt4m4m6r3_15)
+[06:02:55] eval screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=78% tag=eval:m4m6r3_15:tile
+[06:02:56] eval tile on 3bf0407c (save=m4m6r3_15 tag=vpt4m4m6r3_15)
+[06:03:22] eval tile 结束 exit=0
+[2026-10-09 06:03:22] ROTATE_EVAL_DONE save=m4m6r3_15

@@ -1,0 +1,5 @@
+[shot_utils] chewinggum shot4 hash=2a530d2b6a90 picks=['072.JPG', '317.JPG', '479.JPG', '453.JPG']
+  [maps] 保存 .maps_v3_nocrop448_visa4/chewinggum.map shape=(150, 1, 448, 448)
+[v3] chewinggum  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9820  I-AP=0.9922  I-F1=0.9641  P-AUROC=0.9944  P-AP=0.6147  P-F1=0.6789  P-AUPRO=0.9591
+  CSV:0.9820,0.9922,0.9641,0.9944,0.6147,0.6789,0.9591

@@ -1,0 +1,3 @@
+[shot_utils] hazelnut shot2 hash=6b916f0c5fcb picks=['068.png', '291.png']
+[sub] 全局分位数用 1024/2048 个 patch 子采样估计
+[grids2] 保存 .grids2_mv2/hazelnut.npz  keys=57

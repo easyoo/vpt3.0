@@ -1,0 +1,22 @@
+[pick_gpu] 选中 共享卡（已用 2012MiB / 共 24576MiB，剩余 22564MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=74% tag=train:m4m6r3_15:pill
+[04:26:11] train pill on 3bf0407c (save=m4m6r3_15)
+[04:32:01] train pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6r3_15:screw
+[04:32:01] train screw on 3bf0407c (save=m4m6r3_15)
+[04:37:32] train screw 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6r3_15:tile
+[04:37:32] train tile on 3bf0407c (save=m4m6r3_15)
+[04:42:39] train tile 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=100% tag=train:m4m6r3_15:toothbrush
+[04:42:39] train toothbrush on 3bf0407c (save=m4m6r3_15)
+[04:45:28] train toothbrush 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 2154MiB / 共 24576MiB，剩余 22422MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=99% tag=train:m4m6r3_15:transistor
+[04:45:28] train transistor on 3bf0407c (save=m4m6r3_15)
+[04:52:04] train transistor 结束 exit=0
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=train:m4m6r3_15:wood
+[04:52:05] train wood on 0e3a7e1c (save=m4m6r3_15)
+[04:56:12] train wood 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=100% tag=train:m4m6r3_15:zipper
+[04:56:12] train zipper on 0e3a7e1c (save=m4m6r3_15)
+[05:01:50] train zipper 结束 exit=0
+[2026-10-09 05:01:50] ROTATE_TRAIN_DONE save=m4m6r3_15

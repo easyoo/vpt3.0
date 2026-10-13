@@ -1,0 +1,3 @@
+[shot_utils] pipe_fryum shot2 hash=53d54785c96a picks=['073.JPG', '318.JPG']
+[nocrop448] pipe_fryum  I-AUROC=0.9668  I-AP=0.9844  I-F1=0.9187  P-AUROC=0.9906  P-AP=0.4575  P-F1=0.5407  P-AUPRO=0.9727
+  CSV:0.9668,0.9844,0.9187,0.9906,0.4575,0.5407,0.9727

@@ -1,0 +1,5 @@
+2026-10-09 01:42:09	transistor	0e3a7e1c	8918d3f6a866	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1
+2026-10-09 01:46:24	screw	0e3a7e1c	8918d3f6a866	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1
+2026-10-09 01:50:13	capsule	0e3a7e1c	8918d3f6a866	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1
+2026-10-09 01:54:01	metal_nut	0e3a7e1c	8918d3f6a866	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1
+2026-10-09 01:57:31	wood	0e3a7e1c	8918d3f6a866	--global_proto 1 --w_div 0.1 --w_pixel 0.0 --metric_head 1 --w_rank 0.02 --rank_margin 0.25 --rank_norm 1

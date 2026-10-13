@@ -1,0 +1,12 @@
+=== regD2 评估开始 04:50:01 ===
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=eval:regD2:leather
+[04:50:01] eval leather on 0e3a7e1c (save=regD2 tag=vpt4regD2)
+[04:50:30] eval leather 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=44% tag=eval:regD2:pill
+[04:50:30] eval pill on 0e3a7e1c (save=regD2 tag=vpt4regD2)
+[04:51:06] eval pill 结束 exit=0
+[pick_gpu] 选中 共享卡（已用 1MiB / 共 24576MiB，剩余 24575MiB）: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=56% tag=eval:regD2:zipper
+[04:51:06] eval zipper on 0e3a7e1c (save=regD2 tag=vpt4regD2)
+[04:51:38] eval zipper 结束 exit=0
+[2026-10-09 04:51:38] ROTATE_EVAL_DONE save=regD2
+=== regD2 评估结束 04:51:38 ===

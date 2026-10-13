@@ -1,0 +1,16 @@
+=== base hazelnut 20:31:03 ===
+=== base transistor 20:31:03 ===
+  [maps] 已保存 .maps_nocrop392_base/transistor.map  shape=(100, 1, 392, 392)
+[nocrop392] transistor  I-AUROC=0.7633  I-AP=0.7122  I-F1=0.7027  P-AUROC=0.8511  P-AP=0.3125  P-F1=0.4094  P-AUPRO=0.6523
+  CSV:0.7633,0.7122,0.7027,0.8511,0.3125,0.4094,0.6523
+  [maps] 已保存 .maps_nocrop392_base/hazelnut.map  shape=(110, 1, 392, 392)
+[nocrop392] hazelnut  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9940  P-AP=0.7041  P-F1=0.7541  P-AUPRO=0.9786
+  CSV:1.0000,1.0000,1.0000,0.9940,0.7041,0.7541,0.9786
+=== base bottle 20:31:31 ===
+=== base leather 20:31:32 ===
+  [maps] 已保存 .maps_nocrop392_base/bottle.map  shape=(83, 1, 392, 392)
+[nocrop392] bottle  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9767  P-AP=0.7760  P-F1=0.7067  P-AUPRO=0.9341
+  CSV:1.0000,1.0000,1.0000,0.9767,0.7760,0.7067,0.9341
+  [maps] 已保存 .maps_nocrop392_base/leather.map  shape=(124, 1, 392, 392)
+[nocrop392] leather  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9871  P-AP=0.3985  P-F1=0.4163  P-AUPRO=0.9813
+  CSV:1.0000,1.0000,1.0000,0.9871,0.3985,0.4163,0.9813

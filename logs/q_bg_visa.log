@@ -1,0 +1,10 @@
+candle 已有
+[07:35:52] capsules exit=0
+[07:47:18] cashew exit=0
+[07:58:17] chewinggum exit=0
+[08:09:29] fryum exit=0
+[08:25:25] macaroni1 exit=0
+/tmp/gen_bgrid.sh: line 7: 1251963 Killed                  $PY bank_grid.py --class "$cls" --shots "$SHOTS" --size 448 --knn 1024 --data_path "$DATA" --out_dir "$OUT" > "logs/bgrid_${OUT}_${cls}.log" 2>&1
+[08:40:32] macaroni2 exit=0
+[08:56:21] pcb1 exit=0
+[09:10:58] pcb2 exit=0

@@ -1,0 +1,5 @@
+[shot_utils] hazelnut shot4 hash=8dda33d23322 picks=['068.png', '291.png', '032.png', '130.png']
+  [maps] 保存 .maps_v3_nocrop448_mv4/hazelnut.map shape=(110, 1, 448, 448)
+[v3] hazelnut  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9958  P-AP=0.7797  P-F1=0.7853  P-AUPRO=0.9840
+  CSV:1.0000,1.0000,1.0000,0.9958,0.7797,0.7853,0.9840

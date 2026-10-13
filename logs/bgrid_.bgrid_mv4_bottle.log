@@ -1,0 +1,14 @@
+[shot_utils] bottle shot4 hash=d0c4c927f728 picks=['034.png', '145.png', '205.png', '195.png']
+[bank] bottle: 4 shot → 增强 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3215.65it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+  batch 0 done
+  batch 1 done
+  batch 2 done
+  batch 3 done
+  batch 4 done
+  batch 5 done
+[bgrid] 保存 .bgrid_mv4/bottle.npz k=1024 keys=17

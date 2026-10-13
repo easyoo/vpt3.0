@@ -1,0 +1,9 @@
+[shot_utils] capsules shot4 hash=9cf53634f920 picks=['147.JPG', '072.JPG', '289.JPG', '130.JPG']
+[bank-nocrop448] capsules: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3577.91it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/10 [00:00<?, ?it/s]bank448:  10%|█▌             | 1/10 [01:00<09:03, 60.39s/it]bank448:  20%|███            | 2/10 [02:00<08:01, 60.22s/it]bank448:  30%|████▌          | 3/10 [02:59<06:58, 59.83s/it]bank448:  40%|██████         | 4/10 [03:58<05:55, 59.19s/it]bank448:  50%|███████▌       | 5/10 [04:56<04:55, 59.09s/it]bank448:  60%|█████████      | 6/10 [05:54<03:54, 58.68s/it]bank448:  70%|██████████▌    | 7/10 [06:53<02:55, 58.65s/it]bank448:  80%|████████████   | 8/10 [07:52<01:57, 58.67s/it]bank448:  90%|█████████████▌ | 9/10 [08:51<00:58, 58.85s/it]bank448: 100%|██████████████| 10/10 [09:50<00:00, 58.79s/it]bank448: 100%|██████████████| 10/10 [09:50<00:00, 59.01s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448_visa4/capsules.map shape=(160, 1, 448, 448)

@@ -1,0 +1,9 @@
+[shot_utils] cashew shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[bank-nocrop448] cashew: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4009.87it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/10 [00:00<?, ?it/s]bank448:  10%|█▌             | 1/10 [01:05<09:53, 65.97s/it]bank448:  20%|███            | 2/10 [02:08<08:33, 64.22s/it]bank448:  30%|████▌          | 3/10 [03:11<07:23, 63.42s/it]bank448:  40%|██████         | 4/10 [04:11<06:12, 62.01s/it]bank448:  50%|███████▌       | 5/10 [05:11<05:06, 61.39s/it]bank448:  60%|█████████      | 6/10 [06:10<04:02, 60.66s/it]bank448:  70%|██████████▌    | 7/10 [07:10<03:00, 60.20s/it]bank448:  80%|████████████   | 8/10 [08:09<01:59, 59.86s/it]bank448:  90%|█████████████▌ | 9/10 [09:08<00:59, 59.60s/it]bank448: 100%|██████████████| 10/10 [09:30<00:00, 48.08s/it]bank448: 100%|██████████████| 10/10 [09:30<00:00, 57.06s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448_visa4/cashew.map shape=(150, 1, 448, 448)

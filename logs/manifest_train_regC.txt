@@ -1,0 +1,3 @@
+2026-10-09 03:29:12	leather	3bf0407c	642add77a55b	--token_init_std 1e-6 --global_proto 0 --w_div 0.1 --w_pixel 0.0 --metric_head 0
+2026-10-09 03:37:20	pill	3bf0407c	642add77a55b	--token_init_std 1e-6 --global_proto 0 --w_div 0.1 --w_pixel 0.0 --metric_head 0
+2026-10-09 03:42:58	zipper	3bf0407c	642add77a55b	--token_init_std 1e-6 --global_proto 0 --w_div 0.1 --w_pixel 0.0 --metric_head 0

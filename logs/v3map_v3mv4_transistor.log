@@ -1,0 +1,5 @@
+[shot_utils] transistor shot4 hash=d0c4c927f728 picks=['034.png', '145.png', '205.png', '195.png']
+  [maps] 保存 .maps_v3_nocrop448_mv4/transistor.map shape=(100, 1, 448, 448)
+[v3] transistor  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9483  I-AP=0.9337  I-F1=0.8605  P-AUROC=0.8846  P-AP=0.3912  P-F1=0.4780  P-AUPRO=0.6468
+  CSV:0.9483,0.9337,0.8605,0.8846,0.3912,0.4780,0.6468

@@ -1,0 +1,19 @@
+[2026-09-29 14:47:25] === control / hazelnut / 30ep / mapping-only ===
+[2026-09-29 14:53:19] control/hazelnut exit=0
+[2026-09-29 14:53:19] === control / wood / 30ep / mapping-only ===
+[2026-09-29 14:57:56] control/wood exit=0
+[2026-09-29 14:57:56] === control / capsule / 30ep / mapping-only ===
+[2026-09-29 15:02:00] control/capsule exit=0
+[2026-09-29 15:02:00] === control / metal_nut / 30ep / mapping-only ===
+[2026-09-29 15:06:19] control/metal_nut exit=0
+[2026-09-29 15:06:19] === fixed / screw / 30ep / mapping-only ===
+[2026-09-29 15:10:18] fixed/screw exit=0
+[2026-09-29 15:10:18] === fixed / hazelnut / 30ep / mapping-only ===
+[2026-09-29 15:14:57] fixed/hazelnut exit=0
+[2026-09-29 15:14:57] === fixed / wood / 30ep / mapping-only ===
+[2026-09-29 15:18:33] fixed/wood exit=0
+[2026-09-29 15:18:33] === fixed / capsule / 30ep / mapping-only ===
+[2026-09-29 15:22:04] fixed/capsule exit=0
+[2026-09-29 15:22:04] === fixed / metal_nut / 30ep / mapping-only ===
+[2026-09-29 15:26:08] fixed/metal_nut exit=0
+[2026-09-29 15:26:08] REST_DONE

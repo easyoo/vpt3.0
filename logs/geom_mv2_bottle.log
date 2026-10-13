@@ -1,0 +1,4 @@
+[shot_utils] bottle shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_2shot/bottle.map  shape=(83, 1, 448, 448)
+[geom448-geom] bottle  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9883  P-AP=0.8347  P-F1=0.7796  P-AUPRO=0.9617
+  CSV:1.0000,1.0000,1.0000,0.9883,0.8347,0.7796,0.9617

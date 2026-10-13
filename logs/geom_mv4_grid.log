@@ -1,0 +1,4 @@
+[shot_utils] grid shot4 hash=be3d4e70cade picks=['068.png', '032.png', '130.png', '060.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/grid.map  shape=(78, 1, 448, 448)
+[geom448-geom] grid  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9910  P-AP=0.3930  P-F1=0.4375  P-AUPRO=0.9530
+  CSV:1.0000,1.0000,1.0000,0.9910,0.3930,0.4375,0.9530

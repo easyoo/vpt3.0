@@ -1,0 +1,22 @@
+[shot_utils] chewinggum shot4 hash=2a530d2b6a90 picks=['072.JPG', '317.JPG', '479.JPG', '453.JPG']
+=== chewinggum (save=vpt35_visa4shot shot=4) ===
+  raw_min       I-AUROC=0.9830  I-AP=0.9927  I-F1=0.9592  P-AUROC=0.9925  P-AP=0.5903  P-F1=0.6705  P-AUPRO=0.9493
+  CSV,chewinggum,raw_min,0.9830,0.9927,0.9592,0.9925,0.5903,0.6705,0.9493
+  raw_min_rawonlyI-AUROC=0.9818  I-AP=0.9921  I-F1=0.9592  P-AUROC=0.9922  P-AP=0.5673  P-F1=0.6586  P-AUPRO=0.9476
+  CSV,chewinggum,raw_min_rawonly,0.9818,0.9921,0.9592,0.9922,0.5673,0.6586,0.9476
+  raw_geom      I-AUROC=0.9816  I-AP=0.9920  I-F1=0.9592  P-AUROC=0.9938  P-AP=0.6175  P-F1=0.6829  P-AUPRO=0.9557
+  CSV,chewinggum,raw_geom,0.9816,0.9920,0.9592,0.9938,0.6175,0.6829,0.9557
+  raw_geom_rawonlyI-AUROC=0.9786  I-AP=0.9908  I-F1=0.9592  P-AUROC=0.9932  P-AP=0.5538  P-F1=0.6520  P-AUPRO=0.9531
+  CSV,chewinggum,raw_geom_rawonly,0.9786,0.9908,0.9592,0.9932,0.5538,0.6520,0.9531
+  learn_min     I-AUROC=0.9830  I-AP=0.9927  I-F1=0.9592  P-AUROC=0.9925  P-AP=0.5903  P-F1=0.6705  P-AUPRO=0.9493
+  CSV,chewinggum,learn_min,0.9830,0.9927,0.9592,0.9925,0.5903,0.6705,0.9493
+  learn_min_learnonlyI-AUROC=0.9852  I-AP=0.9939  I-F1=0.9746  P-AUROC=0.9934  P-AP=0.8051  P-F1=0.7568  P-AUPRO=0.9356
+  CSV,chewinggum,learn_min_learnonly,0.9852,0.9939,0.9746,0.9934,0.8051,0.7568,0.9356
+  learn_geom    I-AUROC=0.9822  I-AP=0.9923  I-F1=0.9592  P-AUROC=0.9923  P-AP=0.5733  P-F1=0.6617  P-AUPRO=0.9482
+  CSV,chewinggum,learn_geom,0.9822,0.9923,0.9592,0.9923,0.5733,0.6617,0.9482
+  learn_geom_learnonlyI-AUROC=0.9786  I-AP=0.9918  I-F1=0.9700  P-AUROC=0.9925  P-AP=0.8166  P-F1=0.7666  P-AUPRO=0.9261
+  CSV,chewinggum,learn_geom_learnonly,0.9786,0.9918,0.9700,0.9925,0.8166,0.7666,0.9261
+  learn_geom_bankI-AUROC=0.9868  I-AP=0.9941  I-F1=0.9641  P-AUROC=0.9937  P-AP=0.6269  P-F1=0.6907  P-AUPRO=0.9554
+  CSV,chewinggum,learn_geom_bank,0.9868,0.9941,0.9641,0.9937,0.6269,0.6907,0.9554
+  learn_geom_bank_learnonlyI-AUROC=0.9974  I-AP=0.9987  I-F1=0.9804  P-AUROC=0.9982  P-AP=0.8355  P-F1=0.7776  P-AUPRO=0.9818
+  CSV,chewinggum,learn_geom_bank_learnonly,0.9974,0.9987,0.9804,0.9982,0.8355,0.7776,0.9818

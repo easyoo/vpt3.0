@@ -1,0 +1,5 @@
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=visabank:vpt35_visa4shot:macaroni2
+[2026-10-12 22:45:20] macaroni2 exit=(0,0,0)
+[pick_gpu] 选中 共享卡（已用 2780MiB / 共 24576MiB，剩余 21796MiB）: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=51% tag=visabank:vpt35_visa4shot:pcb1
+[2026-10-12 23:00:08] pcb1 exit=(0,0,0)
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=visabank:vpt35_visa4shot:pcb2

@@ -1,0 +1,4 @@
+[shot_utils] tile shot4 hash=b4ad406efaac picks=['034.png', '145.png', '216.png', '205.png']
+  [maps] 已保存(未平滑) .maps_geom_nocrop448_m4m6r3/tile.map  shape=(117, 1, 448, 448)
+[geom448-geom] tile  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9282  P-AP=0.5559  P-F1=0.5458  P-AUPRO=0.7940
+  CSV:1.0000,1.0000,1.0000,0.9282,0.5559,0.5458,0.7940

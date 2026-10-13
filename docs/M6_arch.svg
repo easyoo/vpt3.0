@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="740" viewBox="0 0 1180 740" font-family="Noto Serif CJK SC, DejaVu Sans, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="740" fill="#ffffff"/>
+
+  <text x="30" y="42" font-size="24" font-weight="bold" fill="#111">M6 可学习度量头（对应 TokenMapping.forward）</text>
+  <text x="30" y="70" font-size="15" fill="#555">vpt3.5 交付配置：--res_mapping 0（无残差旁路）  --metric_head 1（启用 M6）</text>
+
+  <!-- 输入 -->
+  <rect x="90" y="100" width="300" height="52" rx="8" fill="#eef4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+  <text x="240" y="122" font-size="15" fill="#111" text-anchor="middle">patch 特征 x_p</text>
+  <text x="240" y="142" font-size="13" fill="#555" text-anchor="middle">[B, N, 768]（测试图所有 patch）</text>
+
+  <rect x="470" y="100" width="300" height="52" rx="8" fill="#eef4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+  <text x="620" y="122" font-size="15" fill="#111" text-anchor="middle">原型特征 x_q</text>
+  <text x="620" y="142" font-size="13" fill="#555" text-anchor="middle">[B, K, 768]（32 图像自适应 ⊕ 32 全局锚点）</text>
+
+  <!-- 汇聚 -->
+  <path d="M 240 152 L 240 178 L 430 178" fill="none" stroke="#444" stroke-width="1.5"/>
+  <path d="M 620 152 L 620 178 L 430 178" fill="none" stroke="#444" stroke-width="1.5"/>
+  <path d="M 430 178 L 430 205" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="448" y="176" font-size="13" fill="#666" text-anchor="start">两侧共用同一套权重</text>
+
+  <!-- TokenMapping 容器 -->
+  <rect x="200" y="210" width="460" height="252" rx="10" fill="#fafafa" stroke="#999" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="215" y="232" font-size="15" font-weight="bold" fill="#333">TokenMapping（低秩瓶颈映射）</text>
+
+  <rect x="240" y="248" width="380" height="36" rx="6" fill="#ffffff" stroke="#666"/>
+  <text x="430" y="272" font-size="14" fill="#111" text-anchor="middle">LayerNorm(768)</text>
+
+  <rect x="240" y="292" width="380" height="36" rx="6" fill="#ffffff" stroke="#666"/>
+  <text x="430" y="316" font-size="14" fill="#111" text-anchor="middle">Linear 768 &#8594; 128</text>
+
+  <rect x="240" y="336" width="380" height="36" rx="6" fill="#ffffff" stroke="#666"/>
+  <text x="430" y="360" font-size="14" fill="#111" text-anchor="middle">GELU</text>
+
+  <rect x="240" y="380" width="380" height="36" rx="6" fill="#ffffff" stroke="#666"/>
+  <text x="430" y="404" font-size="14" fill="#111" text-anchor="middle">LayerNorm(128)</text>
+
+  <rect x="240" y="424" width="380" height="36" rx="6" fill="#ffffff" stroke="#666"/>
+  <text x="430" y="448" font-size="14" fill="#111" text-anchor="middle">Linear 128 &#8594; 768</text>
+
+  <path d="M 430 284 L 430 292" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+  <path d="M 430 328 L 430 336" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+  <path d="M 430 372 L 430 380" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+  <path d="M 430 416 L 430 424" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+  <path d="M 430 462 L 430 500" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- M6 -->
+  <rect x="195" y="505" width="470" height="66" rx="9" fill="#fff3e0" stroke="#e07b00" stroke-width="2.5"/>
+  <text x="430" y="531" font-size="17" font-weight="bold" fill="#a85000" text-anchor="middle">M6 可学习度量头：z = h &#183; W</text>
+  <text x="430" y="556" font-size="13.5" fill="#7a3c00" text-anchor="middle">W &#8712; R^(768&#215;768)，初值 = 单位阵 I（可学习，无额外激活）</text>
+
+  <path d="M 430 571 L 430 596" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="240" y="600" width="380" height="36" rx="6" fill="#ffffff" stroke="#666"/>
+  <text x="430" y="624" font-size="14" fill="#111" text-anchor="middle">L2 归一化 normalize( &#183; )</text>
+
+  <path d="M 430 636 L 430 664" fill="none" stroke="#444" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="180" y="668" width="500" height="56" rx="8" fill="#eef7ee" stroke="#3d7a3d" stroke-width="1.5"/>
+  <text x="430" y="692" font-size="14" fill="#111" text-anchor="middle">打分：s = 1 &#8722; max_k cos( z_p , z_q,k )  →  异常图</text>
+  <text x="430" y="713" font-size="12.5" fill="#555" text-anchor="middle">（min 距离；两侧都过同一个 W）</text>
+
+  <!-- 右侧注释 -->
+  <rect x="700" y="248" width="450" height="224" rx="10" fill="#f7f7f7" stroke="#bbb"/>
+  <text x="720" y="276" font-size="15" font-weight="bold" fill="#222">要点</text>
+  <text x="720" y="304" font-size="13.5" fill="#333">&#183; 参数量：TokenMapping 共 789,120，其中 W 占 589,824（74.7%）</text>
+  <text x="720" y="330" font-size="13.5" fill="#333">&#183; 初值 I &#8658; 训练第 0 步与"直接算余弦"严格等价；</text>
+  <text x="734" y="352" font-size="13.5" fill="#333">训练后偏离单位阵：&#8214;W &#8722; I&#8214;_F &#8776; 9.2（bottle/leather/screw 实测）</text>
+  <text x="720" y="378" font-size="13.5" fill="#333">&#183; patch 与原型两侧共用同一个 W &#8658; 打分口径一致</text>
+  <text x="720" y="404" font-size="13.5" fill="#333">&#183; 主干 DINOv2 全冻结；只训练 原型 + TokenMapping + W</text>
+  <text x="734" y="426" font-size="13.5" fill="#333">（+ 分割头），每类 1 个模型</text>
+  <text x="720" y="452" font-size="13.5" fill="#333">&#183; 交付配置 res_mapping=0：无残差旁路、无 out_ln</text>
+
+  <rect x="700" y="505" width="450" height="150" rx="10" fill="#f7f7f7" stroke="#bbb"/>
+  <text x="720" y="533" font-size="15" font-weight="bold" fill="#222">代码位置</text>
+  <text x="720" y="560" font-size="13" fill="#333" font-family="DejaVu Sans Mono, monospace">dinov2/models/vision_transformer.py</text>
+  <text x="720" y="582" font-size="13" fill="#333" font-family="DejaVu Sans Mono, monospace">  TokenMapping.__init__  self.metric = eye(768)</text>
+  <text x="720" y="604" font-size="13" fill="#333" font-family="DejaVu Sans Mono, monospace">  TokenMapping.forward  out = h @ self.metric</text>
+  <text x="720" y="626" font-size="13" fill="#333" font-family="DejaVu Sans Mono, monospace">main-fewshot-vpt4.py  --metric_head 1</text>
+  <text x="720" y="646" font-size="12.5" fill="#666">（两侧调用：compute_fused_map 的 patch / proto 分支）</text>
+</svg>

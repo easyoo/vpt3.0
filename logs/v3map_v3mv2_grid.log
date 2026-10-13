@@ -1,0 +1,5 @@
+[shot_utils] grid shot2 hash=da98989cce0f picks=['068.png', '032.png']
+  [maps] 保存 .maps_v3_nocrop448_mv2/grid.map shape=(78, 1, 448, 448)
+[v3] grid  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=1.0000  I-AP=1.0000  I-F1=1.0000  P-AUROC=0.9889  P-AP=0.3458  P-F1=0.3889  P-AUPRO=0.9503
+  CSV:1.0000,1.0000,1.0000,0.9889,0.3458,0.3889,0.9503

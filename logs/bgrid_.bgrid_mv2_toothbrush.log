@@ -1,0 +1,11 @@
+[shot_utils] toothbrush shot2 hash=d8f107688ae1 picks=['008.png', '036.png']
+[bank] toothbrush: 2 shot → 增强 (44, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 7317.67it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(45056, 768)
+feature stage-2's shape：(45056, 768)
+Building memory bank finished.
+  batch 0 done
+  batch 1 done
+  batch 2 done
+[bgrid] 保存 .bgrid_mv2/toothbrush.npz k=1024 keys=17

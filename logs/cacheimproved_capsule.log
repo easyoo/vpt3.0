@@ -1,0 +1,13 @@
+[improved] 原始特征库 (3136, 768)
+improved:   0%|                       | 0/9 [00:00<?, ?it/s]improved:   0%|                       | 0/9 [00:02<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/jjquan/experiment/visual/audit_mapping/cache_improved.py", line 95, in <module>
+    main()
+  File "/home/jjquan/experiment/visual/audit_mapping/cache_improved.py", line 85, in main
+    am = mod.compute_fused_map(model, img, bank, a.fused_layer, scales=scales,
+  File "/home/jjquan/experiment/visual/audit_mapping/code_norm/main-fewshot-norm.py", line 783, in compute_fused_map
+    m_learn = _map28(fp, flr)
+TypeError: 'NoneType' object is not callable
+[improved] 原始特征库 (3136, 768)
+improved:   0%|                       | 0/9 [00:00<?, ?it/s]improved:  11%|█▋             | 1/9 [00:02<00:19,  2.46s/it]improved:  22%|███▎           | 2/9 [00:03<00:12,  1.72s/it]improved:  33%|█████          | 3/9 [00:04<00:08,  1.47s/it]improved:  44%|██████▋        | 4/9 [00:06<00:06,  1.36s/it]improved:  56%|████████▎      | 5/9 [00:07<00:05,  1.30s/it]improved:  67%|██████████     | 6/9 [00:08<00:03,  1.27s/it]improved:  78%|███████████▋   | 7/9 [00:09<00:02,  1.27s/it]improved:  89%|█████████████▎ | 8/9 [00:11<00:01,  1.41s/it]improved: 100%|███████████████| 9/9 [00:12<00:00,  1.19s/it]improved: 100%|███████████████| 9/9 [00:12<00:00,  1.35s/it]
+[improved] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/capsule_improved.map  shape=(132, 1, 392, 392)

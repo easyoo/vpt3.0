@@ -1,0 +1,6 @@
+[skip] bank 图已存在: /home/jjquan/experiment/visual/audit_mapping/.errmap_audit/grid.map
+mapping-map:   0%|                    | 0/5 [00:00<?, ?it/s]mapping-map:  20%|██▍         | 1/5 [00:01<00:05,  1.34s/it]mapping-map:  40%|████▊       | 2/5 [00:01<00:02,  1.42it/s]mapping-map:  60%|███████▏    | 3/5 [00:01<00:01,  1.99it/s]mapping-map:  80%|█████████▌  | 4/5 [00:02<00:00,  2.47it/s]mapping-map: 100%|████████████| 5/5 [00:02<00:00,  2.85it/s]mapping-map: 100%|████████████| 5/5 [00:02<00:00,  2.04it/s]
+[mapping] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/grid_mapping.map
+[gt] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/grid_gt.map
+[meta] /home/jjquan/experiment/visual/audit_mapping/.maps_audit/grid_meta.json
+  样本数 = 78（两个分支共用同一次 DataLoader 遍历 → 顺序一致）

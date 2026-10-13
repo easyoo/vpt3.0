@@ -1,0 +1,5 @@
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=visabank:vpt35_visa4shot:candle
+[2026-10-12 22:45:19] candle exit=(0,0,0)
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=14% tag=visabank:vpt35_visa4shot:capsules
+[2026-10-12 22:57:12] capsules exit=(0,0,0)
+[pick_gpu] 选中 独占空闲卡: idx=0 uuid=GPU-0e3a7e1c-105c-997d-921f-b4247b4dc822 util=0% tag=visabank:vpt35_visa4shot:cashew

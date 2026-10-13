@@ -1,0 +1,7 @@
+[03:38:19] pcb1 start
+[03:41:31] pcb1 exit=0
+[03:41:31] pcb2 start
+[03:44:48] pcb2 exit=0
+[03:44:48] pipe_fryum start
+[03:47:13] pipe_fryum exit=0
+[03:47:13] WORKER DONE GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be

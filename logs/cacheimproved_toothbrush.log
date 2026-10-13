@@ -1,0 +1,13 @@
+[improved] 原始特征库 (3136, 768)
+improved:   0%|                       | 0/3 [00:00<?, ?it/s]improved:   0%|                       | 0/3 [00:01<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/jjquan/experiment/visual/audit_mapping/cache_improved.py", line 95, in <module>
+    main()
+  File "/home/jjquan/experiment/visual/audit_mapping/cache_improved.py", line 85, in main
+    am = mod.compute_fused_map(model, img, bank, a.fused_layer, scales=scales,
+  File "/home/jjquan/experiment/visual/audit_mapping/code_norm/main-fewshot-norm.py", line 783, in compute_fused_map
+    m_learn = _map28(fp, flr)
+TypeError: 'NoneType' object is not callable
+[improved] 原始特征库 (3136, 768)
+improved:   0%|                       | 0/3 [00:00<?, ?it/s]improved:  33%|█████          | 1/3 [00:03<00:06,  3.33s/it]improved:  67%|██████████     | 2/3 [00:04<00:02,  2.06s/it]improved: 100%|███████████████| 3/3 [00:05<00:00,  1.46s/it]improved: 100%|███████████████| 3/3 [00:05<00:00,  1.77s/it]
+[improved] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/toothbrush_improved.map  shape=(42, 1, 392, 392)

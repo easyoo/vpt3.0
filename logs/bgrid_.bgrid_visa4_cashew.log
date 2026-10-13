@@ -1,0 +1,18 @@
+[shot_utils] cashew shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[bank] cashew: 4 shot → 增强 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 6432.94it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+  batch 0 done
+  batch 1 done
+  batch 2 done
+  batch 3 done
+  batch 4 done
+  batch 5 done
+  batch 6 done
+  batch 7 done
+  batch 8 done
+  batch 9 done
+[bgrid] 保存 .bgrid_visa4/cashew.npz k=1024 keys=17

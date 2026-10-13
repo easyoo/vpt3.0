@@ -1,0 +1,3 @@
+[shot_utils] capsules shot1 hash=3a713cfd097f picks=['147.JPG']
+[nocrop448] capsules  I-AUROC=0.9288  I-AP=0.9552  I-F1=0.8955  P-AUROC=0.9554  P-AP=0.2747  P-F1=0.3520  P-AUPRO=0.9252
+  CSV:0.9288,0.9552,0.8955,0.9554,0.2747,0.3520,0.9252

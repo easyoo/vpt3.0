@@ -1,0 +1,13 @@
+[improved] 原始特征库 (3136, 768)
+improved:   0%|                       | 0/7 [00:00<?, ?it/s]improved:   0%|                       | 0/7 [00:02<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/jjquan/experiment/visual/audit_mapping/cache_improved.py", line 95, in <module>
+    main()
+  File "/home/jjquan/experiment/visual/audit_mapping/cache_improved.py", line 85, in main
+    am = mod.compute_fused_map(model, img, bank, a.fused_layer, scales=scales,
+  File "/home/jjquan/experiment/visual/audit_mapping/code_norm/main-fewshot-norm.py", line 783, in compute_fused_map
+    fused_sum, n_view = None, 0
+TypeError: 'NoneType' object is not callable
+[improved] 原始特征库 (3136, 768)
+improved:   0%|                       | 0/7 [00:00<?, ?it/s]improved:  14%|██▏            | 1/7 [00:03<00:23,  3.85s/it]improved:  29%|████▎          | 2/7 [00:06<00:15,  3.08s/it]improved:  43%|██████▍        | 3/7 [00:08<00:11,  2.83s/it]improved:  57%|████████▌      | 4/7 [00:11<00:08,  2.72s/it]improved:  71%|██████████▋    | 5/7 [00:14<00:05,  2.66s/it]improved:  86%|████████████▊  | 6/7 [00:15<00:02,  2.38s/it]improved: 100%|███████████████| 7/7 [00:16<00:00,  1.70s/it]improved: 100%|███████████████| 7/7 [00:16<00:00,  2.32s/it]
+[improved] 已保存 /home/jjquan/experiment/visual/audit_mapping/.maps_audit/transistor_improved.map  shape=(100, 1, 392, 392)

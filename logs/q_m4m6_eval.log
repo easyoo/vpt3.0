@@ -1,0 +1,5 @@
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 51), ('1', 8496, 0)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 27), ('1', 8436, 100)]），休眠 120s 后重试
+[pick_gpu] 当前无空闲卡（可见 2 张，[('0', 17398, 49), ('1', 8496, 100)]），休眠 120s 后重试
+[pick_gpu] 选中 独占空闲卡: idx=1 uuid=GPU-3bf0407c-aa78-8aab-cd2f-1c7b3356c5be util=0% tag=eval:m4m6:transistor
+[00:16:19] eval transistor on 3bf0407c (save=m4m6 tag=vpt4m6)

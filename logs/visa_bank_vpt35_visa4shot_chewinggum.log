@@ -1,0 +1,9 @@
+[shot_utils] chewinggum shot4 hash=2a530d2b6a90 picks=['072.JPG', '317.JPG', '479.JPG', '453.JPG']
+[bank-nocrop448] chewinggum: 4 shot → 增强后 (88, 3, 448, 448)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 3777.95it/s]
+Extracting pretrained features from images...
+feature stage-1's shape：(90112, 768)
+feature stage-2's shape：(90112, 768)
+Building memory bank finished.
+bank448:   0%|                       | 0/10 [00:00<?, ?it/s]bank448:  10%|█▌             | 1/10 [01:05<09:49, 65.48s/it]bank448:  20%|███            | 2/10 [02:08<08:32, 64.10s/it]bank448:  30%|████▌          | 3/10 [03:09<07:16, 62.43s/it]bank448:  40%|██████         | 4/10 [04:07<06:06, 61.00s/it]bank448:  50%|███████▌       | 5/10 [05:07<05:01, 60.38s/it]bank448:  60%|█████████      | 6/10 [06:06<03:59, 59.97s/it]bank448:  70%|██████████▌    | 7/10 [07:05<02:59, 59.74s/it]bank448:  80%|████████████   | 8/10 [08:04<01:59, 59.56s/it]bank448:  90%|█████████████▌ | 9/10 [09:03<00:59, 59.35s/it]bank448: 100%|██████████████| 10/10 [09:26<00:00, 48.00s/it]bank448: 100%|██████████████| 10/10 [09:26<00:00, 56.63s/it]
+[bank-nocrop448] 已保存 .errmap_nocrop448_visa4/chewinggum.map shape=(150, 1, 448, 448)
