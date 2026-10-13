@@ -1,0 +1,6 @@
+[shot_utils] screw shot2 hash=6b916f0c5fcb picks=['068.png', '291.png']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_mv2/screw.map shape=(160, 1, 448, 448)
+[v3] screw  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.8215  I-AP=0.9325  I-F1=0.8933  P-AUROC=0.9855  P-AP=0.3986  P-F1=0.4540  P-AUPRO=0.9336
+  CSV:0.8215,0.9325,0.8933,0.9855,0.3986,0.4540,0.9336

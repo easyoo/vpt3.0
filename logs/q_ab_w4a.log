@@ -1,0 +1,11 @@
+[19:28:23] ab_nometric/transistor start on 0e3a7e1c
+[19:31:48] ab_nometric/transistor 结束 exit=0
+[19:31:48] ab_nometric/screw start on 0e3a7e1c
+[19:37:03] ab_nometric/screw 结束 exit=0
+[19:37:03] ab_nometric/capsule start on 0e3a7e1c
+[19:43:19] ab_nometric/capsule 结束 exit=0
+[19:43:19] ab_nometric/metal_nut start on 0e3a7e1c
+[19:48:44] ab_nometric/metal_nut 结束 exit=0
+[19:48:44] ab_nometric/wood start on 0e3a7e1c
+[19:52:51] ab_nometric/wood 结束 exit=0
+[2026-10-13 19:52:51] ABLATE_DONE save=ab_nometric

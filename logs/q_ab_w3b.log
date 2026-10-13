@@ -1,0 +1,11 @@
+[18:36:25] ab_norank/transistor start on 3bf0407c
+[18:43:10] ab_norank/transistor 结束 exit=0
+[18:43:10] ab_norank/screw start on 3bf0407c
+[18:49:50] ab_norank/screw 结束 exit=0
+[18:49:50] ab_norank/capsule start on 3bf0407c
+[18:55:42] ab_norank/capsule 结束 exit=0
+[18:55:42] ab_norank/metal_nut start on 3bf0407c
+[19:00:29] ab_norank/metal_nut 结束 exit=0
+[19:00:29] ab_norank/wood start on 3bf0407c
+[19:06:02] ab_norank/wood 结束 exit=0
+[2026-10-13 19:06:02] ABLATE_DONE save=ab_norank

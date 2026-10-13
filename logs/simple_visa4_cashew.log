@@ -1,0 +1,6 @@
+[shot_utils] cashew shot4 hash=fc8fca49be5c picks=['073.JPG', '318.JPG', '480.JPG', '454.JPG']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_visa4/cashew.map shape=(150, 1, 448, 448)
+[v3] cashew  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.8750  I-AP=0.9376  I-F1=0.8785  P-AUROC=0.9954  P-AP=0.7233  P-F1=0.7067  P-AUPRO=0.9780
+  CSV:0.8750,0.9376,0.8785,0.9954,0.7233,0.7067,0.9780

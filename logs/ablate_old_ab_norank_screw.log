@@ -1,0 +1,3 @@
+[shot_utils] screw shot2 hash=6b916f0c5fcb picks=['068.png', '291.png']
+[nocrop448] screw  I-AUROC=0.6473  I-AP=0.8129  I-F1=0.8645  P-AUROC=0.9662  P-AP=0.1639  P-F1=0.2540  P-AUPRO=0.8676
+  CSV:0.6473,0.8129,0.8645,0.9662,0.1639,0.2540,0.8676

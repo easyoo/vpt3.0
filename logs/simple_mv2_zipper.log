@@ -1,0 +1,6 @@
+[shot_utils] zipper shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）
+  [maps] 保存 .maps_simple_nocrop448_mv2/zipper.map shape=(151, 1, 448, 448)
+[v3] zipper  raw(d1^0.5*q512) learn(dlmin^0.7*bq0) w=0.6
+  I-AUROC=0.9874  I-AP=0.9970  I-F1=0.9791  P-AUROC=0.9672  P-AP=0.5911  P-F1=0.5982  P-AUPRO=0.9106
+  CSV:0.9874,0.9970,0.9791,0.9672,0.5911,0.5982,0.9106

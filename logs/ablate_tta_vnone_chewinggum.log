@@ -1,0 +1,4 @@
+[shot_utils] chewinggum shot4 hash=2a530d2b6a90 picks=['072.JPG', '317.JPG', '479.JPG', '453.JPG']
+[v3] chewinggum  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.9780  I-AP=0.9904  I-F1=0.9583  P-AUROC=0.9947  P-AP=0.5723  P-F1=0.6459  P-AUPRO=0.9494
+  CSV:0.9780,0.9904,0.9583,0.9947,0.5723,0.6459,0.9494

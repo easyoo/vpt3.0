@@ -53,17 +53,23 @@ def main():
     ap.add_argument('--seed', type=int, default=1)
     ap.add_argument('--data_path', default='/home/jjquan/experiment/visual2/visa_prepared')
     ap.add_argument('--num_tokens', type=int, default=32)
+    ap.add_argument('--res_mapping', type=int, default=0, help='须与训练一致（0=低秩瓶颈，1=残差）')
+    ap.add_argument('--global_proto', type=int, default=1, help='须与训练一致（1=⊕32 全局锚点）')
+    ap.add_argument('--metric_head', type=int, default=1, help='须与训练一致（1=可学习度量头 W）')
     ap.add_argument('--scales', default='1.5')
     ap.add_argument('--flip', type=int, default=1)
     ap.add_argument('--raw_alpha', type=float, default=0.5)
     ap.add_argument('--raw_global', type=int, default=512, help='raw 全局项分位（1024 子采样中第 k 小）')
     ap.add_argument('--l_alpha', type=float, default=0.7)
-    ap.add_argument('--l_global', type=int, default=64, help='learn 全局项分位')
+    ap.add_argument('--l_global', type=int, default=64,
+                    help='learn 全局项分位；**0 = 关闭该项（简化版，s_learn 退化为 dlmin）**')
     ap.add_argument('--w', type=float, default=0.5, help='learn 侧权重')
     ap.add_argument('--device', default='cuda:0')
     ap.add_argument('--ckpt_dir', default=None)
     ap.add_argument('--script', default=os.path.join(HERE, 'code_vpt4', 'main-fewshot-vpt4.py'))
     ap.add_argument('--sub_seed', type=int, default=1234)
+    ap.add_argument('--chunk', type=int, default=1024,
+                    help='[精简] raw 侧按该宽度分块计算，避免 [B,N,M] 大张量；结果逐位不变')
     ap.add_argument('--save_maps_dir', default='')
     args = ap.parse_args()
 
@@ -78,9 +84,9 @@ def main():
     a.learnable_layers = 1
     a.softmin = 0
     a.learnable_num_per_layer = args.num_tokens
-    a.res_mapping = 0
-    a.global_proto = 1
-    a.metric_head = 1
+    a.res_mapping = args.res_mapping
+    a.global_proto = args.global_proto
+    a.metric_head = args.metric_head
     a.subspace = 0
     a.layer_scale_learn = 0
     a.temperature = 0.07
@@ -109,10 +115,23 @@ def main():
     bank = mod.build_raw_bank(model, normal, a.fused_layer, k=0)
     M = bank.shape[0]
     q_raw = F.normalize(bank, dim=-1)
-    with torch.no_grad():
-        q_bank_l = F.normalize(model.token_mapping(bank), dim=-1)
     gen = torch.Generator().manual_seed(args.sub_seed)
     sub_idx = torch.randperm(M, generator=gen)[:min(SUBN, M)].to(args.device)
+    _simple_learn = int(args.l_global) <= 0     # [简化] 关掉 learn 侧全局项 → s_learn = dlmin
+    if _simple_learn:
+        q_bank_l = None
+        print('[simple] learn 侧全局项已关闭：s_learn = dlmin（不再对 bank 做 token_mapping）')
+    else:
+        # [精简] 该全局项只用到 1024 个子采样 patch，因此**只映射这批**（原来的全量映射是冗余的）
+        with torch.no_grad():
+            q_bank_l = F.normalize(model.token_mapping(bank.index_select(0, sub_idx)), dim=-1)
+    # [精简] raw 侧分块：只按块取 min（d1）与收集子采样列（q50），不再物化 [B,N,M] 大张量
+    _ch = max(1, int(args.chunk))
+    _plan = []
+    for _i in range(0, M, _ch):
+        _j = min(_i + _ch, M)
+        _sel = sub_idx[(sub_idx >= _i) & (sub_idx < _j)] - _i
+        _plan.append((_i, _j, _sel))
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
                           transform=tf, gt_transform=gtf, phase='test')
@@ -120,9 +139,18 @@ def main():
     gk = mod.get_gaussian_kernel(kernel_size=5, sigma=4).to(args.device)
     scales = tuple(float(x) for x in args.scales.split(','))
 
-    def score_of(d, sub):
-        ds_ = torch.sort(d.index_select(-1, sub), dim=-1).values
-        d1 = d.min(-1).values
+    def score_of(p):
+        """raw 侧打分：逐块求 d1=min，同时收集 1024 个子采样列算 q50（与全量实现逐位等价）。"""
+        d1, cols = None, []
+        for i, j, sel in _plan:
+            sim = torch.bmm(p, q_raw[i:j].t().unsqueeze(0).expand(p.shape[0], -1, -1))
+            dch = (1.0 - sim).clamp_min(0)
+            mch = dch.min(-1).values
+            d1 = mch if d1 is None else torch.minimum(d1, mch)
+            if sel.numel():
+                cols.append(dch.index_select(-1, sel))
+        d_sub = torch.cat(cols, dim=-1)                 # [B,N,1024]（顺序与 sub_idx 不同，排序后一致）
+        ds_ = torch.sort(d_sub, dim=-1).values
         q = ds_[..., min(args.raw_global, ds_.shape[-1]) - 1]
         return _pow(d1, q, args.raw_alpha)
 
@@ -145,19 +173,19 @@ def main():
                     gg = int(round(n_el ** 0.5))
 
                     p = F.normalize(fp, dim=-1)
-                    d = (1.0 - torch.bmm(p, q_raw.t().unsqueeze(0)
-                                         .expand(p.shape[0], -1, -1))).clamp_min(0)
-                    m_raw = score_of(d, sub_idx).reshape(-1, 1, gg, gg)
+                    m_raw = score_of(p).reshape(-1, 1, gg, gg)
 
                     pl = F.normalize(model.token_mapping(fp), dim=-1)
                     ql = F.normalize(model.token_mapping(flr), dim=-1)
-                    dl_ = (1.0 - torch.bmm(pl, ql.transpose(1, 2))).clamp_min(0)
-                    db = (1.0 - torch.bmm(pl, q_bank_l.t().unsqueeze(0)
-                                          .expand(pl.shape[0], -1, -1))).clamp_min(0)
-                    dls = torch.sort(db.index_select(-1, sub_idx), dim=-1).values
-                    dlmin = dl_.min(-1).values
-                    ql_ = dls[..., min(args.l_global, dls.shape[-1]) - 1]
-                    m_learn = _pow(dlmin, ql_, args.l_alpha).reshape(-1, 1, gg, gg)
+                    dlmin = (1.0 - torch.bmm(pl, ql.transpose(1, 2))).clamp_min(0).min(-1).values
+                    if _simple_learn:
+                        m_learn = dlmin.reshape(-1, 1, gg, gg)
+                    else:
+                        db = (1.0 - torch.bmm(pl, q_bank_l.t().unsqueeze(0)
+                                              .expand(pl.shape[0], -1, -1))).clamp_min(0)
+                        dls = torch.sort(db, dim=-1).values
+                        ql_ = dls[..., min(args.l_global, dls.shape[-1]) - 1]
+                        m_learn = _pow(dlmin, ql_, args.l_alpha).reshape(-1, 1, gg, gg)
 
                     am = F.interpolate(args.w * m_learn + (1.0 - args.w) * m_raw,
                                        size=base_hw, mode='bilinear', align_corners=True)

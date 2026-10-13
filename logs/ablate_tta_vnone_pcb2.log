@@ -1,0 +1,4 @@
+[shot_utils] pcb2 shot4 hash=3e7679014ad1 picks=['0146.JPG', '0639.JPG', '0961.JPG', '0909.JPG']
+[v3] pcb2  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.8561  I-AP=0.8094  I-F1=0.8158  P-AUROC=0.9759  P-AP=0.2554  P-F1=0.3564  P-AUPRO=0.8355
+  CSV:0.8561,0.8094,0.8158,0.9759,0.2554,0.3564,0.8355

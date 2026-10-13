@@ -1,0 +1,3 @@
+[shot_utils] transistor shot2 hash=79bf97a84286 picks=['034.png', '145.png']
+[nocrop448] transistor  I-AUROC=0.9571  I-AP=0.9351  I-F1=0.8837  P-AUROC=0.8576  P-AP=0.3852  P-F1=0.4348  P-AUPRO=0.6494
+  CSV:0.9571,0.9351,0.8837,0.8576,0.3852,0.4348,0.6494

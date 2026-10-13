@@ -1,0 +1,4 @@
+[shot_utils] macaroni1 shot4 hash=e420263cff2e picks=['0146.JPG', '0639.JPG', '0961.JPG', '0910.JPG']
+[v3] macaroni1  raw(d1^0.5*q512) learn(dlmin^0.7*bq64) w=0.6
+  I-AUROC=0.8017  I-AP=0.7877  I-F1=0.7619  P-AUROC=0.9952  P-AP=0.2262  P-F1=0.3187  P-AUPRO=0.9573
+  CSV:0.8017,0.7877,0.7619,0.9952,0.2262,0.3187,0.9573
