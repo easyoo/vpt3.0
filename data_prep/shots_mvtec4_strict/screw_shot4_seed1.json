@@ -1,0 +1,14 @@
+{
+ "cls": "screw",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "119.png",
+  "176.png",
+  "118.png",
+  "283.png"
+ ],
+ "n_files": 4,
+ "files_hash": "23f5aa7a7493",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

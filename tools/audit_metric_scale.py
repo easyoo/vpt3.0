@@ -45,7 +45,7 @@ def main():
     tf = T.Compose([T.Resize((args.size, args.size)), T.ToTensor(), T.Normalize(mean, std)])
     gtf = T.Compose([T.Resize((args.size, args.size)), T.ToTensor()])
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(ds, batch_size=32, shuffle=False, num_workers=4)
     gt_px = []
     for _, gt, _, _ in dl:

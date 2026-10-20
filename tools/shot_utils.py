@@ -19,7 +19,7 @@ import os
 import random
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SHOT_DIR = os.path.join(HERE, '.shots')
+SHOT_DIR = os.environ.get('VPT_SHOT_DIR', os.path.join(HERE, '.shots'))
 
 
 def _paths(data_path, cls):

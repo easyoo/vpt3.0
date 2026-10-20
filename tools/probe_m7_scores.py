@@ -77,7 +77,7 @@ def main():
 
     data_transform, gt_transform = mod.get_data_transforms(448, 392)
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=data_transform, gt_transform=gt_transform, phase='test')
+                          transform=data_transform, gt_transform=gt_transform, phase='test', sort_items=False)
     print(f'[probe] {args.cls} 测试集 {len(ds)} 张，取前 {args.n_images} 张')
 
     grid = int(round(1024 ** 0.5))      # 32x32 patch

@@ -1,0 +1,14 @@
+{
+ "cls": "pill",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "113.png",
+  "224.png",
+  "014.png",
+  "253.png"
+ ],
+ "n_files": 4,
+ "files_hash": "95be397058e7",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

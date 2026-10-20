@@ -16,7 +16,7 @@ POS=("$@"); [ ${#POS[@]} -eq 0 ] && POS=($CLS_ALL)
 CODE=code_vpt4                                      # ← 原本的 vpt3.5
 K="${SHOTS:-4}"
 DATA=/home/jjquan/experiment/visual2/visa_prepared
-ANOROOT=/home/jjquan/experiment/visual2/anomaly_samples_visa_${K}shot
+ANOROOT="${ANOROOT_OVERRIDE:-/home/jjquan/experiment/visual2/anomaly_samples_visa_${K}shot}"
 EXTRA="${EXTRA_ARGS:-}"
 
 mkdir -p logs results/visa

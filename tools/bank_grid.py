@@ -44,6 +44,9 @@ def main():
     ap.add_argument('--seed', type=int, default=1)
     ap.add_argument('--knn', type=int, default=1024)
     ap.add_argument('--limit', type=int, default=0)
+    ap.add_argument('--batch', type=int, default=16)
+    ap.add_argument('--bank_chunk', type=int, default=0,
+                    help='建增强库时前向分块；0=一次性 88 张')
     ap.add_argument('--data_path', default='/home/jjquan/experiment/visual2/visa_prepared')
     ap.add_argument('--out_dir', default='.bgrid_visa4')
     ap.add_argument('--device', default='cuda:0')
@@ -71,20 +74,31 @@ def main():
     imgs = [tf(Image.open(os.path.join(root, f)).convert('RGB')) for f in picks]
     normal_imgs = torch.cat([vpt.augmentation(im) for im in imgs], 0).to(args.device)
     print(f'[bank] {args.cls}: {len(picks)} shot → 增强 {tuple(normal_imgs.shape)}')
-    bank = mb.MemoryBank(target_cls=args.cls, use_json=False, imgs=normal_imgs, info=print,
-                         device=args.device)
+    if int(args.bank_chunk) > 0:
+        ch = int(args.bank_chunk)
+        bank = mb.MemoryBank(target_cls=args.cls, use_json=False,
+                             imgs=normal_imgs[:ch].to(args.device), info=print,
+                             device=args.device)
+        for i in range(ch, normal_imgs.shape[0], ch):
+            bank.extract_features(normal_imgs[i:i + ch].to(args.device))
+    else:
+        bank = mb.MemoryBank(target_cls=args.cls, use_json=False,
+                             imgs=normal_imgs.to(args.device), info=print,
+                             device=args.device)
     K = args.knn
 
     ds = vpt.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     if args.limit:
         ds.img_paths = ds.img_paths[:args.limit]
         ds.gt_paths = ds.gt_paths[:args.limit]
         ds.labels = ds.labels[:args.limit]
         ds.types = ds.types[:args.limit]
-    dl = torch.utils.data.DataLoader(ds, batch_size=16, shuffle=False, num_workers=4)
+    dl = torch.utils.data.DataLoader(ds, batch_size=int(args.batch),
+                                     shuffle=False, num_workers=4)
 
-    keys = [f's{s}_{c}' for s in (1, 2) for c in (['d1'] + [f'q{q}' for q in QS] + ['mean'])]
+    keys = [f's{s}_{c}' for s in (1, 2)
+            for c in (['d1', 'd2'] + [f'q{q}' for q in QS] + ['mean'])]
     store = {k: [] for k in keys}
     gt_all, label_all = [], []
 
@@ -102,6 +116,8 @@ def main():
                     d = 1.0 - d
                 d = np.sort(np.clip(d, 0.0, None), axis=1)
                 store[f's{si}_d1'].append(d[:, 0].reshape(B, g, g).astype(np.float16))
+                store[f's{si}_d2'].append(
+                    d[:, min(1, d.shape[1] - 1)].reshape(B, g, g).astype(np.float16))
                 for q in QS:
                     store[f's{si}_q{q}'].append(
                         d[:, min(q, d.shape[1]) - 1].reshape(B, g, g).astype(np.float16))

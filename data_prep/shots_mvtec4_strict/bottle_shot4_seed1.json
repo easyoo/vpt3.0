@@ -1,0 +1,14 @@
+{
+ "cls": "bottle",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "068.png",
+  "114.png",
+  "000.png",
+  "178.png"
+ ],
+ "n_files": 4,
+ "files_hash": "8039d5eda4c4",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

@@ -108,7 +108,7 @@ def main():
     bank = mod.build_raw_bank(model, normal, a.fused_layer, k=0)
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(ds, batch_size=16, shuffle=False, num_workers=4)
     gk = mod.get_gaussian_kernel(kernel_size=5, sigma=4).to(args.device)
     scales = tuple(float(x) for x in args.scales.split(','))

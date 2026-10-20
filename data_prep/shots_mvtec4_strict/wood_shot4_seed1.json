@@ -1,0 +1,14 @@
+{
+ "cls": "wood",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "155.png",
+  "195.png",
+  "110.png",
+  "196.png"
+ ],
+ "n_files": 4,
+ "files_hash": "79ec871bcd6c",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

@@ -1,0 +1,14 @@
+{
+ "cls": "capsule",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "007.png",
+  "026.png",
+  "005.png",
+  "081.png"
+ ],
+ "n_files": 4,
+ "files_hash": "ca90cbe17c4a",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

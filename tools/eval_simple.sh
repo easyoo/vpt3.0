@@ -17,7 +17,7 @@ POS=("$@"); [ ${#POS[@]} -eq 0 ] && POS=($CLS_DEFAULT)
 for cls in "${POS[@]}"; do
   $PY eval_score_v3.py --save "$SAVE" --class "$cls" --shots "$SHOTS" --size 448 \
       --data_path "${DATA:-$MVTEC}" --ckpt_dir "${CKPT:-results/vpt4/$SAVE}" \
-      --scales 1.5 --flip 0 \
+      --scales "${SCALES:-1.5}" --flip "${FLIP:-0}" \
       --l_global 0 --raw_alpha 0.5 --raw_global 512 --l_alpha 0.7 --w 0.6 \
       --save_maps_dir "$MAPDIR" \
       > "logs/simple_${TAG}_${cls}.log" 2>&1

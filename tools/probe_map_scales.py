@@ -87,7 +87,7 @@ def main():
     q_raw = F.normalize(bank, dim=-1)
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=data_transform, gt_transform=gt_transform, phase='test')
+                          transform=data_transform, gt_transform=gt_transform, phase='test', sort_items=False)
     rows = []
     with torch.no_grad():
         for i in range(min(args.n_images, len(ds))):

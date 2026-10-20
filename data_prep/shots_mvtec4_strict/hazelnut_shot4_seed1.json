@@ -1,0 +1,14 @@
+{
+ "cls": "hazelnut",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "013.png",
+  "277.png",
+  "004.png",
+  "332.png"
+ ],
+ "n_files": 4,
+ "files_hash": "9a5d24098fa5",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

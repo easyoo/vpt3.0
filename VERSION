@@ -1,3 +1,37 @@
+vpt3.8
+# 版本冻结: 2026-10-20
+# 定位：严格 4-shot 数据协议 + raw 高分辨率 bank 融合版本
+#
+# 【v3.8 核心变化】
+#   * 新增严格 MVTec 4-shot 数据视图与 source 清单；
+#   * 训练、mapping、bank 通过 VPT_SHOT_DIR 共用同一份严格 shot 清单；
+#   * 保留已有 AnoStyler 原始 4-source × 35 数据，不引用 1/2-shot 数据；
+#   * 新增 z_mode=none：取消所有类内测试集 z-score；
+#   * 新增 672 bank 不降采样融合：mapping 448 上采样到 672，bank 保持 672；
+#   * MemoryBank 22x 增强显式固定 seed；
+#   * 新增完整六组 raw/per-image/class-z 对照与指标审计。
+#
+# 【当前默认推理】
+#   mapping raw: sqrt(d1 * q512)
+#   learnable:   dlmin
+#   mapping map: 0.6 * learnable + 0.4 * raw
+#   mapping/bank fusion:
+#       0.5 * box25(resize(mapping,672)) + 0.5 * box25(bank672)
+#   Gaussian: k=5, sigma=4
+#   image score: top-0.5% mean
+#   no class-level z-score
+#
+# 【VisA raw 672 results in this version】
+#   VisA 2-shot raw: 448=81.4020, 672=81.9804
+#   VisA 4-shot raw: 448=82.0479, 672=82.5795
+#   Authoritative per-class CSV files are under logs/.
+#
+# 【Strict MVTec 4-shot】
+#   Training: Resize448 -> CenterCrop392
+#   Inference: Resize448 -> 1.5x -> 672
+#   Training checkpoints: 35 epochs, fixed epoch 35
+#   Final strict result is not embedded in VERSION; see generated CSV/log.
+
 vpt3.7
 # 版本冻结: 2026-10-13
 # 定位：**把"简化版"固化为默认行为**（相对 vpt3.6 仅改推理端打分与默认值；训练代码与权重完全一致）

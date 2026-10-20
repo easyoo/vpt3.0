@@ -320,6 +320,7 @@ class DinoVisionTransformer(nn.Module):
         # [vpt4.0 · M1] token 初始化尺度（默认 0.02，可被 --token_init_std 覆盖；0.000001 = 原行为）
         _tok_std = getattr(arg, 'token_init_std', 0.02) if arg is not None else 0.02
         self.tokens_per_layer = LearnableTokens(layers=learnable_layers,
+                                                dim=embed_dim,
                                                 learnable_token_per_layer=arg.learnable_num_per_layer,
                                                 init_std=_tok_std)
         # self.token_mapping = nn.Sequential(
@@ -333,7 +334,7 @@ class DinoVisionTransformer(nn.Module):
         # [vpt4.0 · M2] 残差映射（默认开启）；--res_mapping 0 则退回原低秩实现
         _res_map = bool(getattr(arg, 'res_mapping', 1)) if arg is not None else True
         _metric = bool(getattr(arg, 'metric_head', 1)) if arg is not None else True
-        self.token_mapping = TokenMapping(dim=768, hidden=128, residual=_res_map, metric=_metric)
+        self.token_mapping = TokenMapping(dim=embed_dim, hidden=128, residual=_res_map, metric=_metric)
         
         # self.p2l = nn.Identity()
         # self.rec_head = ReconstructHead(embed_dim, embed_dim)

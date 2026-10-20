@@ -1,3 +1,41 @@
+# v3.8 环境与运行说明
+
+本版继续使用 vpt3.7 的 Python/CUDA 环境，训练推荐使用空闲 GPU1：
+
+```bash
+export CUDA_VISIBLE_DEVICES=1
+```
+
+严格 4-shot 额外需要：
+
+```bash
+export VPT_SHOT_DIR=/home/jjquan/experiment/visual/audit_mapping/.shots_mvtec4_strict
+```
+
+主要数据路径：
+
+```text
+MVTec 原始数据:
+/home/jjquan/MVTec-AD
+
+严格 4-shot 数据集视图:
+/home/jjquan/experiment/visual2/MVTec-AD_strict4
+
+严格 4-shot 异常训练数据:
+/home/jjquan/experiment/visual2/anomaly_samples_mvtec_4shot_strict
+
+原始 AnoStyler 4-source 数据:
+/home/jjquan/AnoStyler/genbyAnoStyler
+```
+
+严格流水线：
+
+```bash
+bash tools/run_mvtec4_strict_existing_pipeline.sh
+```
+
+下面保留 v3.7 的环境记录作为历史参考。
+
 # 环境与依赖（vpt3.6 复现所需）
 
 > vpt3.6 相对 vpt3.5 **不新增训练侧依赖**；推理端新增只用到 `matplotlib`（画流程图）与 `scipy`（不必须）。

@@ -1,3 +1,99 @@
+# vpt3.8 使用说明（2026-10-20）
+
+> **v3.8 = 严格 4-shot 数据协议 + raw 高分辨率融合**
+
+本版不是新的网络主干，而是在 v3.7 的 learnable mapping 基础上加入：
+
+- 严格 MVTec 4-shot 数据集视图；
+- 严格 4-source AnoStyler 数据；
+- 训练/mapping/bank 共用同一 shot 清单；
+- raw 无测试集统计量融合；
+- 672 bank 不降采样；
+- 可重复的 MemoryBank 22× 增强；
+- 六组归一化对照与完整指标审计。
+
+## v3.8 默认流程
+
+```text
+严格 4 张正常 shot
+├─ 已有 AnoStyler 4-source 异常 → 训练 mapping
+└─ 4 × 22 增强视图 → 原始 MemoryBank
+
+测试
+├─ mapping: 448 → 1.5× → 672
+└─ bank:    672
+
+mapping 输出 448 → 672
+bank 保持 672
+raw:
+  0.5 · box25(mapping_672)
++ 0.5 · box25(bank_672)
+→ Gaussian(k=5, sigma=4)
+→ top-0.5% mean
+```
+
+当前不执行单图 min-max、逐图 z-score 或全类别测试集 z-score。
+
+## v3.8 目录
+
+```text
+vpt3.8/
+├── code/          当前 mapping 训练、模型与 MemoryBank 源码
+├── tools/         推理、建库、融合、严格数据构造、审计和运行脚本
+├── data_prep/
+│   ├── mvtec4_strict_existing_manifest.json
+│   └── shots_mvtec4_strict/
+├── docs/          当前方案、代码一致性审计、归一化与高分辨率对照
+├── logs/          不包含异常图/权重的关键指标 CSV
+├── VERSION
+├── ENVIRONMENT.md
+└── PERFORMANCE.md
+```
+
+## 严格 4-shot 运行
+
+```bash
+cd <repo>
+bash tools/run_mvtec4_strict_existing_pipeline.sh
+```
+
+该脚本依次执行：
+
+1. 从已有 4-source AnoStyler 数据构造严格数据集视图和异常训练根；
+2. 35 epochs 训练 15 类 mapping；
+3. 生成 448 mapping 异常图和 672 MemoryBank 异常图；
+4. 在 672 上执行 raw 融合并计算七项指标。
+
+严格数据要求：
+
+- 每类 `train/good` 恰好 4 张；
+- AnoStyler source 与这 4 张逐字节一致；
+- 不使用 1/2-shot 生成数据；
+- 测试图不进入训练；
+- bank 增强 seed 固定。
+
+## 当前方案文档
+
+```text
+docs/current_strict_mvtec4_scheme_zh.md
+```
+
+代码与方案逐项核对：
+
+```text
+docs/严格4shot方案与代码一致性核对_20261020.md
+```
+
+## 本版重要说明
+
+- v3.8 代码已包含严格 4-shot 流水线；
+- MVTec 严格 4-shot 完整指标以运行后生成的 CSV 为准；
+- VisA 2/4-shot 的 672 bank raw 对照已写入 `PERFORMANCE.md`；
+- checkpoint、异常图、数据集和 723GB 实验目录均未提交到 Git；
+- 仓库只保存源码、脚本、配置、文本日志和小型指标 CSV。
+
+下面保留 v3.7 历史说明和更早版本记录作为参考。
+
 # vpt3.7 使用说明（2026-10-13 冻结）
 
 > **本版 = 把"简化版"固化为默认**：相对 vpt3.6 只改推理端打分与默认值，**训练代码与权重完全一致**。

@@ -127,7 +127,7 @@ def main():
 
     test_data = mod.MVTecDataset(
         root=os.path.join(args.data_path, args.cls),
-        transform=data_transform, gt_transform=gt_transform, phase='test')
+        transform=data_transform, gt_transform=gt_transform, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(
         test_data, batch_size=args.batch_size, shuffle=False, num_workers=4)
 

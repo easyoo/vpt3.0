@@ -1,0 +1,14 @@
+{
+ "cls": "leather",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "053.png",
+  "124.png",
+  "024.png",
+  "201.png"
+ ],
+ "n_files": 4,
+ "files_hash": "feaa1b5369a0",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

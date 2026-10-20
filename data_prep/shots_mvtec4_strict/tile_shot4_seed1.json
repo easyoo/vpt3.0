@@ -1,0 +1,14 @@
+{
+ "cls": "tile",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "099.png",
+  "213.png",
+  "007.png",
+  "228.png"
+ ],
+ "n_files": 4,
+ "files_hash": "0ee7cf52f082",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

@@ -1,0 +1,14 @@
+{
+ "cls": "metal_nut",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "097.png",
+  "108.png",
+  "055.png",
+  "175.png"
+ ],
+ "n_files": 4,
+ "files_hash": "12cb6fcbaa6e",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

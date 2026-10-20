@@ -1,4 +1,5 @@
 import warnings
+import hashlib          # [FIX-4] 样本清单哈希（MVTecDataset.list_hash）
 warnings.filterwarnings("ignore")
 
 from dinov2.models import vision_transformer
@@ -152,8 +153,11 @@ def get_data_transforms(size, isize, mean_train=None, std_train=None):
         transforms.ToTensor()])
     return data_transforms, gt_transforms
 
+# [FIX-4] 样本顺序确定性：原先缺陷目录用 os.listdir（文件系统顺序，跨机器不可复现）、
+# good 分支的 glob 结果也未排序，导致"异常图 ↔ GT"的对齐只依赖同一次 listdir 顺序。
+# 现改为可排序（sort_items=True 为新默认），并暴露 keys/list_hash 供落盘与校验。
 class MVTecDataset(torch.utils.data.Dataset):
-    def __init__(self, root, transform, gt_transform, phase):
+    def __init__(self, root, transform, gt_transform, phase, sort_items=True):
         if phase == 'train':
             self.img_path = os.path.join(root, 'train')
         else:
@@ -161,9 +165,14 @@ class MVTecDataset(torch.utils.data.Dataset):
             self.gt_path = os.path.join(root, 'ground_truth')
         self.transform = transform
         self.gt_transform = gt_transform
+        self.sort_items = bool(sort_items)
         # load dataset
         self.img_paths, self.gt_paths, self.labels, self.types = self.load_dataset()  # self.labels => good : 0, anomaly : 1
         self.cls_idx = 0
+        # [FIX-4] 有序样本键（缺陷类型/文件名）与短哈希：落盘到异常图旁，供后续对齐/校验
+        self.keys = [f'{os.path.basename(os.path.dirname(p))}/{os.path.basename(p)}'
+                     for p in self.img_paths]
+        self.list_hash = hashlib.sha1('\n'.join(self.keys).encode()).hexdigest()[:12]
 
     def load_dataset(self):
 
@@ -173,12 +182,16 @@ class MVTecDataset(torch.utils.data.Dataset):
         tot_types = []
 
         defect_types = os.listdir(self.img_path)
+        if self.sort_items:
+            defect_types = sorted(defect_types)
 
         for defect_type in defect_types:
             if defect_type == 'good':
                 img_paths = glob.glob(os.path.join(self.img_path, defect_type) + "/*.png") + \
                             glob.glob(os.path.join(self.img_path, defect_type) + "/*.JPG") + \
                             glob.glob(os.path.join(self.img_path, defect_type) + "/*.bmp")
+                if self.sort_items:
+                    img_paths.sort()
                 img_tot_paths.extend(img_paths)
                 gt_tot_paths.extend([0] * len(img_paths))
                 tot_labels.extend([0] * len(img_paths))
@@ -207,7 +220,7 @@ class MVTecDataset(torch.utils.data.Dataset):
         img = Image.open(img_path).convert('RGB')
         img = self.transform(img)
         if label == 0:
-            gt = torch.zeros([1, img.size()[-2], img.size()[-2]])
+            gt = torch.zeros([1, img.size()[-2], img.size()[-1]])
         else:
             gt = Image.open(gt)
             gt = self.gt_transform(gt)
@@ -727,11 +740,27 @@ def build_raw_bank(model, imgs, fused_layer, k=0, chunk=8):
     return bank
 
 
-def compute_fused_map(model, img, bank, fused_layer, scales=(1.5,), tta_flip=True, w_learn=0.5,
-                      use_z=False):
-    """改善后 mapping 打分图（未高斯平滑）：逐视图 0.5·可学习原型图 + 0.5·原始特征库图，再跨视图平均。"""
+# [FIX-2] 与生产打分一致的幂次算子：local^a · global^(1-a)
+def _pow_geo(local, glob, a):
+    e = 1e-6
+    return local.clamp_min(e).pow(a) * glob.clamp_min(e).pow(1.0 - a)
+
+
+def compute_fused_map(model, img, bank, fused_layer, scales=(1.5,), tta_flip=False, w_learn=0.6,
+                      use_z=False, raw_alpha=0.5, raw_global=512, sub_seed=1234):
+    """改善后 mapping 打分图（未高斯平滑），**与生产口径 eval_score_v3.py 对齐**：
+      s_raw   = d1^raw_alpha · q^(1-raw_alpha)   # q = 到正常 patch 库距离分布的 raw_global 分位（1024 子采样）
+      s_learn = 到最近可学习原型的距离 dlmin
+      m       = w_learn·s_learn + (1-w_learn)·s_raw
+    默认 w_learn=0.6、无翻转（= vpt3.7 生产配方）。
+    [FIX-2] 旧实现 raw 侧只取 d1（缺 ×q 的几何全局项）、默认 w_learn=0.5 且开翻转，
+    导致"训练内打印的指标 ≠ 生产指标"，据此选轮/判断都会走偏。"""
     base_hw = img.shape[-2:]
     q_raw = F.normalize(bank, dim=-1)
+    # [FIX-2] 全局项所用的固定子采样（与生产同 seed=1234、同 1024 个 patch）
+    _M = q_raw.shape[0]
+    _gen = torch.Generator().manual_seed(int(sub_seed))
+    sub_idx = torch.randperm(_M, generator=_gen)[:min(1024, _M)].to(q_raw.device)
     # [vpt4.0 · M8] 把 4 张 shot 的原始特征库**过一遍 token_mapping**，作为可学习原型图的额外原型。
     # 动机（实测）：在选定协议 w_learn=0.5 下，原始特征库图（w=0 那一侧）单独就比可学习原型图更强；
     # 可学习图只有 96 个"图像自适应"原型，覆盖面远小于 3136 个真实正常 patch。
@@ -756,14 +785,19 @@ def compute_fused_map(model, img, bank, fused_layer, scales=(1.5,), tta_flip=Tru
         for vi, view in enumerate([v_img, v_img.flip(3)] if tta_flip else [v_img]):
             ret = model(view, is_training=True)
             fp = torch.sum(torch.stack([ret['patch_feat_layer'][j] for j in fused_layer], 0), 0)
-            flr = torch.sum(torch.stack(ret['feat_list'], 0), 0)
+            flr = torch.cat(ret['feat_list'], dim=1)   # [MULTI-LAYER] 各层 token 数可不同 → 拼接（layers=1 时与 sum 等价）
             if getattr(args, 'global_proto', 0):     # [M4] 评估端与训练端保持同一套原型集
                 _g = model.tokens_per_layer.token_dict['0'].expand(flr.shape[0], -1, -1)
                 flr = torch.cat([flr, _g], dim=1)
             m_learn = _map28(fp, flr)
             p_raw = F.normalize(fp, dim=-1)
-            s_b = (1.0 - torch.bmm(p_raw, q_raw.T.unsqueeze(0).expand(p_raw.shape[0], -1, -1)))
-            s_b = s_b.clamp_min(0).min(dim=-1).values
+            # [FIX-2] raw 侧改为生产口径：d1^a · q^(1-a)（q=到库距离的 raw_global 分位）
+            d_all = (1.0 - torch.bmm(p_raw, q_raw.T.unsqueeze(0)
+                                     .expand(p_raw.shape[0], -1, -1))).clamp_min(0)
+            d1 = d_all.min(dim=-1).values
+            d_sub = torch.sort(d_all.index_select(-1, sub_idx), dim=-1).values
+            q_sel = d_sub[..., min(int(raw_global), d_sub.shape[-1]) - 1]
+            s_b = _pow_geo(d1, q_sel, raw_alpha)
             g = int(round(s_b.shape[1] ** 0.5))
             m_bank = s_b.reshape(-1, 1, g, g)
             if use_z:                      # 逐视图 z（仅在显式要求时启用；默认关闭，与基线协议一致）
@@ -781,10 +815,10 @@ def compute_fused_map(model, img, bank, fused_layer, scales=(1.5,), tta_flip=Tru
 
 
 def evaluation_batch_fuse(model, dataloader, device, bank, max_ratio=0.01, resize_mask=None,
-                          w_learn=0.5, scales=(1.5,), tta_flip=True, use_z=False):
+                          w_learn=0.6, scales=(1.5,), tta_flip=False, use_z=False):
     """[mapping-only 协议] 只跑映射分支（**不含 MemoryBank**）：
     逐视图 = w·可学习原型距离图 + (1-w)·原始特征空间正常 patch 库距离图，再对多尺度×翻转视图取平均。
-    与 vpt3.0/vpt4.0 的 mapping 打分口径完全一致（用于本目标的"禁用 bank 分支"评估）。"""
+    [FIX-2] 默认与生产 vpt3.7 对齐：w_learn=0.6、无翻转、raw 侧用 d1^a·q^(1-a)。"""
     model.eval()
     gt_list_px, pr_list_px, gt_list_sp, pr_list_sp = [], [], [], []
     gk = get_gaussian_kernel(kernel_size=5, sigma=4).to(device)
@@ -814,9 +848,10 @@ def evaluation_batch_fuse(model, dataloader, device, bank, max_ratio=0.01, resiz
 
 
 def evaluation_batch_vpt3(model, dataloader, device, visual_bank_map, raw_bank, fused_layer,
-                          w=0.3, scales=(1.5,), tta_flip=True, max_ratio=0.01,
+                          w=0.5, scales=(1.5,), tta_flip=False, max_ratio=0.01,
                           cache_dir=None, class_name=None):
-    """[vpt3.0] 两个分支全启用：同一 DataLoader 顺序 → 逐图严格同一样本；类内 z 后加权融合。"""
+    """两个分支全启用：同一 DataLoader 顺序 → 逐图严格同一样本；类内 z 后加权融合。
+    [FIX-2] 默认 0.5/0.5 且无翻转，与生产 vpt3.7 一致（旧默认 0.3/开翻转）。"""
     model.eval()
     gk = get_gaussian_kernel(kernel_size=5, sigma=4).to(device)
     m_list, gt_list, sp_list = [], [], []
@@ -1092,8 +1127,18 @@ class ScaledPatchCosineLoss3(nn.Module):
         self.temperature = nn.Parameter(torch.tensor(args.temperature)) # 示例值，原为 args.temperature
         self.scaled_factor = args.scaled_factor # 示例值，原为 args.scaled_factor
         self.margin = margin  # 新增：负样本的边界阈值 (0.4-0.6 通常效果较好)
+        # [主干实验 · 损失配比] 负推项原本硬编码权重 1.0。
+        # 实测：换 DINOv3 主干后该项在 epoch35 达到 0.25（ViT-B 只有 0.0085，30×），
+        # 而正样本项（cos/mse）反而更小 → 训练被"推开异常"主导，原型几何被扭曲。
+        # 默认 1.0 = 与 v3.7 逐位一致；>0 时才改变行为。
+        self.w_push = float(getattr(args, 'w_push', 1.0))
+        # [PUSH-TOPK] 难负例聚合：默认 10（原实现=top-10 均值）；1=max，3=top-3 均值
+        self.push_topk = int(getattr(args, 'push_topk', 10))
+        # [PUSH-REF] 难负例的参照原型：'global' = 原实现（正常图 batch 平均，脱离推理）；
+        #            'self'   = 异常图自己的原型（与推理端 eval_score_v3 的"每图自参照"一致）
+        self.push_ref = str(getattr(args, 'push_ref', 'global'))
 
-    def forward(self, x, y, neg=None, mask=None):
+    def forward(self, x, y, neg=None, mask=None, neg_proto=None):
         """
         Args:
             x: [B, N, D] 正常样本的 Patch Tokens
@@ -1142,15 +1187,20 @@ class ScaledPatchCosineLoss3(nn.Module):
         if neg is not None and mask is not None:
             neg_normalized = F.normalize(neg, p=2, dim=-1)
 
-            # y_global 是所有原型的全局参考 [1, K_proto, D]
-            y_global = y_normalized.detach().mean(dim=0, keepdim=True)
-
-            # 计算相似度矩阵: [B_aux, N_patch, K_proto]
-            sim_neg = torch.einsum('bnd,ckd->bnk', neg_normalized, y_global)
+            if self.push_ref == 'self' and neg_proto is not None:
+                # [PUSH-REF] 与推理一致：用**本张异常图自己的原型**做参照（每图自参照）
+                y_ref = F.normalize(neg_proto, p=2, dim=-1).detach()          # [B_aux, K, D]
+                sim_neg = torch.bmm(neg_normalized, y_ref.transpose(1, 2))    # [B_aux, N, K]
+                y_global = y_ref
+            else:
+                # 原实现：正常图 batch 平均后的原型 [1, K_proto, D]
+                y_global = y_normalized.detach().mean(dim=0, keepdim=True)
+                # 计算相似度矩阵: [B_aux, N_patch, K_proto]
+                sim_neg = torch.einsum('bnd,ckd->bnk', neg_normalized, y_global)
 
             # --- 修改部分：从 max 改为 top-k ---
             # 这里的 k 不能超过 y_global 的原型总数 K_proto
-            topk_val = min(10, y_global.size(1))
+            topk_val = min(max(1, self.push_topk), y_global.size(1))
 
             # 取相似度最高（离得最近）的 top-k 个值: [B_aux, N_patch, topk_val]
             topk_sims, _ = torch.topk(sim_neg, k=topk_val, dim=-1)
@@ -1168,7 +1218,7 @@ class ScaledPatchCosineLoss3(nn.Module):
             loss_neg = valid_anomaly_loss.sum() / num_anomaly_pixels
 
 
-            total_loss += 1.0 * loss_neg
+            total_loss += self.w_push * loss_neg
             loss_dict["neg_push"] = loss_neg.item()
 
         return total_loss, loss_dict
@@ -1328,6 +1378,28 @@ def top_ratio_mean(scores, ratio=0.01):
     return torch.sort(scores, dim=-1, descending=True)[0][:, :k].mean(dim=-1)
 
 
+def sinkhorn_assign(scores, eps=0.05, iters=3):
+    """[CLUSTER] SwAV 式 Sinkhorn 平衡分配。
+
+    输入 scores [M, K]（M = 一个 batch 的全部正常 patch 数，K = 原型数），
+    输出 Q [M, K]：行和 = 1、列和 ≈ 1/K（即每个簇被**大致等量**的正常 patch 使用）。
+    这一步正是"让正常 patch 形成若干簇"的机制：既要求每个 patch 明确归属（行归一），
+    又禁止所有 patch 挤到少数簇里（列归一 → 均衡使用）。
+    """
+    # 数值安全：先在列（每个 patch）方向减最大值再取 exp，避免 exp(±200) 溢出/下溢成 0；
+    # 归一化分母统一 clamp，避免除零把 NaN 传进损失。
+    _S = (scores / eps)
+    _S = _S - _S.max(dim=-1, keepdim=True).values
+    Q = torch.exp(_S).t()                               # [K, M]，取值 (0, 1]
+    Q = Q / Q.sum().clamp_min(1e-30)
+    K, M = Q.shape
+    for _ in range(int(iters)):
+        Q = Q / Q.sum(dim=0, keepdim=True).clamp_min(1e-30)               # 每个 patch（列）和为 1
+        Q = Q / Q.sum(dim=1, keepdim=True).clamp_min(1e-30) * (M / K)     # 每个原型（行）和为 M/K
+    Q = Q / Q.sum(dim=0, keepdim=True).clamp_min(1e-30)                   # 收尾：每个 patch 和为 1
+    return Q.t()                                                    # [M, K]：行和=1、列和≈M/K
+
+
 class FocalDiceLoss(nn.Module):
     def __init__(self, alpha=0.25, gamma=2.0, dice_weight=0.5, focal_weight=0.5):
         super(FocalDiceLoss, self).__init__()
@@ -1381,6 +1453,23 @@ from datetime import datetime
 from util.dataset import *
 from util.memorybank import MemoryBank
 
+def build_backbone(args):
+    """[主干实验] 统一的主干构建入口（**只换特征主干**，核心创新模块完全不变）。
+
+    base/large → DINOv2 ViT-B/14、ViT-L/14（v3.7 原路径）
+    dinov3b/dinov3l → DINOv3 ViT-B/16、ViT-L/16（timm 实现，RoPE；权重在封装内从本地读入）
+    """
+    if str(args.backbone).startswith('dinov3'):
+        from dinov3_mapping import build_dinov3
+        return build_dinov3(args.backbone, args, img_size=518)
+    if str(args.backbone).startswith('clip'):
+        from clip_mapping import build_clip
+        return build_clip(args.backbone, args, img_size=518)
+    return vision_transformer.__dict__['vit_' + args.backbone](
+        patch_size=14, img_size=518, block_chunks=0, init_values=1e-8, num_register_tokens=4,
+        interpolate_antialias=False, interpolate_offset=0.1, arg=args)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')
     
@@ -1390,6 +1479,11 @@ if __name__ == '__main__':
 
     parser.add_argument('--fused_layer',type=list,default=[1,2,3,4,6,8,11])
     parser.add_argument('--fused_layer_learnable',type=list,default=[0])
+    # [主干实验] 特征主干与层配置（只换主干，核心创新部分保持不变）
+    parser.add_argument('--backbone', type=str, default='base',
+                        help="[主干实验] 'base'=DINOv2 ViT-B/14（默认）；'large'=DINOv2 ViT-L/14")
+    parser.add_argument('--fused_layer_csv', type=str, default='',
+                        help='[主干实验] 覆盖 --fused_layer，例如 "2,4,6,8,12,16,22"（ViT-L）')
     parser.add_argument('--train_class',type=str,default='carpet',choices=['carpet', 'grid', 'leather', 'tile', 'wood', 'bottle', 'cable', 'capsule','hazelnut', 'metal_nut', 'pill', 'screw', 'toothbrush', 'transistor', 'zipper',"candle", "capsules", "cashew",   "chewinggum",  "fryum",  "macaroni1",  "macaroni2",  "pcb1",  "pcb2",  "pcb3","pcb4",  "pipe_fryum"])
 
     parser.add_argument('--temperature',type=float,default=0.07,help='Temperature for the cosine distance loss')
@@ -1408,9 +1502,11 @@ if __name__ == '__main__':
     # [AUDIT-FIX-4] 只评估 mapping 分支（type=1）并跳过 bank 构建/误差图计算，用于快速迭代
     # ===== vpt3.0：改善后 mapping ⊕ 原版 MemoryBank 全启用（默认开启）=====
     parser.add_argument('--vpt3', type=int, default=1, help='1=vpt3.0 融合评估(默认)；0=关闭，退回原 7 类打分')
-    parser.add_argument('--vpt3_w', type=float, default=0.3, help='融合权重：w*class-z(mapping) + (1-w)*class-z(bank)')
+    parser.add_argument('--vpt3_w', type=float, default=0.5,
+                        help='[FIX-2] 融合权重：w*class-z(mapping) + (1-w)*class-z(bank)；默认 0.5 与生产一致（旧默认 0.3）')
     parser.add_argument('--vpt3_scales', type=str, default='1.5', help='改善后 mapping 的多尺度')
-    parser.add_argument('--vpt3_flip', type=int, default=1, help='改善后 mapping 是否做水平翻转 TTA')
+    parser.add_argument('--vpt3_flip', type=int, default=0,
+                        help='[FIX-2] 改善后 mapping 是否做水平翻转 TTA；默认 0 与生产 vpt3.7 一致（旧默认 1）')
     parser.add_argument('--vpt3_cache_dir', type=str, default='', help='非空则把两个分支的异常图落盘到该目录')
     # ===== vpt4.0：mapping 分支的模型/算法改动（M1 原型初始化 / M2 残差映射 / M3 原型多样性正则）=====
     parser.add_argument('--token_init_std', type=float, default=0.02,
@@ -1429,12 +1525,101 @@ if __name__ == '__main__':
                         help='M3: 超过该余弦相似度才惩罚')
     parser.add_argument('--w_rank', type=float, default=0.0,
                         help='M7: 跨图排序一致性损失权重（默认 0=关闭）；该项直接优化 P-AUROC 的跨图可比性')
+    parser.add_argument('--push_topk', type=int, default=10,
+                        help='[PUSH-TOPK] 难负例聚合的 top-k（10=原实现均值；1=max）')
+    parser.add_argument('--push_ref', type=str, default='global',
+                        help="[PUSH-REF] 难负例参照原型：'global'=原实现（正常图 batch 平均）；"
+                             "'self'=异常图自己的原型（与推理每图自参照一致）")
+    parser.add_argument('--w_push', type=float, default=1.0,
+                        help='[主干实验 · 损失配比] 负推项权重（默认 1.0 = v3.7 原行为）。'
+                             '换 DINOv3 主干后该项比 ViT-B 大 30×，可下调以恢复"正样本项/负推项"平衡')
+    parser.add_argument('--save_every', type=int, default=1,
+                        help='[工程] 每 N 轮存一次权重（默认 1 = 与历史一致）；长轮数训练时降低落盘频率')
+    parser.add_argument('--w_cluster', type=float, default=0.0,
+                        help='[CLUSTER] 聚类式损失权重（SwAV 平衡分配；默认 0 = 与 v3.7 逐位一致）')
+    parser.add_argument('--cluster_temp', type=float, default=0.1, help='[CLUSTER] 相似度温度')
+    parser.add_argument('--cluster_eps', type=float, default=0.05, help='[CLUSTER] Sinkhorn 温度')
+    parser.add_argument('--cluster_iters', type=int, default=3, help='[CLUSTER] Sinkhorn 迭代次数')
+    parser.add_argument('--w_cluster_cons', type=float, default=0.0,
+                        help='[CLUSTER] 跨增强簇一致性损失权重（默认 0 = 关闭）')
+    parser.add_argument('--w_distill', type=float, default=0.0,
+                        help='[LOSS-DISTILL] 教师=原始库侧打分（训练无关，仅用 K shot 建库），'
+                             '学生=可学习侧打分；在"教师分差明显"的样本对上要求排序一致（尺度无关 hinge）。'
+                             '默认 0=关闭（与 v3.7 完全一致）。')
+    parser.add_argument('--distill_margin', type=float, default=0.5,
+                        help='[LOSS-DISTILL] 学生侧 hinge margin，单位为"学生分数的 batch 内标准差"')
+    parser.add_argument('--distill_topk', type=int, default=16,
+                        help='[LOSS-DISTILL] 每图取教师最高/最低各 k 个像素组成 k×k 对（只在这些极端对上约束）')
+    parser.add_argument('--distill_tau_ratio', type=float, default=0.25,
+                        help='[LOSS-DISTILL] 只对"教师分差 > ratio×std(T)"的对生效，过滤噪声对')
+    parser.add_argument('--distill_global', type=int, default=512,
+                        help='[LOSS-DISTILL] 教师分数里的全局项分位（与推理 raw_global 同义，512=中位数）')
+    parser.add_argument('--distill_alpha', type=float, default=0.5,
+                        help='[LOSS-DISTILL] 教师分数指数：d1^alpha·q^(1-alpha)（与推理 raw_alpha 一致）')
+    parser.add_argument('--distill_sub_seed', type=int, default=1234,
+                        help='[LOSS-DISTILL] 教师全局项子采样种子（与推理 sub_seed 一致）')
+    parser.add_argument('--w_flip_cons', type=float, default=0.0,
+                        help='[LOSS-FLIP] 翻转一致性损失权重（默认 0=关闭）：要求可学习侧分数图在'
+                             '水平翻转下保持一致（逐图 z 后 L1）；推理端仍为单视图。')
+    parser.add_argument('--w_scale_cons', type=float, default=0.0,
+                        help='[LOSS-SCALE] 跨尺度一致性损失权重（默认 0=关闭）：要求可学习侧分数图在'
+                             '训练尺度与 scale_cons_scale 倍尺度下一致（逐图 z 后 L1）；推理仍单视图。')
+    parser.add_argument('--scale_cons_scale', type=float, default=1.5,
+                        help='[LOSS-SCALE] 一致性第二视图的放缩倍数（默认 1.5，与推理 1.5× 对齐）')
+    parser.add_argument('--w_peak', type=float, default=0.0,
+                        help='[LOSS-PEAK] 分数图峰值/稀疏正则权重（默认 0=关闭）：异常图要求 top-1% '
+                             '远高于自身中位数、正常图要求两者接近（对准 P-AP/P-F1 的高分段精度）。')
+    parser.add_argument('--peak_margin', type=float, default=0.5,
+                        help='[LOSS-PEAK] 峰-中位差距的 hinge margin（单位：batch 内分数标准差）')
+    parser.add_argument('--peak_top_ratio', type=float, default=0.01,
+                        help='[LOSS-PEAK] 峰值取多少比例的像素（默认 1%，与评估的图像级分数口径一致）')
+    parser.add_argument('--w_ema', type=float, default=0.0,
+                        help='[LOSS-EMA] 均值教师(Mean-Teacher)一致性权重（默认 0=关闭）：维护可训练参数的 '
+                             'EMA 副本，要求可学习侧分数图与之逐图 z 后一致。用于压低种子方差。')
+    parser.add_argument('--ema_decay', type=float, default=0.999,
+                        help='[LOSS-EMA] EMA 衰减系数')
+    parser.add_argument('--w_balance', type=float, default=0.0,
+                        help='[LOSS-BAL] 原型使用均衡正则权重（默认 0=关闭）：把"正常 patch→原型"的软分配'
+                             '平均分布拉向均匀（KL(avg||uniform)），抑制少数原型包办、其余闲置。')
+    parser.add_argument('--balance_temp', type=float, default=0.07,
+                        help='[LOSS-BAL] 软分配 softmax 温度（与训练 temperature 一致）')
+    parser.add_argument('--w_prox', type=float, default=0.0,
+                        help='[LOSS-PROX] 参数空间邻近项权重（默认 0=关闭）：||θ−θ_ema||²/参数量，'
+                             '抑制 epoch 间质量摆动（实测最好轮常在训练中断）。')
+    parser.add_argument('--prox_decay', type=float, default=0.99,
+                        help='[LOSS-PROX] 参数 EMA 锚点的衰减系数')
+    parser.add_argument('--w_prod', type=float, default=0.0,
+                        help='[LOSS-PROD] **训推一致性**损失权重（默认 0=关闭）：用合成掩码直接监督'
+                             '推理端真正使用的分数 m = w_learn·s_learn + (1-w_learn)·s_raw（s_raw 无参数）。')
+    parser.add_argument('--prod_w_learn', type=float, default=0.6,
+                        help='[LOSS-PROD] m 里可学习侧的权重（与推理端 eval_score_v3 --w 一致，默认 0.6）')
+    parser.add_argument('--prod_znorm', type=int, default=0,
+                        help='[LOSS-PROD][修复] 1=两支各自"图内 z"后再加权（贴近推理端"类内 z 后加权"），'
+                             '0=按原始距离加权（原实现）')
+    parser.add_argument('--w_near', type=float, default=0.0,
+                        help='[LOSS-NEAR] 最近原型量化损失权重（默认 0=关闭）：对正常 patch 直接最小化'
+                             '"到最近原型的距离 dlmin"（推理端真正使用的可学习侧分数），hinge 防塌缩。')
+    parser.add_argument('--near_margin', type=float, default=0.05,
+                        help='[LOSS-NEAR] dlmin 的 hinge margin（超过才惩罚，避免过度收缩）')
+    parser.add_argument('--w_barlow', type=float, default=0.0,
+                        help='[LOSS-BARLOW] 映射特征去冗余正则权重（默认 0=关闭）：Barlow 式，'
+                             '惩罚映射后正常 patch 特征维间的相关（去冗余、保方差）。')
+    parser.add_argument('--barlow_lambda', type=float, default=0.005,
+                        help='[LOSS-BARLOW] 对角项（方差保持）的权重')
+    parser.add_argument('--w_comp', type=float, default=0.0,
+                        help='[LOSS-COMP] "补短板"损失权重（默认 0=关闭）：用原始库侧的错向响应加权，'
+                             '让可学习侧专门学习"原始库侧判错的地方"，提升互补性（诊断驱动）。')
+    parser.add_argument('--comp_lam', type=float, default=1.0,
+                        help='[LOSS-COMP] 教师错误权重的放大系数（w = 1 + λ·err）')
     parser.add_argument('--rank_margin', type=float, default=0.5,
                         help='M7: 成对 hinge 的 margin；rank_norm=1 时单位为"正常分数离散度的倍数"')
     parser.add_argument('--rank_norm', type=int, default=1,
                         help='M7: 1=分差按正常分数稳健离散度(p75-p25)归一化（尺度无关，推荐）；0=用原始分差')
     parser.add_argument('--rank_samples', type=int, default=256,
                         help='M7: 困难样本挖掘时，正常/异常各取的像素数（复杂度 O(n^2)）')
+    parser.add_argument('--w_rank_final', type=float, default=-1.0,
+                        help='[LOSS-CURRIC] w_rank 的课程终值（<0 = 保持常数，行为与 v3.7 一致）；'
+                             '给定时 w_rank 从 --w_rank 线性变到该值（例如 0.02→0.04）。')
     parser.add_argument('--w_img_rank', type=float, default=0.0,
                         help='M10: 图像级跨图排序一致性损失权重（默认 0=关闭）；对准 I-AUROC/I-AP 的跨图可比性')
     parser.add_argument('--img_rank_margin', type=float, default=0.5,
@@ -1450,6 +1635,9 @@ if __name__ == '__main__':
     # （与评估脚本 eval_nocrop.py --size N 完全同一几何；默认 0 = 保持原 448→裁392）
     parser.add_argument('--nocrop_size', type=int, default=0,
                         help='>0: 训练与 GT 预处理改为 Resize(N) 无裁剪（例如 392）')
+    parser.add_argument('--eval_size', type=int, default=0,
+                        help='[FIX-2] >0 时**训练内评估**的测试集改用 Resize(N) 无裁剪（生产口径，例如 448）；'
+                             '0 = 沿用训练几何（裁剪 392）。仅影响训练期打印的指标，不影响训练本身。')
     # save info
     parser.add_argument('--save_dir', type=str, default='./mvtec_saved_results0')
     parser.add_argument('--save_name', type=str, default='4-32token_70epoch_seg_anomalyStyler_seghead-error_map_add')
@@ -1458,6 +1646,9 @@ if __name__ == '__main__':
     parser.add_argument('--vis_dir', type=str, default='visualization')
     
     args = parser.parse_args()
+    if getattr(args, 'fused_layer_csv', ''):
+        args.fused_layer = [int(x) for x in args.fused_layer_csv.split(',') if x != '']
+        print(f'[主干实验] fused_layer 覆盖为 {args.fused_layer}')
     if args.dataset == 'MVTec-AD':
         args.item_list = ['carpet', 'grid', 'leather', 'tile', 'wood', 'bottle', 'cable', 'capsule',
                  'hazelnut', 'metal_nut', 'pill', 'screw', 'toothbrush', 'transistor', 'zipper']
@@ -1485,6 +1676,16 @@ if __name__ == '__main__':
         print_fn(f'[nocrop] 预处理 = Resize({_S}) 无裁剪（训练与 GT 同几何）')
     else:
         data_transform, gt_transform = get_data_transforms(args.input_size,args.crop_size)
+    # [FIX-2] 训练内评估可单独指定测试几何：--eval_size 448 → Resize(448) 无裁剪（与生产 eval_score_v3 一致）
+    if getattr(args, 'eval_size', 0) and args.eval_size > 0:
+        _ES = int(args.eval_size)
+        _em, _es = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
+        eval_transform = transforms.Compose([transforms.Resize((_ES, _ES)), transforms.ToTensor(),
+                                             transforms.Normalize(mean=_em, std=_es)])
+        eval_gt_transform = transforms.Compose([transforms.Resize((_ES, _ES)), transforms.ToTensor()])
+        print_fn(f'[FIX-2] 训练内评估几何 = Resize({_ES}) 无裁剪（生产口径）')
+    else:
+        eval_transform, eval_gt_transform = data_transform, gt_transform
     train_data_list = []
     test_data_list = []
 
@@ -1496,7 +1697,8 @@ if __name__ == '__main__':
         for i, item in enumerate(args.item_list):
 
             test_path = os.path.join(args.data_path, item)
-            test_data = MVTecDataset(root=test_path, transform=data_transform, gt_transform=gt_transform, phase="test")
+            test_data = MVTecDataset(root=test_path, transform=eval_transform,
+                                     gt_transform=eval_gt_transform, phase="test")
             test_data_list.append(test_data)
 
             if args.train_class is not None and args.train_class != item:
@@ -1650,12 +1852,12 @@ if __name__ == '__main__':
         print(f'Testing :\n--vis_dir:{args.save_name}/{args.vis_dir}\n--test_class:{args.train_class}\n--pth_epoch:{args.pth_epoch}\n\n')
         checkpoint = torch.load(os.path.join(args.save_dir, args.save_name, f'model_{args.train_class}_{args.pth_epoch}.pth'))
         
-        model = vision_transformer.__dict__['vit_base'](patch_size=14, img_size=518,block_chunks=0, init_values=1e-8,num_register_tokens=4,interpolate_antialias=False,interpolate_offset=0.1,arg=args)
+        model = build_backbone(args)
         model.to(device)
         segmentation_head = nn.Sequential(
-            nn.Linear(768, 768 // 2),
+            nn.Linear(model.embed_dim, model.embed_dim // 2),
             nn.ReLU(inplace=True),
-            nn.Linear(768 // 2, 1), # 输出单通道，用于二分类
+            nn.Linear(model.embed_dim // 2, 1), # 输出单通道，用于二分类
             nn.Sigmoid() 
         ).to(device)
         
@@ -1724,17 +1926,30 @@ if __name__ == '__main__':
         torch.manual_seed(args.seed); np.random.seed(args.seed); random.seed(args.seed)
         # [AUDIT-FIX-3] 原路径 /home/jjquan/codebase/vpt/checkpoint/... 已不存在，训练阶段会直接崩。
         # 改成按顺序找可用权重（Downloads 下那份是同名同源权重）。
-        _pth_candidates = [
-            '/home/jjquan/codebase/vpt/checkpoint/dinov2_vitb14_reg4_pretrain.pth',
-            '/home/jjquan/Downloads/dinov2_vitb14_reg4_pretrain.pth',
-            '/home/jjquan/experiment/visual2_v2/dinov2_vitb14_reg4_pretrain.pth',
-        ]
-        pth = next((p for p in _pth_candidates if os.path.exists(p)), _pth_candidates[1])
+        if str(args.backbone).startswith('dinov3'):
+            # [主干实验] DINOv3：预训练权重已在封装内从本地 safetensors 载入，这里不再重复加载
+            _pth_candidates = ['<dinov3-internal>']
+        elif str(args.backbone).startswith('clip'):
+            # [主干实验] CLIP：同上，权重在 clip_mapping 封装内载入
+            _pth_candidates = ['<clip-internal>']
+        elif args.backbone == 'large':      # [主干实验] ViT-L/14 预训练权重
+            _pth_candidates = [
+                '/home/jjquan/Downloads/dinov2_vitl14_reg4_pretrain_converted.pth',
+                '/home/jjquan/Downloads/timm_dinov2_vitl14.pth',
+            ]
+        else:
+            _pth_candidates = [
+                '/home/jjquan/codebase/vpt/checkpoint/dinov2_vitb14_reg4_pretrain.pth',
+                '/home/jjquan/Downloads/dinov2_vitb14_reg4_pretrain.pth',
+                '/home/jjquan/experiment/visual2_v2/dinov2_vitb14_reg4_pretrain.pth',
+            ]
+        pth = next((p for p in _pth_candidates if os.path.exists(p)), _pth_candidates[0])
         print_fn(f'[audit] 预训练权重: {pth}')
-        model = vision_transformer.__dict__['vit_base'](patch_size=14, img_size=518,block_chunks=0, init_values=1e-8,num_register_tokens=4,interpolate_antialias=False,interpolate_offset=0.1,arg=args)
-        state_dict = torch.load(pth, map_location='cpu',weights_only=True)
+        model = build_backbone(args)
         model.to(device)
-        model.load_state_dict(state_dict, strict=False)
+        if not (str(args.backbone).startswith('dinov3') or str(args.backbone).startswith('clip')):
+            state_dict = torch.load(pth, map_location='cpu', weights_only=True)
+            model.load_state_dict(state_dict, strict=False)
         model.eval()
 
         # 先全部冻结再解冻子模块
@@ -1753,9 +1968,9 @@ if __name__ == '__main__':
        
         # 轻量级分割头示例
         segmentation_head = nn.Sequential(
-            nn.Linear(768, 768 // 2),
+            nn.Linear(model.embed_dim, model.embed_dim // 2),
             nn.ReLU(inplace=True),
-            nn.Linear(768 // 2, 1), # 输出单通道，用于二分类
+            nn.Linear(model.embed_dim // 2, 1), # 输出单通道，用于二分类
             nn.Sigmoid() 
         ).to(device)
         trainable = nn.ModuleList([model.tokens_per_layer,model.token_mapping,segmentation_head])
@@ -1788,10 +2003,61 @@ if __name__ == '__main__':
 
         print_fn('train image number:{}'.format(len(train_data)))
 
+        # [LOSS-DISTILL] 训练用"原始库侧"教师库：只用该类的 K 张 shot（与推理同一个库，不扩充、不用测试集）
+        _teacher_bank = None
+        _teacher_idx = None
+        if ((getattr(args, 'w_distill', 0.0) and float(args.w_distill) > 0) or
+                (getattr(args, 'w_prod', 0.0) and float(args.w_prod) > 0)):
+            with torch.no_grad():
+                # 只用该类 **K 张原始 shot**（与推理同一个库；**不做增强、不扩充**），
+                # 几何用训练几何（Resize(448)→CenterCrop(392)），与该 batch 的特征同尺度。
+                import sys as _sys_
+                _sys_.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                from shot_utils import get_shots as _get_shots
+                _picks = _get_shots(args.data_path, args.train_class, shots=args.shot, seed=args.seed)
+                _root = os.path.join(args.data_path, args.train_class, 'train', 'good')
+                _shots = torch.stack([data_transform(Image.open(os.path.join(_root, _f)).convert('RGB'))
+                                      for _f in _picks], 0)
+                _ret = model(_shots.to(device), is_training=True)
+                _fp = torch.sum(torch.stack([_ret['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                _teacher_bank = F.normalize(_fp, dim=-1).reshape(-1, _fp.shape[-1])   # [K*N, D]
+                _M = _teacher_bank.shape[0]
+                _g = torch.Generator().manual_seed(int(getattr(args, 'distill_sub_seed', 1234)))
+                _teacher_idx = torch.randperm(_M, generator=_g)[:min(1024, _M)].to(device)
+            print_fn(f'[LOSS-DISTILL] 教师原始库：{tuple(_teacher_bank.shape)}，'
+                     f'子采样 {int(_teacher_idx.numel())}（仅用 K={args.shot} 张 shot：{_picks}）')
+
 
         cos_loss = ScaledPatchCosineLoss3()
+        # [LOSS-EMA] 均值教师（Mean-Teacher）一致性：维护一份可训练参数的 EMA 副本，
+        # 要求"学生"与"教师"的可学习侧分数图一致（逐图 z 后 L1）。
+        # 动机：实测种子方差很大（15 类 mapping 极差 1.74、融合 1.18），
+        # 一致性平滑是标准做法，且属于**纯损失侧**改动（不加数据、不动 bank）。
+        _ema_model = None
+        if float(getattr(args, 'w_ema', 0.0)) > 0:
+            import copy as _copy
+            _ema_model = _copy.deepcopy(model)
+            for _p in _ema_model.parameters():
+                _p.requires_grad_(False)
+            _ema_model.eval()
+            print_fn(f'[LOSS-EMA] 已建立 EMA 教师（decay={float(getattr(args,"ema_decay",0.999))}）')
+        _ema_step = 0
+        # [LOSS-PROX] 参数空间邻近项：把可训练参数拉向其"参数 EMA"（θ_ref），
+        # 抑制 epoch 间质量摆动（实测内部 P-AUROC 极差 0.27~0.53、71~100% 的类最好轮≠35）。
+        # 与 [LOSS-EMA]（输出一致）不同：本项作用在**参数空间**、不需要额外前向。
+        _prox_ref = None
+        if float(getattr(args, 'w_prox', 0.0)) > 0:
+            _prox_ref = [p.detach().clone() for p in trainable.parameters()]
+            print_fn(f'[LOSS-PROX] 已建立参数 EMA 锚点（decay={float(getattr(args,"prox_decay",0.99))}）')
         seg_criterion = FocalDiceLoss(dice_weight=0.5, focal_weight=0.5)
         for epoch in range(args.total_epochs):
+            # [LOSS-CURRIC] 损失权重课程：w_rank 在训练中从 w_rank 线性变到 w_rank_final
+            # （动机：M7 的"跨图可比性"约束在表征成熟后更有意义；稳定性诊断显示后期质量会摆动）
+            if float(getattr(args, 'w_rank_final', -1.0)) >= 0 and args.total_epochs > 1:
+                _t = epoch / float(args.total_epochs - 1)
+                _w_rank_eff = args.w_rank + (float(args.w_rank_final) - args.w_rank) * _t
+            else:
+                _w_rank_eff = args.w_rank
             model.token_mapping.train()
             loss_list = []
             loss_cos_list = []
@@ -1804,7 +2070,9 @@ if __name__ == '__main__':
 
                target_imgs = target_imgs.to(device)
                aux_imgs = datas['img'].to(device)
-               aux_mask = resize_mask(datas['img_mask']).to(device) # B N
+               # [FIX-GRID] aux_mask 的格数必须跟随主干实际的 patch 格数，不能硬编码 784(28×28)。
+               # DINOv2/patch14 在 392 裁剪下恰好是 28×28；DINOv3/patch16 不是。
+               # 这里推迟到 aux 前向之后，用真实的 patch token 数下采样（见下方）。
 
                # 正常部分
                ret = model(target_imgs,is_training=True)
@@ -1812,12 +2080,15 @@ if __name__ == '__main__':
 
                fused_patch_token_list = [patch_feat_layer[i] for i in fused_layer]
                fused_patch_token = torch.sum(torch.stack(fused_patch_token_list,dim=0), dim=0)
+               # [FIX-GRID] 用真实 patch 格数下采样 GT 掩码（DINOv2=784，DINOv3/patch16=625）
+               aux_mask = resize_mask(
+                   datas['img_mask'], num_tokens=fused_patch_token.shape[1]).to(device)  # B N
 
                fused_learnable_token_list = [feat_list[i] for i in fused_layer_learnable]
                fused_learnable_token = torch.sum(torch.stack(fused_learnable_token_list,dim=0), dim=0)
 
                # [CONTROL] 保留原行为：用"所有 learnable 层求和"覆盖上面的选层结果
-               fused_learnable_token = torch.sum(torch.stack(feat_list,dim=0), dim=0)
+               fused_learnable_token = torch.cat(feat_list, dim=1)   # [MULTI-LAYER] 拼接各层 token
                # [vpt4.0 · M4] 双原型集：再拼上"全局（与图像无关）的可学习原型"，
                # 给原型集一个跨图固定的锚点 → 改善像素级 AUROC 的跨图校准
                if args.global_proto:
@@ -1825,7 +2096,6 @@ if __name__ == '__main__':
                    fused_learnable_token = torch.cat([fused_learnable_token, _g], dim=1)
                normal_patch_mapping = model.token_mapping(fused_patch_token)
                normal_learnable_mapping = model.token_mapping(fused_learnable_token)
-
                # 异常部分
                ret = model(aux_imgs,is_training=True)
                patch_feat_layer, feat_list = ret['patch_feat_layer'], ret['feat_list']
@@ -1837,7 +2107,7 @@ if __name__ == '__main__':
                fused_learnable_token = torch.sum(torch.stack(fused_learnable_token_list,dim=0), dim=0)
 
                # [CONTROL] 同上，保留原行为
-               fused_learnable_token = torch.sum(torch.stack(feat_list,dim=0), dim=0)
+               fused_learnable_token = torch.cat(feat_list, dim=1)   # [MULTI-LAYER] 拼接各层 token
                # [vpt4.0 · FIX-M4] 异常分支也要拼接全局原型锚点：推理时（compute_fused_map）对
                # **测试图**是 `sum(feat_list) ⊕ token_dict['0']`（K=96），而这里若只留 K=64，
                # M5/M7 用的原型集就与线上推理不一致 → 损失在优化一个"线上不存在的"打分函数。
@@ -1845,7 +2115,52 @@ if __name__ == '__main__':
                    _ga = model.tokens_per_layer.token_dict['0'].expand(fused_learnable_token.shape[0], -1, -1)
                    fused_learnable_token = torch.cat([fused_learnable_token, _ga], dim=1)
                abnormal_patch_mapping = model.token_mapping(fused_patch_token)
-               loss,loss_dict = cos_loss(normal_patch_mapping, normal_learnable_mapping,abnormal_patch_mapping,aux_mask)
+               # [PUSH-REF] 异常分支自己的原型（供"与推理一致的每图自参照"使用）
+               abnormal_learnable_mapping = model.token_mapping(fused_learnable_token)
+               loss,loss_dict = cos_loss(normal_patch_mapping, normal_learnable_mapping,
+                                         abnormal_patch_mapping, aux_mask,
+                                         neg_proto=abnormal_learnable_mapping)
+               # [CLUSTER · 机制1] 让正常 patch 在"可学习原型空间"里形成若干个簇：
+               #   SimCLR 式的 softmax 目标会把每个 patch 拉向原型的**凸组合**（趋向均值），
+               #   但正常 patch 本身是多样的（不同材质/纹理/部件），应当各自归属到某个簇。
+               #   这里用 SwAV 的 Sinkhorn 平衡分配 Q 作为"硬一点的目标"：
+               #     Q = sinkhorn(sim/eps)  → 行和 1（patch 明确归属）、列均衡（簇被等量使用）
+               #     loss = CE(log_softmax(sim), Q)  → 让 patch 去预测这个平衡归属。
+               #   --w_cluster 默认 0 → 与 v3.7 逐位一致。
+               if float(getattr(args, 'w_cluster', 0.0)) > 0:
+                   _Xc = torch.nn.functional.normalize(normal_patch_mapping, dim=-1)
+                   _Pc = torch.nn.functional.normalize(normal_learnable_mapping, dim=-1)
+                   _sim = torch.bmm(_Xc, _Pc.transpose(1, 2)) / float(args.cluster_temp)   # [B,N,K]
+                   _Bc, _Nc, _Kc = _sim.shape
+                   with torch.no_grad():
+                       _Q = sinkhorn_assign(_sim.reshape(-1, _Kc),
+                                            eps=float(args.cluster_eps),
+                                            iters=int(args.cluster_iters))
+                   _logp = torch.nn.functional.log_softmax(_sim.reshape(-1, _Kc), dim=-1)
+                   loss_cluster = -(_Q * _logp).sum(-1).mean()
+                   loss = loss + float(args.w_cluster) * loss_cluster
+                   loss_dict['cluster'] = float(loss_cluster)
+                   # [CLUSTER · 机制2] 跨增强的簇一致性：同一正常图的水平翻转视图，
+                   # 其 patch 应当落到**同一簇**。目标 = 主视图的平衡分配 Q（detach），
+                   # 学生 = 翻转视图的 log_softmax；空间上把 Q 按列翻转对齐 patch 顺序。
+                   if float(getattr(args, 'w_cluster_cons', 0.0)) > 0:
+                       _xf = torch.flip(target_imgs, dims=[3])
+                       _rf = model(_xf, is_training=True)
+                       _fpf = torch.sum(torch.stack([_rf['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                       _flrf = torch.sum(torch.stack(_rf['feat_list'], 0), 0)
+                       if args.global_proto:
+                           _gf = model.tokens_per_layer.token_dict['0'].expand(_flrf.shape[0], -1, -1)
+                           _flrf = torch.cat([_flrf, _gf], dim=1)
+                       _Xf = torch.nn.functional.normalize(model.token_mapping(_fpf), dim=-1)
+                       _Pf = torch.nn.functional.normalize(model.token_mapping(_flrf), dim=-1)
+                       _simf = torch.bmm(_Xf, _Pf.transpose(1, 2)) / float(args.cluster_temp)
+                       _gg = int(round(_sim.shape[1] ** 0.5))
+                       _Qt = _Q.detach().reshape(_Bc, _gg, _gg, _Kc).flip(2).reshape(-1, _Kc)
+                       _logpf = torch.nn.functional.log_softmax(_simf.reshape(-1, _Kc), dim=-1)
+                       loss_cons = -(_Qt * _logpf).sum(-1).mean()
+                       loss = loss + float(args.w_cluster_cons) * loss_cons
+                       loss_dict['cluster_cons'] = float(loss_cons)
+
                # [vpt4.0 · M3] 原型多样性正则：把映射后的 K 个原型两两余弦中"过高"的部分拉低，
                # 让 32 个原型真正覆盖多个正常模式（实测原始版本它们两两余弦 0.87、有效自由度仅 2~3）
                if args.w_div > 0:
@@ -1888,8 +2203,252 @@ if __name__ == '__main__':
                        abnormal_patch_mapping, model.token_mapping(fused_learnable_token),
                        aux_mask, margin=args.rank_margin, n_sample=args.rank_samples,
                        normalize=bool(args.rank_norm))
-                   loss = loss + args.w_rank * loss_rank
+                   loss = loss + _w_rank_eff * loss_rank       # [LOSS-CURRIC] 支持权重课程
                    loss_dict['rank'] = float(loss_rank)
+               # [LOSS-DISTILL] 教师=原始库侧打分（训练无关、确定性、只用 K shot），学生=可学习侧打分。
+               # 只在"教师认为差异明显"的样本对上要求学生的排序一致（尺度无关的成对 hinge）：
+               #   若 T_i − T_j 足够大，则要求 (S_j − S_i)/τ_S + margin ≤ 0
+               # 目的：把"大而多样的真实正常 patch 库"携带的信息蒸馏进可学习度量空间，
+               # 使 v3.7 的简化打分（s_learn = dlmin，无全局项）本身变得更有信息量。
+               if _teacher_bank is not None:
+                   with torch.no_grad():
+                       _tn = F.normalize(fused_patch_token, dim=-1)
+                       _d = (1.0 - torch.bmm(_tn, _teacher_bank.t().unsqueeze(0)
+                                             .expand(_tn.shape[0], -1, -1))).clamp_min(0)
+                       _d1 = _d.min(dim=-1).values
+                       _ds = torch.sort(_d.index_select(-1, _teacher_idx), dim=-1).values
+                       _qq = _ds[..., min(int(args.distill_global), _ds.shape[-1]) - 1]
+                       T = _pow_geo(_d1, _qq, float(args.distill_alpha))          # [B,N]
+                   S = proto_distance_scores(abnormal_patch_mapping,
+                                             model.token_mapping(fused_learnable_token))  # [B,N]
+                   _k = int(getattr(args, 'distill_topk', 16))
+                   _k = max(1, min(_k, S.shape[1] // 2))
+                   _t_hi = torch.topk(T, _k, dim=-1).values                    # 教师最高分
+                   _t_lo = torch.topk(T, _k, dim=-1, largest=False).values     # 教师最低分
+                   _i_hi = torch.topk(T, _k, dim=-1).indices
+                   _i_lo = torch.topk(T, _k, dim=-1, largest=False).indices
+                   _s_hi = torch.gather(S, 1, _i_hi)                           # [B,k]
+                   _s_lo = torch.gather(S, 1, _i_lo)
+                   _tau = torch.clamp(S.detach().std(unbiased=False), min=1e-8)
+                   _gap = (_s_lo.unsqueeze(-1) - _s_hi.unsqueeze(-2)) / _tau \
+                          + float(getattr(args, 'distill_margin', 0.5))
+                   # 只在教师把两者分得开的对上生效（否则是噪声对）
+                   _valid = (_t_hi.unsqueeze(-1) - _t_lo.unsqueeze(-2)) > \
+                            float(getattr(args, 'distill_tau_ratio', 0.25)) * \
+                            torch.clamp(T.detach().std(unbiased=False), min=1e-8)
+                   _hinge = torch.relu(_gap) * _valid
+                   loss_distill = _hinge.sum() / torch.clamp(_valid.sum(), min=1.0)
+                   loss = loss + float(args.w_distill) * loss_distill
+                   loss_dict['distill'] = float(loss_distill)
+               # [LOSS-FLIP] 翻转一致性：同一张图与其水平翻转图的"可学习侧分数图"应当一致
+               # （历史上测试期翻转 TTA 有 +0.5 量级的 mapping 收益；本项把该收益烧进权重，
+               #   推理端仍然只用单视图，不违反"不多视图"约束）。
+               if float(getattr(args, 'w_flip_cons', 0.0)) > 0:
+                   _xf = torch.flip(aux_imgs, dims=[3])
+                   _rf = model(_xf, is_training=True)
+                   _fp_f = torch.sum(torch.stack([_rf['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                   _flr_f = torch.sum(torch.stack(_rf['feat_list'], 0), 0)
+                   if args.global_proto:
+                       _gf = model.tokens_per_layer.token_dict['0'].expand(_flr_f.shape[0], -1, -1)
+                       _flr_f = torch.cat([_flr_f, _gf], dim=1)
+                   _S_f = proto_distance_scores(model.token_mapping(_fp_f),
+                                                model.token_mapping(_flr_f))       # [B,N]
+                   # 学生侧分数（与 M5/M7 同一口径）；不依赖蒸馏分支是否开启
+                   _S = proto_distance_scores(abnormal_patch_mapping,
+                                              model.token_mapping(fused_learnable_token))
+                   _B, _N = _S.shape
+                   _g = int(round(_N ** 0.5))
+                   _a_map = _S.reshape(_B, 1, _g, _g)
+                   _b_map = torch.flip(_S_f.reshape(_B, 1, _g, _g), dims=[3])       # 空间对齐
+                   _z = lambda t: (t - t.mean(dim=(1, 2, 3), keepdim=True)) / \
+                                  (t.std(dim=(1, 2, 3), keepdim=True) + 1e-8)
+                   loss_flip = (_z(_a_map) - _z(_b_map)).abs().mean()
+                   loss = loss + float(args.w_flip_cons) * loss_flip
+                   loss_dict['flip_cons'] = float(loss_flip)
+               # [LOSS-SCALE] 跨尺度一致性：同一张图在训练尺度(392)与 1.5×(588) 下的
+               # "可学习侧分数图"应当一致（推理在 672=448×1.5，与训练尺度存在 1.7× 错配；
+               # 测试期多尺度 TTA 实测有 +0.47 mapping 收益，本项把该收益烧进权重，推理仍单视图）。
+               if float(getattr(args, 'w_scale_cons', 0.0)) > 0:
+                   _su = float(getattr(args, 'scale_cons_scale', 1.5))
+                   _xu = F.interpolate(aux_imgs, scale_factor=_su, mode='bilinear', align_corners=False)
+                   _ru = model(_xu, is_training=True)
+                   _fp_u = torch.sum(torch.stack([_ru['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                   _flr_u = torch.sum(torch.stack(_ru['feat_list'], 0), 0)
+                   if args.global_proto:
+                       _gu = model.tokens_per_layer.token_dict['0'].expand(_flr_u.shape[0], -1, -1)
+                       _flr_u = torch.cat([_flr_u, _gu], dim=1)
+                   _S_u = proto_distance_scores(model.token_mapping(_fp_u),
+                                                model.token_mapping(_flr_u))
+                   _S0 = proto_distance_scores(abnormal_patch_mapping,
+                                               model.token_mapping(fused_learnable_token))
+                   _B2, _N2 = _S0.shape
+                   _g2 = int(round(_N2 ** 0.5))
+                   _gu2 = int(round(_S_u.shape[1] ** 0.5))
+                   _m0 = _S0.reshape(_B2, 1, _g2, _g2)
+                   _mu = F.interpolate(_S_u.reshape(_B2, 1, _gu2, _gu2), size=(_g2, _g2),
+                                       mode='bilinear', align_corners=False)
+                   _z2 = lambda t: (t - t.mean(dim=(1, 2, 3), keepdim=True)) / \
+                                   (t.std(dim=(1, 2, 3), keepdim=True) + 1e-8)
+                   loss_scale = (_z2(_m0) - _z2(_mu)).abs().mean()
+                   loss = loss + float(args.w_scale_cons) * loss_scale
+                   loss_dict['scale_cons'] = float(loss_scale)
+               # [LOSS-PEAK] 分数图峰值/稀疏正则：直接对准最弱的 P-AP / P-F1（"高分段精度"）：
+               #   异常图 → 要求 top-1% 像素显著高于中位数（尖峰）;
+               #   正常图 → 要求两者接近（平）。
+               # 只用到"合成异常属于异常、shot 属于正常"这一训练侧已知信息，不涉及测试集。
+               if float(getattr(args, 'w_peak', 0.0)) > 0:
+                   _S_a2 = proto_distance_scores(abnormal_patch_mapping,
+                                                 model.token_mapping(fused_learnable_token))
+                   _S_n2 = proto_distance_scores(normal_patch_mapping, normal_learnable_mapping)
+                   _r = float(getattr(args, 'peak_top_ratio', 0.01))
+                   _k2 = max(1, int(_S_a2.shape[1] * _r))
+                   _tau2 = torch.clamp(torch.cat([_S_a2, _S_n2]).detach().std(unbiased=False),
+                                       min=1e-8)
+                   def _peak_gap(_S):
+                       _top = torch.topk(_S, _k2, dim=-1).values.mean(dim=-1)
+                       _med = _S.median(dim=-1).values
+                       return (_top - _med) / _tau2
+                   _mgn = float(getattr(args, 'peak_margin', 0.5))
+                   loss_peak = torch.relu(_mgn - _peak_gap(_S_a2)).mean() + \
+                               torch.relu(_peak_gap(_S_n2) - _mgn).mean()
+                   loss = loss + float(args.w_peak) * loss_peak
+                   loss_dict['peak'] = float(loss_peak)
+               # [LOSS-EMA] 与 EMA 教师的一致性（仅可学习侧分数图；教师不做梯度）
+               if _ema_model is not None:
+                   with torch.no_grad():
+                       _rt = _ema_model(aux_imgs, is_training=True)
+                       _fp_t = torch.sum(torch.stack([_rt['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                       _flr_t = torch.sum(torch.stack(_rt['feat_list'], 0), 0)
+                       if args.global_proto:
+                           _gt0 = _ema_model.tokens_per_layer.token_dict['0'].expand(_flr_t.shape[0], -1, -1)
+                           _flr_t = torch.cat([_flr_t, _gt0], dim=1)
+                       _S_t = proto_distance_scores(_ema_model.token_mapping(_fp_t),
+                                                    _ema_model.token_mapping(_flr_t))
+                   _S_s = proto_distance_scores(abnormal_patch_mapping,
+                                                model.token_mapping(fused_learnable_token))
+                   _Be, _Ne = _S_s.shape
+                   _ge = int(round(_Ne ** 0.5))
+                   _ze = lambda t: (t - t.mean(dim=(1, 2, 3), keepdim=True)) / \
+                                   (t.std(dim=(1, 2, 3), keepdim=True) + 1e-8)
+                   loss_ema = (_ze(_S_s.reshape(_Be, 1, _ge, _ge)) -
+                               _ze(_S_t.reshape(_Be, 1, _ge, _ge))).abs().mean()
+                   loss = loss + float(args.w_ema) * loss_ema
+                   loss_dict['ema'] = float(loss_ema)
+               # [LOSS-BAL] 原型使用均衡正则：把"正常 patch → 可学习原型"的软分配平均分布拉向均匀，
+               # 避免少数原型被包办、其余闲置（实测 64 个原型高度冗余、有效自由度仅 2~3）。
+               # 现有 L_div 只压"原型两两余弦过高"，不约束"使用是否均衡"，两者互补。
+               if float(getattr(args, 'w_balance', 0.0)) > 0:
+                   _P = F.normalize(normal_learnable_mapping, dim=-1)          # [B,K,D]
+                   _Q = F.normalize(normal_patch_mapping, dim=-1)              # [B,N,D]
+                   _sim = torch.bmm(_Q, _P.transpose(1, 2)) / float(getattr(args, 'balance_temp', 0.07))
+                   _assign = torch.softmax(_sim, dim=-1)                       # [B,N,K]
+                   _avg = _assign.mean(dim=(0, 1))                             # [K]
+                   _unif = torch.full_like(_avg, 1.0 / _avg.numel())
+                   loss_bal = torch.sum(_unif * (torch.log(_unif + 1e-8) -
+                                                 torch.log(_avg + 1e-8)))       # KL(avg || uniform)
+                   loss = loss + float(args.w_balance) * loss_bal
+                   loss_dict['balance'] = float(loss_bal)
+               # [LOSS-PROX] 参数邻近项：||θ − θ_ref||²（按参数量归一），θ_ref 为参数 EMA
+               if _prox_ref is not None:
+                   _ps = list(trainable.parameters())
+                   # 按"参数自身尺度"归一 → 相对漂移（否则绝对平方和/参数量太小、梯度可忽略）
+                   _num = sum(int(p.numel()) for p in _ps) + 1e-8
+                   _scale = (sum((r ** 2).sum() for r in _prox_ref) / _num).detach() + 1e-12
+                   loss_prox = sum(((p - r) ** 2).sum() for p, r in zip(_ps, _prox_ref)) / (_num * _scale)
+                   loss = loss + float(args.w_prox) * loss_prox
+                   loss_dict['prox'] = float(loss_prox)
+               # [LOSS-PROD] **训推一致性**：直接监督"推理时真正使用的那个分数"
+               #   推理端: m = w_learn·s_learn + (1-w_learn)·s_raw,  s_raw = d1^α·q^(1-α)（K shot 库）
+               #   本项:   用合成掩码对 **同一个 m** 做 BCE（s_raw 无参数 → detach）
+               # 与已有损失的差别：M5 只监督 s_learn（推理公式的 0.6 那一半），
+               # 而推理实际用的是 m；此前训练从未直接优化过 m。
+               if float(getattr(args, 'w_prod', 0.0)) > 0 and _teacher_bank is not None:
+                   with torch.no_grad():
+                       _tpn = F.normalize(fused_patch_token, dim=-1)
+                       _dd = (1.0 - torch.bmm(_tpn, _teacher_bank.t().unsqueeze(0)
+                                              .expand(_tpn.shape[0], -1, -1))).clamp_min(0)
+                       _dd1 = _dd.min(dim=-1).values
+                       _dds = torch.sort(_dd.index_select(-1, _teacher_idx), dim=-1).values
+                       _dqq = _dds[..., min(int(args.distill_global), _dds.shape[-1]) - 1]
+                       _raw = _pow_geo(_dd1, _dqq, float(args.distill_alpha))
+                   _s_learn_p = proto_distance_scores(abnormal_patch_mapping,
+                                                      model.token_mapping(fused_learnable_token))
+                   _wl = float(getattr(args, 'prod_w_learn', 0.6))
+                   if int(getattr(args, 'prod_znorm', 0)) > 0:
+                       # [修复] 与推理端融合口径一致：两支各自标准化后再加权
+                       # （推理是"类内 z 后 0.5/0.5"；训练按图内 z 近似），避免"原始距离直接混合"的尺度不一致
+                       def _z_perimg(t):
+                           m = t.mean(dim=1, keepdim=True)
+                           s = t.std(dim=1, keepdim=True) + 1e-8
+                           return (t - m) / s
+                       _zs_l = _z_perimg(_s_learn_p)
+                       _zs_r = _z_perimg(_raw)
+                       _m_prod = _wl * _zs_l + (1.0 - _wl) * _zs_r
+                       _prob_p = torch.sigmoid(_m_prod)          # 标准化后落在±几，用 sigmoid 映射到 (0,1)
+                   else:
+                       _m_prod = _wl * _s_learn_p + (1.0 - _wl) * _raw
+                       _prob_p = (_m_prod / 2.0).clamp(1e-6, 1.0 - 1e-6)   # 与 M5 相同的映射
+                   _tgt_p = aux_mask.float()
+                   _bce_p = -(_tgt_p * torch.log(_prob_p) + (1 - _tgt_p) * torch.log(1 - _prob_p))
+                   loss_prod = _bce_p.mean()
+                   loss = loss + float(args.w_prod) * loss_prod
+                   loss_dict['prod'] = float(loss_prod)
+               # [LOSS-NEAR] 最近原型量化损失（训推一致的"正样本项"）：
+               #   推理端可学习侧分数 = 到**最近**原型的距离 dlmin；
+               #   现有正样本项只把 patch 拉向 softmax 加权原型（soft 目标），**从未直接优化最小值这一步**。
+               #   本项对正常 patch 直接最小化 dlmin，并用 hinge(margin) 防止过度收缩（塌缩另有 L_div 抑制）。
+               if float(getattr(args, 'w_near', 0.0)) > 0:
+                   _Pn = F.normalize(model.token_mapping(fused_patch_token), dim=-1)
+                   _Qn = F.normalize(model.token_mapping(fused_learnable_token), dim=-1)
+                   _dn = (1.0 - torch.bmm(_Pn, _Qn.transpose(1, 2))).clamp_min(0).min(dim=-1).values
+                   loss_near = torch.relu(_dn - float(getattr(args, 'near_margin', 0.05))).mean()
+                   loss = loss + float(args.w_near) * loss_near
+                   loss_dict['near'] = float(loss_near)
+               # [LOSS-BARLOW] 映射特征空间去冗余（Barlow Twins 式）：
+               #   实测"32 个可学习原型两两余弦 0.87、有效自由度仅 2~3"——即映射空间高度冗余。
+               #   本项把正常 patch 的映射特征逐维标准化后求相关矩阵 C=ZᵀZ/M，
+               #   惩罚非对角元（去相关）+ 对角偏离 1（保方差）。属纯表征正则，不改推理路径。
+               if float(getattr(args, 'w_barlow', 0.0)) > 0:
+                   _Z = normal_patch_mapping.reshape(-1, normal_patch_mapping.shape[-1])
+                   _Z = (_Z - _Z.mean(0, keepdim=True)) / (_Z.std(0, keepdim=True) + 1e-6)
+                   _C = torch.mm(_Z.t(), _Z) / max(1, _Z.shape[0])
+                   _off = (_C ** 2).sum() - (_C.diagonal() ** 2).sum()
+                   _on = ((_C.diagonal() - 1.0) ** 2).sum()
+                   loss_barlow = _off / (_C.shape[0] * (_C.shape[0] - 1)) + \
+                       float(getattr(args, 'barlow_lambda', 0.005)) * _on / _C.shape[0]
+                   loss = loss + float(args.w_barlow) * loss_barlow
+                   loss_dict['barlow'] = float(loss_barlow)
+               # [LOSS-COMP] "补短板"损失（诊断驱动）：诊断发现"可学习侧单独提升 +3.09 也不传导到融合"，
+               # 说明需要提升的是**互补性**而非单独质量。本项让可学习侧专门拟合**原始库侧判错的地方**：
+               #   教师(原始库侧,无参)的错向响应 err = relu(-z_raw)·mask + relu(z_raw)·(1-mask)
+               #   加权 BCE：权重 w = 1 + λ·err（在教师错得越明显的 patch 上学得越多）
+               if float(getattr(args, 'w_comp', 0.0)) > 0 and _teacher_bank is not None:
+                   with torch.no_grad():
+                       _tc = F.normalize(fused_patch_token, dim=-1)
+                       _dc = (1.0 - torch.bmm(_tc, _teacher_bank.t().unsqueeze(0)
+                                              .expand(_tc.shape[0], -1, -1))).clamp_min(0)
+                       _dc1 = _dc.min(dim=-1).values
+                       _dcs = torch.sort(_dc.index_select(-1, _teacher_idx), dim=-1).values
+                       _dcq = _dcs[..., min(int(args.distill_global), _dcs.shape[-1]) - 1]
+                       _rawc = _pow_geo(_dc1, _dcq, float(args.distill_alpha))
+                       _zr = (_rawc - _rawc.mean(dim=1, keepdim=True)) / (_rawc.std(dim=1, keepdim=True) + 1e-8)
+                       _tg = aux_mask.float()
+                       _err = (torch.relu(-_zr) * _tg + torch.relu(_zr) * (1.0 - _tg)).detach()
+                   _sc = proto_distance_scores(abnormal_patch_mapping,
+                                               model.token_mapping(fused_learnable_token))
+                   _zc = (_sc - _sc.mean(dim=1, keepdim=True)) / (_sc.std(dim=1, keepdim=True) + 1e-8)
+                   _pc = torch.sigmoid(_zc).clamp(1e-6, 1.0 - 1e-6)
+                   _bce_c = -(_tg * torch.log(_pc) + (1 - _tg) * torch.log(1 - _pc))
+                   _wgt = 1.0 + float(getattr(args, 'comp_lam', 1.0)) * _err
+                   loss_comp = (_wgt * _bce_c).sum() / torch.clamp(_wgt.sum(), min=1.0)
+                   if os.environ.get('DEBUG_COMP'):
+                       print_fn(f'  [dbg-comp] sc nan={int(torch.isnan(_sc).sum())} '
+                                f'zc nan={int(torch.isnan(_zc).sum())} pc nan={int(torch.isnan(_pc).sum())} '
+                                f'tg nan={int(torch.isnan(_tg).sum())} bce nan={int(torch.isnan(_bce_c).sum())} '
+                                f'w nan={int(torch.isnan(_wgt).sum())} '
+                                f'pc_min={float(_pc.min()):.3e} pc_max={float(_pc.max()):.3e}')
+                   loss = loss + float(args.w_comp) * loss_comp
+                   loss_dict['comp'] = float(loss_comp)
                # [vpt4.0 · M10] 图像级跨图排序一致性：把"正常图的图像级分数 < 异常图的图像级分数"
                # 直接写进损失（图像级分数按评估口径 = 最高的 1% 像素均值），治图像级跨图漂移。
                if args.w_img_rank > 0:
@@ -1907,6 +2466,19 @@ if __name__ == '__main__':
                loss.backward()
                nn.utils.clip_grad_norm(trainable.parameters(), max_norm=0.5)
                optimizer.step()
+               if _ema_model is not None:      # [LOSS-EMA] 更新教师（EMA）
+                   _decay = float(getattr(args, 'ema_decay', 0.999))
+                   with torch.no_grad():
+                       for _pe, _ps in zip(_ema_model.parameters(), model.parameters()):
+                           _pe.mul_(_decay).add_(_ps.detach(), alpha=1.0 - _decay)
+                       for _be, _bs in zip(_ema_model.buffers(), model.buffers()):
+                           _be.copy_(_bs)
+                   _ema_step += 1
+               if _prox_ref is not None:       # [LOSS-PROX] 更新参数 EMA 锚点（每步，慢速）
+                   _pd = float(getattr(args, 'prox_decay', 0.99))
+                   with torch.no_grad():
+                       for _i, (_p, _r) in enumerate(zip(trainable.parameters(), _prox_ref)):
+                           _r.mul_(_pd).add_(_p.detach(), alpha=1.0 - _pd)
                loss_list.append(loss.item())
                loss_cos_list.append(loss_dict['pos_cos'])
                loss_mse_list.append(loss_dict['pos_mse'])
@@ -1914,7 +2486,7 @@ if __name__ == '__main__':
                loss_seg_list.append(loss_seg.item())
                lr_scheduler.step()
                print_fn('epoch [{}/{}], total_loss:{:.4f}, cos_loss:{:.4f}, mse_loss:{:.4f}, neg_push_loss:{:.4f}, seg_loss:{:.4f}'.format(epoch+1, args.total_epochs, np.mean(loss_list),np.mean(loss_cos_list),np.mean(loss_mse_list),np.mean(loss_tri_list),np.mean(loss_seg_list)))
-               if args.w_pixel > 0 or args.w_rank > 0 or args.w_div > 0 or args.w_img_rank > 0:
+               if args.w_pixel > 0 or args.w_rank > 0 or args.w_div > 0 or args.w_img_rank > 0 or float(getattr(args, 'w_cluster', 0.0)) > 0:
                    _aux = []
                    if args.w_div > 0:
                        _aux.append('div:{:.4f}'.format(loss_dict.get('div', float('nan'))))
@@ -1924,6 +2496,30 @@ if __name__ == '__main__':
                        _aux.append('rank:{:.4f}'.format(loss_dict.get('rank', float('nan'))))
                    if args.w_img_rank > 0:
                        _aux.append('imgrank:{:.4f}'.format(loss_dict.get('img_rank', float('nan'))))
+                   if float(getattr(args, 'w_cluster', 0.0)) > 0:
+                       _aux.append('cluster:{:.4f}'.format(loss_dict.get('cluster', float('nan'))))
+                   if getattr(args, 'w_distill', 0.0) and args.w_distill > 0:
+                       _aux.append('distill:{:.4f}'.format(loss_dict.get('distill', float('nan'))))
+                   if getattr(args, 'w_flip_cons', 0.0) and args.w_flip_cons > 0:
+                       _aux.append('flipc:{:.4f}'.format(loss_dict.get('flip_cons', float('nan'))))
+                   if getattr(args, 'w_scale_cons', 0.0) and args.w_scale_cons > 0:
+                       _aux.append('scalec:{:.4f}'.format(loss_dict.get('scale_cons', float('nan'))))
+                   if getattr(args, 'w_peak', 0.0) and args.w_peak > 0:
+                       _aux.append('peak:{:.4f}'.format(loss_dict.get('peak', float('nan'))))
+                   if getattr(args, 'w_ema', 0.0) and args.w_ema > 0:
+                       _aux.append('ema:{:.4f}'.format(loss_dict.get('ema', float('nan'))))
+                   if getattr(args, 'w_balance', 0.0) and args.w_balance > 0:
+                       _aux.append('bal:{:.4f}'.format(loss_dict.get('balance', float('nan'))))
+                   if getattr(args, 'w_prox', 0.0) and args.w_prox > 0:
+                       _aux.append('prox:{:.3e}'.format(loss_dict.get('prox', float('nan'))))
+                   if getattr(args, 'w_prod', 0.0) and args.w_prod > 0:
+                       _aux.append('prod:{:.4f}'.format(loss_dict.get('prod', float('nan'))))
+                   if getattr(args, 'w_near', 0.0) and args.w_near > 0:
+                       _aux.append('near:{:.4f}'.format(loss_dict.get('near', float('nan'))))
+                   if getattr(args, 'w_barlow', 0.0) and args.w_barlow > 0:
+                       _aux.append('barlow:{:.3e}'.format(loss_dict.get('barlow', float('nan'))))
+                   if getattr(args, 'w_comp', 0.0) and args.w_comp > 0:
+                       _aux.append('comp:{:.4f}'.format(loss_dict.get('comp', float('nan'))))
                    print_fn('  [aux-loss] ' + ' '.join(_aux))
             # print_fn('epoch [{}/{}], total_loss:{:.4f}, cos_loss:{:.4f}, mse_loss:{:.4f}'.format(epoch+1, args.total_epochs, np.mean(loss_list),np.mean(loss_cos_list),np.mean(loss_mse_list)))
 
@@ -2029,4 +2625,8 @@ if __name__ == '__main__':
                 # mean_values = [np.mean(auroc_sp_list), np.mean(ap_sp_list), np.mean(f1_sp_list),np.mean(auroc_px_list), np.mean(ap_px_list), np.mean(f1_px_list), np.mean(aupro_px_list)]
                 # mean_row = "{:^12}".format("Mean") + "".join(["{:^12.4f}".format(val) for val in mean_values])
                 # print_fn(mean_row)
-                torch.save({"dino":model.state_dict(),"seg_head":segmentation_head.state_dict()}, os.path.join(args.save_dir, args.save_name, f'model_{args.train_class}_{epoch+1}.pth'))
+                # [主干实验] 默认每轮都存（save_every=1，与历史行为一致）；
+                # 长轮数训练（如 70 epoch）时用 --save_every 降低落盘频率，避免磁盘被打爆。
+                _se = max(1, int(getattr(args, 'save_every', 1)))
+                if (epoch + 1) % _se == 0 or (epoch + 1) == args.total_epochs:
+                    torch.save({"dino":model.state_dict(),"seg_head":segmentation_head.state_dict()}, os.path.join(args.save_dir, args.save_name, f'model_{args.train_class}_{epoch+1}.pth'))

@@ -86,7 +86,7 @@ def main():
     print(f'[improved] 原始特征库 {tuple(bank.shape)}')
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(ds, batch_size=args.batch_size, shuffle=False, num_workers=4)
     scales = tuple(float(x) for x in args.scales.split(','))
     out = []

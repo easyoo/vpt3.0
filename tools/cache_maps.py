@@ -70,7 +70,7 @@ def main():
 
     data_transform, gt_transform = mod.get_data_transforms(448, 392)
     test_data = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                                 transform=data_transform, gt_transform=gt_transform, phase='test')
+                                 transform=data_transform, gt_transform=gt_transform, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, shuffle=False, num_workers=4)
 
     map_dir = os.path.join(HERE, '.maps_audit'); os.makedirs(map_dir, exist_ok=True)

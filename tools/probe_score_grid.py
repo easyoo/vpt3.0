@@ -111,7 +111,7 @@ def main():
         q_bank_l = F.normalize(model.token_mapping(bank), dim=-1)      # 学到度量空间里的原始库
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     if args.limit:
         ds.img_paths = ds.img_paths[:args.limit]
         ds.gt_paths = ds.gt_paths[:args.limit]

@@ -113,7 +113,7 @@ def main():
     print(f'[sub] 全局分位数用 {sub_idx.numel()}/{M} 个 patch 子采样估计')
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     if args.limit:
         ds.img_paths = ds.img_paths[:args.limit]
         ds.gt_paths = ds.gt_paths[:args.limit]

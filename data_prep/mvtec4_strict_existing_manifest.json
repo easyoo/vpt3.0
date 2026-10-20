@@ -1,0 +1,431 @@
+{
+  "dataset": "MVTec-AD",
+  "shots": 4,
+  "num_gen_per_source": 35,
+  "source_root": "/home/jjquan/AnoStyler/genbyAnoStyler",
+  "dataset_view": "/home/jjquan/experiment/visual2/MVTec-AD_strict4",
+  "anomaly_root": "/home/jjquan/experiment/visual2/anomaly_samples_mvtec_4shot_strict/mvtec",
+  "total_pairs": 2100,
+  "items": [
+    {
+      "class": "bottle",
+      "source_stem": "068",
+      "defect": "broken_large",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/bottle/broken_large/068"
+    },
+    {
+      "class": "bottle",
+      "source_stem": "114",
+      "defect": "broken_large",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/bottle/broken_large/114"
+    },
+    {
+      "class": "bottle",
+      "source_stem": "000",
+      "defect": "contamination",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/bottle/contamination/000"
+    },
+    {
+      "class": "bottle",
+      "source_stem": "178",
+      "defect": "contamination",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/bottle/contamination/178"
+    },
+    {
+      "class": "cable",
+      "source_stem": "151",
+      "defect": "cable_swap",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/cable/cable_swap/151"
+    },
+    {
+      "class": "cable",
+      "source_stem": "184",
+      "defect": "cable_swap",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/cable/cable_swap/184"
+    },
+    {
+      "class": "cable",
+      "source_stem": "205",
+      "defect": "cable_swap",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/cable/cable_swap/205"
+    },
+    {
+      "class": "cable",
+      "source_stem": "058",
+      "defect": "cut_inner_insulation",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/cable/cut_inner_insulation/058"
+    },
+    {
+      "class": "capsule",
+      "source_stem": "005",
+      "defect": "crack",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/capsule/crack/005"
+    },
+    {
+      "class": "capsule",
+      "source_stem": "026",
+      "defect": "crack",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/capsule/crack/026"
+    },
+    {
+      "class": "capsule",
+      "source_stem": "007",
+      "defect": "squeeze",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/capsule/squeeze/007"
+    },
+    {
+      "class": "capsule",
+      "source_stem": "081",
+      "defect": "squeeze",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/capsule/squeeze/081"
+    },
+    {
+      "class": "carpet",
+      "source_stem": "060",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/carpet/color/060"
+    },
+    {
+      "class": "carpet",
+      "source_stem": "068",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/carpet/color/068"
+    },
+    {
+      "class": "carpet",
+      "source_stem": "130",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/carpet/color/130"
+    },
+    {
+      "class": "carpet",
+      "source_stem": "032",
+      "defect": "thread",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/carpet/thread/032"
+    },
+    {
+      "class": "grid",
+      "source_stem": "241",
+      "defect": "bent",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/grid/bent/241"
+    },
+    {
+      "class": "grid",
+      "source_stem": "194",
+      "defect": "broken",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/grid/broken/194"
+    },
+    {
+      "class": "grid",
+      "source_stem": "230",
+      "defect": "broken",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/grid/broken/230"
+    },
+    {
+      "class": "grid",
+      "source_stem": "253",
+      "defect": "broken",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/grid/broken/253"
+    },
+    {
+      "class": "hazelnut",
+      "source_stem": "013",
+      "defect": "cut",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/hazelnut/cut/013"
+    },
+    {
+      "class": "hazelnut",
+      "source_stem": "332",
+      "defect": "hole",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/hazelnut/hole/332"
+    },
+    {
+      "class": "hazelnut",
+      "source_stem": "004",
+      "defect": "print",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/hazelnut/print/004"
+    },
+    {
+      "class": "hazelnut",
+      "source_stem": "277",
+      "defect": "print",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/hazelnut/print/277"
+    },
+    {
+      "class": "leather",
+      "source_stem": "024",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/leather/color/024"
+    },
+    {
+      "class": "leather",
+      "source_stem": "053",
+      "defect": "cut",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/leather/cut/053"
+    },
+    {
+      "class": "leather",
+      "source_stem": "201",
+      "defect": "fold",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/leather/fold/201"
+    },
+    {
+      "class": "leather",
+      "source_stem": "124",
+      "defect": "glue",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/leather/glue/124"
+    },
+    {
+      "class": "metal_nut",
+      "source_stem": "097",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/metal_nut/color/097"
+    },
+    {
+      "class": "metal_nut",
+      "source_stem": "108",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/metal_nut/color/108"
+    },
+    {
+      "class": "metal_nut",
+      "source_stem": "055",
+      "defect": "flip",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/metal_nut/flip/055"
+    },
+    {
+      "class": "metal_nut",
+      "source_stem": "175",
+      "defect": "flip",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/metal_nut/flip/175"
+    },
+    {
+      "class": "pill",
+      "source_stem": "014",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/pill/color/014"
+    },
+    {
+      "class": "pill",
+      "source_stem": "113",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/pill/color/113"
+    },
+    {
+      "class": "pill",
+      "source_stem": "253",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/pill/color/253"
+    },
+    {
+      "class": "pill",
+      "source_stem": "224",
+      "defect": "faulty_imprint",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/pill/faulty_imprint/224"
+    },
+    {
+      "class": "screw",
+      "source_stem": "118",
+      "defect": "scratch_neck",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/screw/scratch_neck/118"
+    },
+    {
+      "class": "screw",
+      "source_stem": "119",
+      "defect": "scratch_neck",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/screw/scratch_neck/119"
+    },
+    {
+      "class": "screw",
+      "source_stem": "283",
+      "defect": "scratch_neck",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/screw/scratch_neck/283"
+    },
+    {
+      "class": "screw",
+      "source_stem": "176",
+      "defect": "thread_top",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/screw/thread_top/176"
+    },
+    {
+      "class": "tile",
+      "source_stem": "007",
+      "defect": "crack",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/tile/crack/007"
+    },
+    {
+      "class": "tile",
+      "source_stem": "213",
+      "defect": "crack",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/tile/crack/213"
+    },
+    {
+      "class": "tile",
+      "source_stem": "099",
+      "defect": "rough",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/tile/rough/099"
+    },
+    {
+      "class": "tile",
+      "source_stem": "228",
+      "defect": "rough",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/tile/rough/228"
+    },
+    {
+      "class": "toothbrush",
+      "source_stem": "014",
+      "defect": "defective",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/toothbrush/defective/014"
+    },
+    {
+      "class": "toothbrush",
+      "source_stem": "029",
+      "defect": "defective",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/toothbrush/defective/029"
+    },
+    {
+      "class": "toothbrush",
+      "source_stem": "043",
+      "defect": "defective",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/toothbrush/defective/043"
+    },
+    {
+      "class": "toothbrush",
+      "source_stem": "048",
+      "defect": "defective",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/toothbrush/defective/048"
+    },
+    {
+      "class": "transistor",
+      "source_stem": "005",
+      "defect": "bent_lead",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/transistor/bent_lead/005"
+    },
+    {
+      "class": "transistor",
+      "source_stem": "074",
+      "defect": "bent_lead",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/transistor/bent_lead/074"
+    },
+    {
+      "class": "transistor",
+      "source_stem": "106",
+      "defect": "cut_lead",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/transistor/cut_lead/106"
+    },
+    {
+      "class": "transistor",
+      "source_stem": "142",
+      "defect": "damaged_case",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/transistor/damaged_case/142"
+    },
+    {
+      "class": "wood",
+      "source_stem": "110",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/wood/color/110"
+    },
+    {
+      "class": "wood",
+      "source_stem": "195",
+      "defect": "color",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/wood/color/195"
+    },
+    {
+      "class": "wood",
+      "source_stem": "155",
+      "defect": "combined",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/wood/combined/155"
+    },
+    {
+      "class": "wood",
+      "source_stem": "196",
+      "defect": "liquid",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/wood/liquid/196"
+    },
+    {
+      "class": "zipper",
+      "source_stem": "025",
+      "defect": "fabric_border",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/zipper/fabric_border/025"
+    },
+    {
+      "class": "zipper",
+      "source_stem": "047",
+      "defect": "fabric_interior",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/zipper/fabric_interior/047"
+    },
+    {
+      "class": "zipper",
+      "source_stem": "164",
+      "defect": "split_teeth",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/zipper/split_teeth/164"
+    },
+    {
+      "class": "zipper",
+      "source_stem": "236",
+      "defect": "squeezed_teeth",
+      "generated_pairs": 35,
+      "source_sample_dir": "/home/jjquan/AnoStyler/genbyAnoStyler/zipper/squeezed_teeth/236"
+    }
+  ]
+}

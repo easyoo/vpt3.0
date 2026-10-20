@@ -15,6 +15,7 @@ POS=("$@")
 
 CODE=code_ablate
 SHOTS=2
+INT="${INTERNAL:-5}"                     # [精简] INTERNAL=35 时只在最后一轮存权重/评估（省 6/7 存档）
 ANOROOT_2SHOT=/home/jjquan/experiment/visual2/anomaly_samples_2shot
 EXTRA="${EXTRA_ARGS:-}"
 
@@ -37,11 +38,11 @@ for cls in "${POS[@]}"; do
   CODE_HASH=$(md5sum ${CODE}/main-fewshot-vpt4.py | cut -c1-12)
   {
     echo "===== [$(date +'%F %T')] ablate save=$SAVE class=$cls gpu=${U:4:8} code_md5=$CODE_HASH ====="
-    echo "cmd: $PY ${CODE}/main-fewshot-vpt4.py --train_class $cls --total_epochs 35 --internal 5 --map_only --batch_size 16 --seed 1 --shot 2 --token_init_std 0.02 --res_mapping 0 --anomaly_data_root $ANOROOT_2SHOT --save_dir results/vpt4 --save_name $SAVE $EXTRA"
+    echo "cmd: $PY ${CODE}/main-fewshot-vpt4.py --train_class $cls --total_epochs 35 --internal $INT --map_only --batch_size 16 --seed 1 --shot 2 --token_init_std 0.02 --res_mapping 0 --anomaly_data_root $ANOROOT_2SHOT --save_dir results/vpt4 --save_name $SAVE $EXTRA"
   } >> "$LOG"
   printf '%s\t%s\t%s\t%s\t%s\n' "$(date +'%F %T')" "$cls" "${U:4:8}" "$CODE_HASH" "$EXTRA" >> "$MANIFEST"
   echo "[$(date +%H:%M:%S)] $SAVE/$cls start on ${U:4:8}"
-  timeout 3600 $PY ${CODE}/main-fewshot-vpt4.py --train_class "$cls" --total_epochs 35 --internal 5 \
+  timeout 3600 $PY ${CODE}/main-fewshot-vpt4.py --train_class "$cls" --total_epochs 35 --internal "$INT" \
     --map_only --batch_size 16 --seed 1 --shot "$SHOTS" --token_init_std 0.02 --res_mapping 0 \
     --anomaly_data_root "$ANOROOT_2SHOT" --save_dir results/vpt4 --save_name "$SAVE" $EXTRA \
     --data_path "$MVTEC" >> "$LOG" 2>&1

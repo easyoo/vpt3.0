@@ -162,7 +162,7 @@ def main():
     scorers['lof8_pca256'] = (scorers['pca256'][0], 1, True)
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(ds, batch_size=16, shuffle=False, num_workers=4)
     gk = mod.get_gaussian_kernel(kernel_size=5, sigma=4).to(args.device)
     scales = tuple(float(x) for x in args.scales.split(','))

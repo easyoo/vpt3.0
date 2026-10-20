@@ -449,9 +449,11 @@ class MemoryBank():
                 distances = 1 - distances
             closest_features.append((distances, indices))
         
-        stage1 = F1.interpolate(torch.tensor(closest_features[0][0]).reshape(1,1,64,64),size,mode='bilinear', align_corners=True).squeeze().numpy()
-        stage2 = F1.interpolate(torch.tensor(closest_features[1][0]).reshape(1,1,32,32),size,mode='bilinear', align_corners=True).squeeze().numpy()
-        stage3 = F1.interpolate(torch.tensor(closest_features[2][0]).reshape(1,1,16,16),size,mode='bilinear', align_corners=True).squeeze().numpy()
+        # [FIX-3] 同 query_batch：改用 [0,0] 切片，并按真实 patch 网格 reshape（原实现硬编码 64/32/16 且用 .squeeze()）
+        _g = size[0] // 14
+        stage1 = F1.interpolate(torch.tensor(closest_features[0][0]).reshape(1,1,_g,_g),size,mode='bilinear', align_corners=True)[0,0].numpy()
+        stage2 = F1.interpolate(torch.tensor(closest_features[1][0]).reshape(1,1,_g,_g),size,mode='bilinear', align_corners=True)[0,0].numpy()
+        stage3 = F1.interpolate(torch.tensor(closest_features[2][0]).reshape(1,1,_g,_g),size,mode='bilinear', align_corners=True)[0,0].numpy()
         stage4 = (stage1 + stage2 + stage3) / 9
         stage1 /= stage1.max()
         stage2 /= stage2.max() 
@@ -466,15 +468,19 @@ class MemoryBank():
         
         return [stage1,stage2,stage3,stage4]
         
-    def query_batch(self, test_data):
+    def query_batch(self, test_data, return_stages=False):
         size = test_data.shape[-2:]
-        patch_size = size[0]//14
         batch_size = test_data.shape[0]
         # 提取查询图片的特征
         with torch.no_grad():
             query_features = extract_fused_features(self.model_t,test_data)
             # query_features = [self.avg_pool(feature) for feature in query_features]
             query_features = [F1.normalize(rearrange(feature,'b l c->b c l')) for feature in query_features if self.use_cos]
+
+        # [主干实验] 同 code_vpt2 副本：patch 数不再硬编码 size//14，改从特征长度反推网格
+        n_tok = int(query_features[0].shape[-1])
+        patch_size = int(round(n_tok ** 0.5))
+        assert patch_size * patch_size == n_tok, (n_tok, patch_size)
             
             
 
@@ -489,10 +495,14 @@ class MemoryBank():
             closest_features.append((distances, indices))
         err1 = torch.tensor(closest_features[0][0].reshape(batch_size,patch_size**2,1).reshape(batch_size,1,patch_size,patch_size))
         err2 = torch.tensor(closest_features[1][0].reshape(batch_size,patch_size**2,1).reshape(batch_size,1,patch_size,patch_size))
-        stage1 = F1.interpolate(err1,size,mode='bilinear', align_corners=True).squeeze().numpy()
-        stage2 = F1.interpolate(err2,size,mode='bilinear', align_corners=True).squeeze().numpy()
+        # [FIX-3] 不能用 .squeeze()：最后一个 batch 只有 1 张图时 (1,1,H,W) 会被压成 (H,W)，
+        # 下游 cat/unsqueeze 维度不一致直接崩（MVTec carpet/tile N=117、batch=4 时必现）。
+        stage1 = F1.interpolate(err1, size, mode='bilinear', align_corners=True)[:, 0].numpy()
+        stage2 = F1.interpolate(err2, size, mode='bilinear', align_corners=True)[:, 0].numpy()
         err_map = (stage1 + stage2 ) / 2
         
+        if return_stages:
+            return stage1, stage2, err_map
         return err_map
     
     def evaluation(self,tar_cls_name='bottle'):

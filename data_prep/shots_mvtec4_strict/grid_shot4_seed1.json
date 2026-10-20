@@ -1,0 +1,14 @@
+{
+ "cls": "grid",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "230.png",
+  "241.png",
+  "194.png",
+  "253.png"
+ ],
+ "n_files": 4,
+ "files_hash": "252f59c25687",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

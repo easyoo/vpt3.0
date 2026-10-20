@@ -1,0 +1,14 @@
+{
+ "cls": "cable",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "151.png",
+  "184.png",
+  "058.png",
+  "205.png"
+ ],
+ "n_files": 4,
+ "files_hash": "778cfaa6ad3a",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

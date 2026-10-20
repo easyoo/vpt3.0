@@ -1,0 +1,14 @@
+{
+ "cls": "toothbrush",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "029.png",
+  "043.png",
+  "014.png",
+  "048.png"
+ ],
+ "n_files": 4,
+ "files_hash": "109a440a4fcf",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

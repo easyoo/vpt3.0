@@ -89,7 +89,7 @@ def main():
     q_raw = F.normalize(bank, dim=-1)
 
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(ds, batch_size=16, shuffle=False, num_workers=4)
 
     stats = {'learn': [], 'raw': []}

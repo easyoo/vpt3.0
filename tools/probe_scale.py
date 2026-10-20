@@ -87,7 +87,7 @@ def main():
 
     tf, gtf = mod.get_data_transforms(448, 392)
     ds = mod.MVTecDataset(root=os.path.join(args.data_path, args.cls),
-                          transform=tf, gt_transform=gtf, phase='test')
+                          transform=tf, gt_transform=gtf, phase='test', sort_items=False)
     dl = torch.utils.data.DataLoader(ds, batch_size=args.batch_size, shuffle=False, num_workers=4)
     gk = mod.get_gaussian_kernel(kernel_size=5, sigma=4).to(device)
     rm = None if args.protocol == 392 else args.protocol

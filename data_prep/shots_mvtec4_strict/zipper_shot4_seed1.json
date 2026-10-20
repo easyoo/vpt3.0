@@ -1,0 +1,14 @@
+{
+ "cls": "zipper",
+ "shots": 4,
+ "seed": 1,
+ "picks": [
+  "047.png",
+  "164.png",
+  "025.png",
+  "236.png"
+ ],
+ "n_files": 4,
+ "files_hash": "7f71d5c91688",
+ "data_path": "/home/jjquan/experiment/visual2/MVTec-AD_strict4"
+}

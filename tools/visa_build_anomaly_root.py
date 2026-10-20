@@ -9,7 +9,7 @@
 # 训练脚本里用的是 os.path.join(args.anomaly_data_root, 'visa')，
 # 所以 --anomaly_data_root 指向 /home/jjquan/experiment/visual2/anomaly_samples_visa_<K>shot 即可。
 #
-# 用法：python visa_build_anomaly_root.py <K>      # K ∈ {1,2,4}
+# 用法：python visa_build_anomaly_root.py <K> [src] [dst_visa_dir]
 import glob
 import os
 import sys
@@ -18,6 +18,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 K = sys.argv[1] if len(sys.argv) > 1 else '1'
 SRC = os.path.join(HERE, 'anostyler_visa', K + 'shot', 'genbyAnoStyler')
 DST = '/home/jjquan/experiment/visual2/anomaly_samples_visa_' + K + 'shot/visa'
+if len(sys.argv) > 2:
+    SRC = sys.argv[2]
+if len(sys.argv) > 3:
+    DST = sys.argv[3]
 NUM_GEN = 35
 
 
