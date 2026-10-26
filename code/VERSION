@@ -1,6 +1,7 @@
-vpt3.0
-# 版本冻结: 2026-10-08
-# = 原版 control 训练配方（35 轮 / 4-shot / --map_only 关闭）
-# + 改善后 mapping 分支（可学习原型 ⊕ 原始特征空间正常 patch 库，1.5× 缩放 + 水平翻转）
-# + 原版 MemoryBank 分支（facebook/dinov2-base 中层双 stage + faiss）
-# + 类内 z 标准化后的加权融合：0.3·z(mapping) + 0.7·z(bank)
+vpt3.9
+训练主干及默认损失配置继承 VPT3.8。
+推理端统一使用 SS-MSF：
+  w_m = clip((1-c) * r, 0, 1)
+  w_b = 1-w_m
+  S = mean(box_9, box_25, box_41) fusion
+不执行测试集统计量归一化。

@@ -1,0 +1,32 @@
+[
+  {
+    "device": "NVIDIA GeForce RTX 3090",
+    "class": "transistor",
+    "shots": 2,
+    "images": 100,
+    "batch_size": 1,
+    "mapping_images_per_s": 14.829248067074158,
+    "bank_images_per_s": 9.68989228229729,
+    "fusion_images_per_s": 961.6189694635025,
+    "end_to_end_images_per_s": 5.824975661405117,
+    "end_to_end_ms_per_image": 171.6745370501303,
+    "mapping_share_pct": 39.280317080530146,
+    "bank_share_pct": 60.11393616879428,
+    "fusion_share_pct": 0.605746750675575
+  },
+  {
+    "device": "NVIDIA GeForce RTX 3090",
+    "class": "transistor",
+    "shots": 2,
+    "images": 100,
+    "batch_size": 4,
+    "mapping_images_per_s": 17.459060358925303,
+    "bank_images_per_s": 10.22312469245818,
+    "fusion_images_per_s": 1459.3849236537994,
+    "end_to_end_images_per_s": 6.419328963927397,
+    "end_to_end_ms_per_image": 155.77952237988939,
+    "mapping_share_pct": 36.767894903609466,
+    "bank_share_pct": 62.792239721609526,
+    "fusion_share_pct": 0.4398653747810138
+  }
+]

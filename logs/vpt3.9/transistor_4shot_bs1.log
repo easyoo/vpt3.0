@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 4208.76it/s]
+{"device": "NVIDIA GeForce RTX 3090", "class": "transistor", "shots": 4, "images": 100, "batch_size": 1, "mapping_images_per_s": 14.791606217214955, "bank_images_per_s": 6.854574430843521, "fusion_images_per_s": 870.2737944661534, "end_to_end_images_per_s": 4.658899788525751, "end_to_end_ms_per_image": 214.6429512098257, "mapping_share_pct": 31.49691602189606, "bank_share_pct": 67.96774672928058, "fusion_share_pct": 0.535337248823358}

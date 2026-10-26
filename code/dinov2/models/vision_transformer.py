@@ -53,9 +53,13 @@ class LearnableTokens(nn.Module):
                     learnable_token_per_layer = 8,
                     init_std = 1e-6):
         super().__init__()
+        layer_ids = list(range(int(layers))) if isinstance(layers, int) else [int(x) for x in layers]
+        if len(layer_ids) != len(set(layer_ids)):
+            raise ValueError(f'learnable layer list contains duplicates: {layer_ids}')
+        self.layer_ids = tuple(layer_ids)
         self.token_dict = nn.ParameterDict({
             str(i): nn.Parameter(torch.randn(1,learnable_token_per_layer, dim))
-            for i in range(layers)})
+            for i in layer_ids})
         # [vpt4.0 · M1] 原实现 std=1e-6 → 32 个可学习 token 初始几乎完全相同（实测训练后两两余弦仍 0.87，
         # 参与比有效秩仅 2~3/32，即"32 个原型实际只有 2~3 个自由度"）。
         # 这里改成与 ViT patch embedding 同量级的初始化（截断正态 std=0.02），
@@ -116,6 +120,99 @@ class TokenMapping(nn.Module):
         if self.metric is not None:
             out = out @ self.metric
         return out
+
+
+class PatchFeatureAggregator(nn.Module):
+    """跨层 patch 聚合器。
+
+    residual=True：base 为现有 VPT3.8 多层 sum，MLP 学习零初始化修正。
+    residual=False：严格使用逐层 LayerNorm → concat → MLP 的输出。
+    """
+    def __init__(self, dim, num_layers, hidden=128, residual=True):
+        super().__init__()
+        self.residual = bool(residual)
+        self.norms = nn.ModuleList([nn.LayerNorm(dim) for _ in range(num_layers)])
+        self.mlp = nn.Sequential(
+            nn.Linear(dim * num_layers, hidden),
+            nn.GELU(),
+            nn.Linear(hidden, dim),
+        )
+        if self.residual:
+            nn.init.zeros_(self.mlp[-1].weight)
+            nn.init.zeros_(self.mlp[-1].bias)
+
+    def forward(self, feats, base):
+        h = torch.cat([norm(x) for norm, x in zip(self.norms, feats)], dim=-1)
+        out = self.mlp(h)
+        return base + out if self.residual else out
+
+
+class ZeroResidual(nn.Module):
+    """低秩、零初始化的残差分支；初始时输出严格为零。"""
+    def __init__(self, dim, hidden=64, context_dim=0):
+        super().__init__()
+        self.context_dim = int(context_dim)
+        if self.context_dim > 0:
+            self.context_proj = nn.Sequential(
+                nn.LayerNorm(self.context_dim),
+                nn.Linear(self.context_dim, dim),
+                nn.GELU(),
+            )
+            in_dim = 2 * dim
+        else:
+            self.context_proj = None
+            in_dim = dim
+        self.net = nn.Sequential(
+            nn.LayerNorm(in_dim),
+            nn.Linear(in_dim, int(hidden)),
+            nn.GELU(),
+            nn.Linear(int(hidden), dim),
+        )
+        nn.init.zeros_(self.net[-1].weight)
+        nn.init.zeros_(self.net[-1].bias)
+
+    def forward(self, x, context=None):
+        h = x
+        if self.context_proj is not None:
+            if context is None:
+                raise ValueError('support-conditioned residual 缺少 context')
+            c = self.context_proj(context).unsqueeze(1).expand(-1, x.shape[1], -1)
+            h = torch.cat([h, c], dim=-1)
+        return self.net(h)
+
+
+class PrototypeRefiner(nn.Module):
+    """用深层 patch 上下文对早期原型做零初始化 cross-attention 精炼。"""
+    def __init__(self, dim=768, proj_dim=128, num_heads=2, scale=1.0):
+        super().__init__()
+        if proj_dim % num_heads:
+            raise ValueError('prototype_refiner_dim 必须能被 heads 整除')
+        self.num_heads = int(num_heads)
+        self.head_dim = int(proj_dim) // int(num_heads)
+        self.q_norm = nn.LayerNorm(dim)
+        self.f_norm = nn.LayerNorm(dim)
+        self.q_proj = nn.Linear(dim, proj_dim)
+        self.kv_proj = nn.Linear(dim, 2 * proj_dim)
+        self.out_proj = nn.Linear(proj_dim, dim)
+        self.gate = nn.Linear(dim, 1)
+        self.scale = float(scale)
+        nn.init.zeros_(self.out_proj.weight)
+        nn.init.zeros_(self.out_proj.bias)
+
+    def forward(self, prototypes, patch_features):
+        b, k, _ = prototypes.shape
+        n = patch_features.shape[1]
+        q = self.q_proj(self.q_norm(prototypes)).reshape(
+            b, k, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+        kv = self.kv_proj(self.f_norm(patch_features))
+        kf, vf = kv.chunk(2, dim=-1)
+        kf = kf.reshape(b, n, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+        vf = vf.reshape(b, n, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+        attn = torch.softmax(
+            torch.matmul(q, kf.transpose(-2, -1)) / (self.head_dim ** 0.5), dim=-1)
+        out = torch.matmul(attn, vf).permute(0, 2, 1, 3).reshape(b, k, -1)
+        gate = torch.sigmoid(self.gate(self.q_norm(prototypes)))
+        return prototypes + self.scale * gate * self.out_proj(out)
 
 
 
@@ -312,6 +409,12 @@ class DinoVisionTransformer(nn.Module):
         
         #############
         learnable_layers = 4 if arg is None else arg.learnable_layers
+        _insert_layers = getattr(arg, 'learnable_insert_layers', '') if arg is not None else ''
+        if _insert_layers:
+            learnable_layers = [int(x) for x in str(_insert_layers).split(',') if x.strip()]
+            if any(x < 0 or x >= depth for x in learnable_layers):
+                raise ValueError(f'learnable_insert_layers={learnable_layers} 超出 blocks 范围 [0,{depth})')
+        self.learnable_insert_layers = tuple(learnable_layers) if not isinstance(learnable_layers, int) else ()
         # self.mlp_per_layer = nn.ModuleDict({
         #     str(i): MLp(embed_dim, embed_dim)
         #     for i in range(learnable_layers)
@@ -323,6 +426,39 @@ class DinoVisionTransformer(nn.Module):
                                                 dim=embed_dim,
                                                 learnable_token_per_layer=arg.learnable_num_per_layer,
                                                 init_std=_tok_std)
+        _dedicated_global = int(getattr(arg, 'dedicated_global_anchors', 0))
+        if _dedicated_global > 0:
+            self.dedicated_global_anchors = nn.Parameter(
+                torch.empty(1, _dedicated_global, embed_dim))
+            # 不推进后续模块的随机数流，保证它与 VPT3.8 的 token_mapping
+            # 初始化在相同 seed 下保持一致。
+            with torch.random.fork_rng():
+                nn.init.normal_(self.dedicated_global_anchors, std=float(_tok_std))
+        else:
+            self.dedicated_global_anchors = None
+        self.prompt_anchor_coupled = (
+            bool(getattr(arg, 'prompt_anchor_coupled', 0)) if arg is not None else False)
+        if self.prompt_anchor_coupled:
+            self.pacm_hidden = int(getattr(arg, 'pacm_hidden', 64))
+            self.pacm_max_rel = float(getattr(arg, 'pacm_max_rel', 0.0))
+            self.pacm_shot = max(1, int(getattr(arg, 'shot', 1)))
+            self.pacm_support_conditioned = bool(
+                getattr(arg, 'pacm_support_conditioned', 0))
+            _ctx_dim = 4 * embed_dim + 1 if self.pacm_support_conditioned else 0
+            self.support_context = None
+            # 不改变 token_mapping 等后续模块在固定 seed 下的初始化随机流。
+            with torch.random.fork_rng():
+                self.prompt_residual = ZeroResidual(
+                    embed_dim, self.pacm_hidden, context_dim=_ctx_dim)
+                self.anchor_residual = ZeroResidual(
+                    embed_dim, self.pacm_hidden, context_dim=_ctx_dim)
+        else:
+            self.prompt_residual = None
+            self.anchor_residual = None
+            self.pacm_max_rel = 0.0
+            self.pacm_shot = 1
+            self.pacm_support_conditioned = False
+            self.support_context = None
         # self.token_mapping = nn.Sequential(
         #     nn.LayerNorm(768),
         #     nn.Linear(768, 768),
@@ -335,6 +471,72 @@ class DinoVisionTransformer(nn.Module):
         _res_map = bool(getattr(arg, 'res_mapping', 1)) if arg is not None else True
         _metric = bool(getattr(arg, 'metric_head', 1)) if arg is not None else True
         self.token_mapping = TokenMapping(dim=embed_dim, hidden=128, residual=_res_map, metric=_metric)
+        # [MULTI-MAPPING] 显式多层模式：每个插入层使用独立的同结构 TokenMapping。
+        # 第一个层继续复用 token_mapping 属性以兼容旧逻辑，其余层放入 ModuleDict。
+        self.token_mappings = nn.ModuleDict()
+        if not isinstance(learnable_layers, int):
+            for _layer in list(learnable_layers)[1:]:
+                self.token_mappings[str(int(_layer))] = TokenMapping(
+                    dim=embed_dim, hidden=128, residual=_res_map, metric=_metric)
+        _agg_layers = getattr(arg, 'patch_aggregator_layers', '') if arg is not None else ''
+        self.patch_aggregator_layers = tuple(
+            int(x) for x in str(_agg_layers).split(',') if x.strip())
+        if self.patch_aggregator_layers:
+            if any(x < 0 or x >= depth for x in self.patch_aggregator_layers):
+                raise ValueError(
+                    f'patch_aggregator_layers={self.patch_aggregator_layers} '
+                    f'超出 blocks 范围 [0,{depth})')
+            self.patch_aggregator = PatchFeatureAggregator(
+                embed_dim, len(self.patch_aggregator_layers),
+                hidden=int(getattr(arg, 'patch_aggregator_hidden', 128)),
+                residual=bool(getattr(arg, 'patch_aggregator_residual', 1)))
+        else:
+            self.patch_aggregator = None
+        if bool(getattr(arg, 'prototype_refiner', 0)) if arg is not None else False:
+            self.prototype_refiner = PrototypeRefiner(
+                dim=embed_dim,
+                proj_dim=int(getattr(arg, 'prototype_refiner_dim', 128)),
+                num_heads=int(getattr(arg, 'prototype_refiner_heads', 2)),
+                scale=float(getattr(arg, 'prototype_refiner_scale', 1.0)))
+        else:
+            self.prototype_refiner = None
+        self.use_external_proto_attn = (
+            bool(getattr(arg, 'external_proto_attn', 0)) if arg is not None else False)
+        _ext_layers = str(getattr(
+            arg, 'external_proto_layers', '1,2,3,4,6,8,11')) if arg is not None else ''
+        self.external_proto_layers = tuple(
+            int(x) for x in _ext_layers.split(',') if x.strip())
+        if self.use_external_proto_attn:
+            if not self.external_proto_layers:
+                raise ValueError('external_proto_layers 不能为空')
+            if any(x < 0 or x >= depth for x in self.external_proto_layers):
+                raise ValueError(
+                    f'external_proto_layers={self.external_proto_layers} '
+                    f'超出 blocks 范围 [0,{depth})')
+            self.external_proto_aggregator = PrototypeRefiner(
+                dim=embed_dim,
+                proj_dim=int(getattr(arg, 'external_proto_dim', 128)),
+                num_heads=int(getattr(arg, 'external_proto_heads', 2)),
+                scale=float(getattr(arg, 'external_proto_scale', 1.0)))
+            if bool(getattr(arg, 'external_patch_update', 0)):
+                self.external_patch_coupler = PrototypeRefiner(
+                    dim=embed_dim,
+                    proj_dim=int(getattr(arg, 'external_proto_dim', 128)),
+                    num_heads=int(getattr(arg, 'external_proto_heads', 2)),
+                    scale=float(getattr(arg, 'external_patch_scale', 1.0)))
+            else:
+                self.external_patch_coupler = None
+            self.external_rounds = max(
+                1, int(getattr(arg, 'external_rounds', 1)))
+        else:
+            self.external_proto_aggregator = None
+            self.external_patch_coupler = None
+            self.external_rounds = 1
+        self.dedup_local_proto = (
+            bool(getattr(arg, 'dedup_local_proto', 0)) if arg is not None else False)
+        # 仅供机制诊断：保持权重和 token_mapping 不变，关闭可学习 token 插入，
+        # 用于分离“patch 调制”与“上下文原型”对异常分数的贡献。
+        self.diagnostic_skip_insertion = False
         
         # self.p2l = nn.Identity()
         # self.rec_head = ReconstructHead(embed_dim, embed_dim)
@@ -345,6 +547,51 @@ class DinoVisionTransformer(nn.Module):
         if self.register_tokens is not None:
             nn.init.normal_(self.register_tokens, std=1e-6)
         named_apply(init_weights_vit_timm, self)
+
+    def get_token_mapping(self, layer):
+        """返回指定插入层对应的 mapping；单层/默认模式始终返回历史 token_mapping。"""
+        if not self.learnable_insert_layers:
+            return self.token_mapping
+        if int(layer) == int(self.learnable_insert_layers[0]):
+            return self.token_mapping
+        return self.token_mappings[str(int(layer))]
+
+    def get_global_prototype(self):
+        """全局锚点与显式插入层保持一致；默认行为仍使用 token_dict['0']。"""
+        if self.dedicated_global_anchors is not None:
+            return self.dedicated_global_anchors
+        key = str(int(self.learnable_insert_layers[0])) if self.learnable_insert_layers else '0'
+        base = self.tokens_per_layer.token_dict[key]
+        if self.anchor_residual is not None:
+            base = base + self._bounded_pacm_residual(self.anchor_residual, base)
+        return base
+
+    def _bounded_pacm_residual(self, module, base):
+        delta = module(base, self.support_context)
+        if self.pacm_max_rel <= 0:
+            return delta
+        # shot 越多，允许的相对修正越小，避免固定 35 epoch 下优化步数增加
+        # 导致残差淹没共享基向量。
+        rho = self.pacm_max_rel / math.sqrt(float(self.pacm_shot))
+        max_norm = rho * base.norm(dim=-1, keepdim=True).clamp_min(1e-6)
+        factor = (max_norm / (delta.norm(dim=-1, keepdim=True) + 1e-8)).clamp(max=1.0)
+        return delta * factor
+
+    def set_support_context(self, context):
+        self.support_context = None if context is None else context.detach()
+
+    def aggregate_patch_features(self, patch_feat_layer, base_layers):
+        """按 VPT3.8 原 sum 得到 base，可选叠加零初始化跨层残差聚合器。"""
+        base = torch.sum(torch.stack([patch_feat_layer[j] for j in base_layers], 0), 0)
+        if self.patch_aggregator is None:
+            return base
+        feats = [patch_feat_layer[j] for j in self.patch_aggregator_layers]
+        return self.patch_aggregator(feats, base)
+
+    def refine_prototypes(self, prototypes, patch_features):
+        if self.prototype_refiner is None:
+            return prototypes
+        return self.prototype_refiner(prototypes, patch_features)
 
     def interpolate_pos_encoding(self, x, w, h):
         previous_dtype = x.dtype
@@ -427,10 +674,16 @@ class DinoVisionTransformer(nn.Module):
 
         x = self.prepare_tokens_with_masks(x, masks)
         b,l,c = x.shape
+        selected_layers = set(self.learnable_insert_layers)
         # [CONTROL] 这里刻意保留原项目的行为：循环外先追加一次 token_dict[str(0)]，
         # 循环体内 i=0 时再追加一次（即 layer-0 可学习 token 被追加两遍，
         # feat_list[0]=64 且前后 32 个逐元素相同）。用于和审计副本做 A/B。
-        x=torch.cat((x,self.tokens_per_layer.token_dict[str(0)].expand(x.shape[0], -1, -1)), dim=1)
+        if not self.diagnostic_skip_insertion and not self.use_external_proto_attn and (
+                not selected_layers or 0 in selected_layers):
+            tok0 = self.tokens_per_layer.token_dict[str(0)]
+            if self.prompt_residual is not None:
+                tok0 = tok0 + self._bounded_pacm_residual(self.prompt_residual, tok0)
+            x = torch.cat((x, tok0.expand(x.shape[0], -1, -1)), dim=1)
         feat_list,patch_feat_layer = [],[]
         for i,blk in enumerate(self.blocks):
             # if i==0:
@@ -450,7 +703,35 @@ class DinoVisionTransformer(nn.Module):
             #     x = blk(x)
            
             # 输出后即丢弃
-            if i < len(self.tokens_per_layer.token_dict.keys()):
+            if self.diagnostic_skip_insertion:
+                x = blk(x)
+                patch_feat_layer.append(x[:, 5:l, :])
+            elif self.use_external_proto_attn:
+                x = blk(x)
+                patch_feat_layer.append(x[:, 5:l, :])
+            elif selected_layers:
+                if i in selected_layers:
+                    tok = self.tokens_per_layer.token_dict[str(i)]
+                    if self.prompt_residual is not None:
+                        tok = tok + self._bounded_pacm_residual(self.prompt_residual, tok)
+                    # 显式多层模式。历史行为：layer 0 在循环外已插入一次，
+                    # 循环内再补一次（32→64）；其他选中层补两次。
+                    # dedup_local_proto=1 时每层只保留一份 32-token 原型。
+                    if self.dedup_local_proto:
+                        n_add = 0 if i == 0 else 1
+                    else:
+                        n_add = 1 if i == 0 else 2
+                    for _ in range(n_add):
+                        x = torch.cat((x, tok.expand(x.shape[0], -1, -1)), dim=1)
+                    x = blk(x)
+                    length = x.shape[1]-l
+                    feat_list.append(x[:,-length:,:]) # b len c
+                    patch_feat_layer.append(x[:,5:l,:])
+                    x = x[:,:l,:] # b l c
+                else:
+                    x = blk(x)
+                    patch_feat_layer.append(x[:,5:l,:])
+            elif i < len(self.tokens_per_layer.token_dict.keys()):
                 x = torch.cat((x,self.tokens_per_layer.token_dict[str(i)].expand(x.shape[0], -1, -1)), dim=1) 
                 x = blk(x)
                 length = x.shape[1]-l
@@ -474,6 +755,30 @@ class DinoVisionTransformer(nn.Module):
             #     patch_feat_layer.append(x[:,5:l,:])
 
    
+        if self.use_external_proto_attn:
+            base = torch.sum(torch.stack(
+                [patch_feat_layer[j] for j in self.external_proto_layers], 0), 0)
+            if self.patch_aggregator is not None:
+                base = self.patch_aggregator(
+                    [patch_feat_layer[j] for j in self.patch_aggregator_layers], base)
+            key = str(int(self.learnable_insert_layers[0])) if self.learnable_insert_layers else '0'
+            query = self.tokens_per_layer.token_dict[key].expand(x.shape[0], -1, -1)
+            external_patch_feature = base
+            local_proto = query
+            for _ in range(self.external_rounds):
+                local_proto = self.external_proto_aggregator(
+                    query, external_patch_feature)
+                if self.external_patch_coupler is not None:
+                    proto_context = torch.cat([local_proto, query], dim=1)
+                    external_patch_feature = self.external_patch_coupler(
+                        external_patch_feature, proto_context)
+            # 最后一轮 patch 更新后重新聚合，保证 patch/prototype 同空间。
+            local_proto = self.external_proto_aggregator(
+                query, external_patch_feature)
+            feat_list = [local_proto]
+        else:
+            external_patch_feature = None
+
         x_norm = self.norm(x)
         return {
             "x_norm_clstoken": x_norm[:, 0],
@@ -484,6 +789,7 @@ class DinoVisionTransformer(nn.Module):
 
             "patch_feat_layer": patch_feat_layer,
             "feat_list": feat_list,
+            "external_patch_feature": external_patch_feature,
         }
 
     def _get_intermediate_layers_not_chunked(self, x, n=1):

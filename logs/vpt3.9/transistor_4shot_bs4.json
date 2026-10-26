@@ -1,0 +1,17 @@
+[
+  {
+    "device": "NVIDIA GeForce RTX 3090",
+    "class": "transistor",
+    "shots": 4,
+    "images": 100,
+    "batch_size": 4,
+    "mapping_images_per_s": 17.43072255666098,
+    "bank_images_per_s": 7.294842017107786,
+    "fusion_images_per_s": 1370.8845849168165,
+    "end_to_end_images_per_s": 5.123407912954914,
+    "end_to_end_ms_per_image": 195.18258491021697,
+    "mapping_share_pct": 29.3929749400839,
+    "bank_share_pct": 70.23329499034458,
+    "fusion_share_pct": 0.3737300695715238
+  }
+]

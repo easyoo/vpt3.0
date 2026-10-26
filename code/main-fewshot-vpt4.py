@@ -732,7 +732,7 @@ def build_raw_bank(model, imgs, fused_layer, k=0, chunk=8):
     feats = []
     for i in range(0, imgs.shape[0], chunk):
         ret = model(imgs[i:i + chunk].to(next(model.parameters()).device), is_training=True)
-        fp = torch.sum(torch.stack([ret['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+        fp = aggregate_patch_features(model, ret['patch_feat_layer'], fused_layer)
         feats.append(F.normalize(fp, dim=-1).reshape(-1, fp.shape[-1]))
     bank = torch.cat(feats, 0)
     if k and k < bank.shape[0]:
@@ -744,6 +744,59 @@ def build_raw_bank(model, imgs, fused_layer, k=0, chunk=8):
 def _pow_geo(local, glob, a):
     e = 1e-6
     return local.clamp_min(e).pow(a) * glob.clamp_min(e).pow(1.0 - a)
+
+
+def aggregate_patch_features(model, patch_feat_layer, base_layers):
+    """训练/推理统一的 patch 层聚合入口。"""
+    if hasattr(model, 'aggregate_patch_features'):
+        return model.aggregate_patch_features(patch_feat_layer, base_layers)
+    return torch.sum(torch.stack([patch_feat_layer[j] for j in base_layers], 0), 0)
+
+
+def global_prototype_tensor(model):
+    if hasattr(model, 'get_global_prototype'):
+        return model.get_global_prototype()
+    return model.tokens_per_layer.token_dict['0']
+
+
+def refine_prototypes(model, prototypes, patch_features, freeze_anchors=0):
+    if hasattr(model, 'refine_prototypes'):
+        freeze_anchors = int(freeze_anchors)
+        if freeze_anchors > 0:
+            if freeze_anchors >= prototypes.shape[1]:
+                raise ValueError('freeze_anchors 必须小于原型总数')
+            n_local = prototypes.shape[1] - freeze_anchors
+            local = model.refine_prototypes(prototypes[:, :n_local], patch_features)
+            return torch.cat([local, prototypes[:, n_local:]], dim=1)
+        return model.refine_prototypes(prototypes, patch_features)
+    return prototypes
+
+
+def build_support_context(model, imgs, device, chunk=4):
+    """用冻结骨干的 shot CLS/patch 统计构造 PACM 条件向量。"""
+    if not getattr(model, 'pacm_support_conditioned', False):
+        return None
+    old_skip = bool(getattr(model, 'diagnostic_skip_insertion', False))
+    model.diagnostic_skip_insertion = True
+    cls_chunks, patch_chunks = [], []
+    try:
+        with torch.no_grad():
+            for i in range(0, imgs.shape[0], max(1, int(chunk))):
+                out = model(imgs[i:i + chunk].to(device), is_training=True)
+                cls_chunks.append(out['x_norm_clstoken'].float().cpu())
+                patch_chunks.append(out['x_norm_patchtokens'].float().mean(1).cpu())
+        cls = torch.cat(cls_chunks, 0)
+        patch = torch.cat(patch_chunks, 0)
+        mean_cls = cls.mean(0, keepdim=True)
+        std_cls = cls.std(0, unbiased=False, keepdim=True)
+        mean_patch = patch.mean(0, keepdim=True)
+        std_patch = patch.std(0, unbiased=False, keepdim=True)
+        log_k = torch.tensor(
+            [[math.log(float(imgs.shape[0]))]], dtype=mean_cls.dtype)
+        return torch.cat(
+            [mean_cls, std_cls, mean_patch, std_patch, log_k], dim=-1).to(device)
+    finally:
+        model.diagnostic_skip_insertion = old_skip
 
 
 def compute_fused_map(model, img, bank, fused_layer, scales=(1.5,), tta_flip=False, w_learn=0.6,
@@ -772,6 +825,7 @@ def compute_fused_map(model, img, bank, fused_layer, scales=(1.5,), tta_flip=Fal
 
     def _map28(patch_feat, proto_feat):
         p = F.normalize(model.token_mapping(patch_feat), dim=-1)
+        proto_feat = refine_prototypes(model, proto_feat, patch_feat)
         q = F.normalize(model.token_mapping(proto_feat), dim=-1)
         if _bank_proto is not None:
             q = torch.cat([q, _bank_proto.unsqueeze(0).expand(q.shape[0], -1, -1)], dim=1)
@@ -784,12 +838,15 @@ def compute_fused_map(model, img, bank, fused_layer, scales=(1.5,), tta_flip=Fal
         v_img = img if s == 1.0 else F.interpolate(img, scale_factor=s, mode='bilinear', align_corners=False)
         for vi, view in enumerate([v_img, v_img.flip(3)] if tta_flip else [v_img]):
             ret = model(view, is_training=True)
-            fp = torch.sum(torch.stack([ret['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+            fp = aggregate_patch_features(model, ret['patch_feat_layer'], fused_layer)
+            fp_learn = (
+                ret['external_patch_feature']
+                if ret.get('external_patch_feature') is not None else fp)
             flr = torch.cat(ret['feat_list'], dim=1)   # [MULTI-LAYER] 各层 token 数可不同 → 拼接（layers=1 时与 sum 等价）
             if getattr(args, 'global_proto', 0):     # [M4] 评估端与训练端保持同一套原型集
-                _g = model.tokens_per_layer.token_dict['0'].expand(flr.shape[0], -1, -1)
+                _g = global_prototype_tensor(model).expand(flr.shape[0], -1, -1)
                 flr = torch.cat([flr, _g], dim=1)
-            m_learn = _map28(fp, flr)
+            m_learn = _map28(fp_learn, flr)
             p_raw = F.normalize(fp, dim=-1)
             # [FIX-2] raw 侧改为生产口径：d1^a · q^(1-a)（q=到库距离的 raw_global 分位）
             d_all = (1.0 - torch.bmm(p_raw, q_raw.T.unsqueeze(0)
@@ -1137,6 +1194,12 @@ class ScaledPatchCosineLoss3(nn.Module):
         # [PUSH-REF] 难负例的参照原型：'global' = 原实现（正常图 batch 平均，脱离推理）；
         #            'self'   = 异常图自己的原型（与推理端 eval_score_v3 的"每图自参照"一致）
         self.push_ref = str(getattr(args, 'push_ref', 'global'))
+        self.w_pos = float(getattr(args, 'w_pos', 0.5))
+        self.w_mse = float(getattr(args, 'w_mse', 1.0))
+        self.pos_norm_per_image = bool(
+            getattr(args, 'pos_norm_per_image', 0))
+        self.pos_match_mode = str(
+            getattr(args, 'pos_match_mode', 'soft'))
 
     def forward(self, x, y, neg=None, mask=None, neg_proto=None):
         """
@@ -1155,20 +1218,35 @@ class ScaledPatchCosineLoss3(nn.Module):
         # 计算相似度 [B, N, K]
         cosine_sim = torch.einsum('bnd,bkd->bnk', x_normalized, y_normalized)
 
-        # Softmax 加权融合原型
-        weights = F.softmax(cosine_sim / self.temperature, dim=-1)
-        soft_tokens = torch.einsum('bnk,bkd->bnd', weights, y)
+        if self.pos_match_mode == 'nearest':
+            # [TRAIN-INFER-ALIGN] 推理使用 min_k distance，正样本训练也使用
+            # 单个最近原型，而不是多个原型的 softmax 平均。
+            _idx = cosine_sim.argmax(dim=-1, keepdim=True)
+            matched_tokens = torch.gather(
+                y, 1, _idx.expand(-1, -1, y.shape[-1]))
+        elif self.pos_match_mode == 'soft':
+            # 原实现：Softmax 加权融合原型
+            weights = F.softmax(cosine_sim / self.temperature, dim=-1)
+            matched_tokens = torch.einsum('bnk,bkd->bnd', weights, y)
+        else:
+            raise ValueError(f'unknown pos_match_mode={self.pos_match_mode}')
 
         # MSE Loss
-        loss_mse = F.mse_loss(soft_tokens, x)
+        loss_mse = F.mse_loss(matched_tokens, x)
 
         # Scaled Cosine Distance Loss
-        cosine_sim_selected = F.cosine_similarity(x, soft_tokens, dim=-1) # [B, N]
+        cosine_sim_selected = F.cosine_similarity(x, matched_tokens, dim=-1) # [B, N]
         cosine_dist = 1 - cosine_sim_selected
 
         # 动态缩放因子 (你的核心逻辑)
         dis = cosine_dist.detach()
-        dis_mean = dis.mean() + 1e-6
+        # [STABLE-POS] 原实现用整个 batch 的平均距离做缩放。训练样本数量、
+        # 类别组成或 batch 内难 patch 比例变化时，同一个 patch 的有效权重会
+        # 随 batch 漂移。per-image 模式只使用当前图自身的均值，消除这种耦合。
+        if self.pos_norm_per_image:
+            dis_mean = dis.mean(dim=1, keepdim=True) + 1e-6
+        else:
+            dis_mean = dis.mean() + 1e-6
 
         # 增加数值稳定性保护
         ratio = dis / dis_mean
@@ -1177,10 +1255,12 @@ class ScaledPatchCosineLoss3(nn.Module):
         scaled_factor = ratio ** self.scaled_factor
         loss_pos = (scaled_factor * cosine_dist).mean()
 
-        total_loss = 0.5 * loss_pos + 1.0 * loss_mse
+        total_loss = self.w_pos * loss_pos + self.w_mse * loss_mse
         loss_dict = {
             "pos_cos": loss_pos.item(),
-            "pos_mse": loss_mse.item()
+            "pos_mse": loss_mse.item(),
+            "pos_cos_weighted": (self.w_pos * loss_pos).item(),
+            "pos_mse_weighted": (self.w_mse * loss_mse).item(),
         }
 
         # === Part 2: 负样本损失 (Top-K 优化版) ===
@@ -1449,6 +1529,13 @@ class FocalDiceLoss(nn.Module):
 import argparse
 import torch.nn as nn
 from tqdm import tqdm
+
+
+class _AnchorParam(nn.Module):
+    """把一个独立 Parameter 包装成可加入 ModuleList 的模块。"""
+    def __init__(self, parameter):
+        super().__init__()
+        self.weight = parameter
 from datetime import datetime
 from util.dataset import *
 from util.memorybank import MemoryBank
@@ -1475,6 +1562,10 @@ if __name__ == '__main__':
     
     # model info
     parser.add_argument('--learnable_layers',type=int, default=1)
+    parser.add_argument('--learnable_insert_layers', type=str, default='',
+                        help='[DINOv2 主干] 逗号分隔的 0-based block 层号；非空时覆盖 --learnable_layers')
+    parser.add_argument('--learnable_insert_layer', type=int, default=0,
+                        help='[DINOv3 主干] 可学习原型 token 插入的 0-based block 层号')
     parser.add_argument('--learnable_num_per_layer',type=int, default=32)
 
     parser.add_argument('--fused_layer',type=list,default=[1,2,3,4,6,8,11])
@@ -1484,6 +1575,50 @@ if __name__ == '__main__':
                         help="[主干实验] 'base'=DINOv2 ViT-B/14（默认）；'large'=DINOv2 ViT-L/14")
     parser.add_argument('--fused_layer_csv', type=str, default='',
                         help='[主干实验] 覆盖 --fused_layer，例如 "2,4,6,8,12,16,22"（ViT-L）')
+    parser.add_argument('--patch_aggregator_layers', type=str, default='',
+                        help='[多层 patch 聚合] 零初始化残差 MLP 的输入层，如 "0,6,11"')
+    parser.add_argument('--patch_aggregator_hidden', type=int, default=128,
+                        help='[多层 patch 聚合] 残差 MLP 瓶颈维度')
+    parser.add_argument('--patch_aggregator_residual', type=int, default=1,
+                        help='[多层 patch 聚合] 1=保留 F_base 的残差聚合；0=直接用 MLP 输出')
+    parser.add_argument('--prototype_refiner', type=int, default=0,
+                        help='[原型精炼] 1=用深层 patch cross-attention 零初始化精炼 block0 原型')
+    parser.add_argument('--prototype_refiner_dim', type=int, default=128)
+    parser.add_argument('--prototype_refiner_heads', type=int, default=2)
+    parser.add_argument('--prototype_refiner_scale', type=float, default=1.0)
+    parser.add_argument('--prototype_refiner_freeze_global', type=int, default=0,
+                        help='1=只精炼图像条件原型，保持末尾全局锚点不变（缓解单图过拟合）')
+    parser.add_argument('--external_proto_attn', type=int, default=0,
+                        help='1=不向 ViT 插入 token，改由可学习 query 在外部注意力聚合 patch 信息')
+    parser.add_argument('--external_proto_layers', type=str, default='1,2,3,4,6,8,11')
+    parser.add_argument('--external_proto_dim', type=int, default=128)
+    parser.add_argument('--external_proto_heads', type=int, default=2)
+    parser.add_argument('--external_proto_scale', type=float, default=1.0)
+    parser.add_argument('--external_patch_update', type=int, default=0,
+                        help='1=外部原型通过零初始化 cross-attention 校准 patch 特征')
+    parser.add_argument('--external_patch_scale', type=float, default=1.0)
+    parser.add_argument('--external_rounds', type=int, default=1,
+                        help='外部 prototype/patch 交替注意力轮数')
+    parser.add_argument('--dedup_local_proto', type=int, default=0,
+                        help='1=每层只保留一份局部原型，移除 block-0 的历史重复副本')
+    parser.add_argument('--dedicated_global_anchors', type=int, default=0,
+                        help='>0=使用独立的全局锚点参数，不再与插入 token 共享')
+    parser.add_argument('--prompt_anchor_coupled', type=int, default=0,
+                        help='1=PACM：prompt/anchor 共享基向量并使用零初始化双残差')
+    parser.add_argument('--pacm_hidden', type=int, default=64)
+    parser.add_argument('--pacm_max_rel', type=float, default=0.0,
+                        help='PACM 残差相对基向量的最大范数；>0 时使用 max_rel/sqrt(shot)')
+    parser.add_argument('--pacm_support_conditioned', type=int, default=0,
+                        help='1=用 K shot 的 CLS/patch 统计条件化 PACM 双残差')
+    parser.add_argument('--w_pacm_assign', type=float, default=0.0,
+                        help='PACM 全局锚点平衡分配损失权重')
+    parser.add_argument('--w_pacm_pair', type=float, default=0.0,
+                        help='PACM 局部原型与同编号全局锚点对应损失权重')
+    parser.add_argument('--pacm_temp', type=float, default=0.1)
+    parser.add_argument('--pacm_eps', type=float, default=0.05)
+    parser.add_argument('--pacm_iters', type=int, default=3)
+    parser.add_argument('--w_ref_keep', type=float, default=0.0,
+                        help='[原型精炼] 保持精炼原型靠近原始原型的相对L2正则权重')
     parser.add_argument('--train_class',type=str,default='carpet',choices=['carpet', 'grid', 'leather', 'tile', 'wood', 'bottle', 'cable', 'capsule','hazelnut', 'metal_nut', 'pill', 'screw', 'toothbrush', 'transistor', 'zipper',"candle", "capsules", "cashew",   "chewinggum",  "fryum",  "macaroni1",  "macaroni2",  "pcb1",  "pcb2",  "pcb3","pcb4",  "pipe_fryum"])
 
     parser.add_argument('--temperature',type=float,default=0.07,help='Temperature for the cosine distance loss')
@@ -1533,6 +1668,20 @@ if __name__ == '__main__':
     parser.add_argument('--w_push', type=float, default=1.0,
                         help='[主干实验 · 损失配比] 负推项权重（默认 1.0 = v3.7 原行为）。'
                              '换 DINOv3 主干后该项比 ViT-B 大 30×，可下调以恢复"正样本项/负推项"平衡')
+    parser.add_argument('--w_pos', type=float, default=0.5,
+                        help='[ABLATE] 正样本 scaled cosine loss 权重')
+    parser.add_argument('--w_mse', type=float, default=1.0,
+                        help='[ABLATE] 正样本原型重建 MSE 权重')
+    parser.add_argument('--pos_norm_per_image', type=int, default=0,
+                        help='[STABLE-POS] 1=scaled cosine 的尺度归一化只用当前图，'
+                             '避免 batch 组成造成类别间权重漂移')
+    parser.add_argument('--pos_match_mode', type=str, default='soft',
+                        choices=('soft', 'nearest'),
+                        help='[TRAIN-INFER-ALIGN] soft=原 softmax 混合原型；'
+                             'nearest=与推理最近邻距离一致的单个最近原型')
+    parser.add_argument('--all_anomaly_samples', action='store_true',
+                        help='[BALANCE] 使用每类全部严格合成异常样本；'
+                             '默认 False=沿用每 anomaly type 35 张')
     parser.add_argument('--save_every', type=int, default=1,
                         help='[工程] 每 N 轮存一次权重（默认 1 = 与历史一致）；长轮数训练时降低落盘频率')
     parser.add_argument('--w_cluster', type=float, default=0.0,
@@ -1567,12 +1716,12 @@ if __name__ == '__main__':
     parser.add_argument('--scale_cons_scale', type=float, default=1.5,
                         help='[LOSS-SCALE] 一致性第二视图的放缩倍数（默认 1.5，与推理 1.5× 对齐）')
     parser.add_argument('--w_peak', type=float, default=0.0,
-                        help='[LOSS-PEAK] 分数图峰值/稀疏正则权重（默认 0=关闭）：异常图要求 top-1% '
+                        help='[LOSS-PEAK] 分数图峰值/稀疏正则权重（默认 0=关闭）：异常图要求 top-1%% '
                              '远高于自身中位数、正常图要求两者接近（对准 P-AP/P-F1 的高分段精度）。')
     parser.add_argument('--peak_margin', type=float, default=0.5,
                         help='[LOSS-PEAK] 峰-中位差距的 hinge margin（单位：batch 内分数标准差）')
     parser.add_argument('--peak_top_ratio', type=float, default=0.01,
-                        help='[LOSS-PEAK] 峰值取多少比例的像素（默认 1%，与评估的图像级分数口径一致）')
+                        help='[LOSS-PEAK] 峰值取多少比例的像素（默认 1%%，与评估的图像级分数口径一致）')
     parser.add_argument('--w_ema', type=float, default=0.0,
                         help='[LOSS-EMA] 均值教师(Mean-Teacher)一致性权重（默认 0=关闭）：维护可训练参数的 '
                              'EMA 副本，要求可学习侧分数图与之逐图 z 后一致。用于压低种子方差。')
@@ -1835,7 +1984,8 @@ if __name__ == '__main__':
             transform=data_transform,
             image_suffix='.jpg',
             target_transform=gt_transform,
-            samples_per_anomaly_type=35  # Randomly select 10 samples from each anomaly type
+            samples_per_anomaly_type=(None if args.all_anomaly_samples else 35),
+            shuffle_samples=not args.all_anomaly_samples
         )
         
          # anomaly Draem数据集
@@ -1846,7 +1996,15 @@ if __name__ == '__main__':
         #     target_transform=gt_transform,
         #     samples_per_anomaly_type=35  # Randomly select 10 samples from each anomaly type
         # )
-        abnormal_train_dataloader = torch.utils.data.DataLoader(anomaly_styler_dataset, batch_size=args.batch_size, shuffle=True, num_workers=4, drop_last=True)
+        abnormal_train_dataloader = torch.utils.data.DataLoader(
+            anomaly_styler_dataset,
+            batch_size=args.batch_size,
+            shuffle=True,
+            num_workers=4,
+            drop_last=not args.all_anomaly_samples)
+        print_fn(f'[BALANCE] anomaly samples={len(anomaly_styler_dataset)} '
+                 f'batches/epoch={len(abnormal_train_dataloader)} '
+                 f'all_samples={bool(args.all_anomaly_samples)}')
     
     if args.phase == 'test':
         print(f'Testing :\n--vis_dir:{args.save_name}/{args.vis_dir}\n--test_class:{args.train_class}\n--pth_epoch:{args.pth_epoch}\n\n')
@@ -1908,8 +2066,44 @@ if __name__ == '__main__':
             f"--Running Time:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
             f"--train_class {args.train_class}\n"
             f"--learnable_layers {args.learnable_layers}\n"
+            f"--learnable_insert_layers {args.learnable_insert_layers or '<default>'}\n"
+            f"--learnable_insert_layer {args.learnable_insert_layer}\n"
             f"--learnable_num_per_layer {args.learnable_num_per_layer}\n"
             f"--fused_layer {args.fused_layer}\n"
+            f"--patch_aggregator_layers {args.patch_aggregator_layers or '<off>'}\n"
+            f"--patch_aggregator_residual {args.patch_aggregator_residual}\n"
+            f"--prototype_refiner {args.prototype_refiner}\n"
+            f"--prototype_refiner_scale {args.prototype_refiner_scale}\n"
+            f"--prototype_refiner_freeze_global {args.prototype_refiner_freeze_global}\n"
+            f"--external_proto_attn {args.external_proto_attn}\n"
+            f"--external_proto_layers {args.external_proto_layers}\n"
+            f"--external_proto_dim {args.external_proto_dim}\n"
+            f"--external_proto_heads {args.external_proto_heads}\n"
+            f"--external_proto_scale {args.external_proto_scale}\n"
+            f"--external_patch_update {args.external_patch_update}\n"
+            f"--external_patch_scale {args.external_patch_scale}\n"
+            f"--external_rounds {args.external_rounds}\n"
+            f"--dedup_local_proto {args.dedup_local_proto}\n"
+            f"--dedicated_global_anchors {args.dedicated_global_anchors}\n"
+            f"--prompt_anchor_coupled {args.prompt_anchor_coupled}\n"
+            f"--pacm_hidden {args.pacm_hidden}\n"
+            f"--pacm_max_rel {args.pacm_max_rel}\n"
+            f"--pacm_support_conditioned {args.pacm_support_conditioned}\n"
+            f"--w_pacm_assign {args.w_pacm_assign}\n"
+            f"--w_pacm_pair {args.w_pacm_pair}\n"
+            f"--pacm_temp {args.pacm_temp}\n"
+            f"--pacm_eps {args.pacm_eps}\n"
+            f"--pacm_iters {args.pacm_iters}\n"
+            f"--w_ref_keep {args.w_ref_keep}\n"
+            f"--w_pos {args.w_pos}\n"
+            f"--w_mse {args.w_mse}\n"
+            f"--pos_norm_per_image {args.pos_norm_per_image}\n"
+            f"--pos_match_mode {args.pos_match_mode}\n"
+            f"--all_anomaly_samples {int(bool(args.all_anomaly_samples))}\n"
+            f"--w_push {args.w_push}\n"
+            f"--w_seg 1.0\n"
+            f"--w_div {args.w_div}\n"
+            f"--w_rank {args.w_rank}\n"
             f"--fused_layer_learnable {args.fused_layer_learnable}\n"
             f'--total_epochs {args.total_epochs}\n'
             f'--internal {args.internal}\n'
@@ -1951,6 +2145,12 @@ if __name__ == '__main__':
             state_dict = torch.load(pth, map_location='cpu', weights_only=True)
             model.load_state_dict(state_dict, strict=False)
         model.eval()
+        if args.pacm_support_conditioned:
+            _support_ctx = build_support_context(
+                model, normal_imgs_for_bank, device, chunk=4)
+            model.set_support_context(_support_ctx)
+            print_fn(f'[PACM-support] context={tuple(_support_ctx.shape)} '
+                     f'shots={normal_imgs_for_bank.shape[0]}')
 
         # 先全部冻结再解冻子模块
         for param in model.parameters():
@@ -1958,9 +2158,32 @@ if __name__ == '__main__':
 
         for param in model.tokens_per_layer.parameters():
             param.requires_grad = True
+        if getattr(model, 'dedicated_global_anchors', None) is not None:
+            model.dedicated_global_anchors.requires_grad = True
+        if getattr(model, 'prompt_residual', None) is not None:
+            for param in model.prompt_residual.parameters():
+                param.requires_grad = True
+        if getattr(model, 'anchor_residual', None) is not None:
+            for param in model.anchor_residual.parameters():
+                param.requires_grad = True
 
         for param in model.token_mapping.parameters():
             param.requires_grad = True
+        if getattr(model, 'token_mappings', None) is not None:
+            for param in model.token_mappings.parameters():
+                param.requires_grad = True
+        if getattr(model, 'patch_aggregator', None) is not None:
+            for param in model.patch_aggregator.parameters():
+                param.requires_grad = True
+        if getattr(model, 'prototype_refiner', None) is not None:
+            for param in model.prototype_refiner.parameters():
+                param.requires_grad = True
+        if getattr(model, 'external_proto_aggregator', None) is not None:
+            for param in model.external_proto_aggregator.parameters():
+                param.requires_grad = True
+        if getattr(model, 'external_patch_coupler', None) is not None:
+            for param in model.external_patch_coupler.parameters():
+                param.requires_grad = True
 
         
         fused_layer = args.fused_layer
@@ -1973,7 +2196,25 @@ if __name__ == '__main__':
             nn.Linear(model.embed_dim // 2, 1), # 输出单通道，用于二分类
             nn.Sigmoid() 
         ).to(device)
-        trainable = nn.ModuleList([model.tokens_per_layer,model.token_mapping,segmentation_head])
+        _trainable_modules = [model.tokens_per_layer, model.token_mapping]
+        if getattr(model, 'dedicated_global_anchors', None) is not None:
+            _trainable_modules.append(_AnchorParam(model.dedicated_global_anchors))
+        if getattr(model, 'prompt_residual', None) is not None:
+            _trainable_modules.append(model.prompt_residual)
+        if getattr(model, 'anchor_residual', None) is not None:
+            _trainable_modules.append(model.anchor_residual)
+        if getattr(model, 'token_mappings', None) is not None:
+            _trainable_modules.append(model.token_mappings)
+        if getattr(model, 'patch_aggregator', None) is not None:
+            _trainable_modules.append(model.patch_aggregator)
+        if getattr(model, 'prototype_refiner', None) is not None:
+            _trainable_modules.append(model.prototype_refiner)
+        if getattr(model, 'external_proto_aggregator', None) is not None:
+            _trainable_modules.append(model.external_proto_aggregator)
+        if getattr(model, 'external_patch_coupler', None) is not None:
+            _trainable_modules.append(model.external_patch_coupler)
+        _trainable_modules.append(segmentation_head)
+        trainable = nn.ModuleList(_trainable_modules)
 
         # define optimizer
         optimizer = StableAdamW([{'params': trainable.parameters()}],
@@ -2019,7 +2260,7 @@ if __name__ == '__main__':
                 _shots = torch.stack([data_transform(Image.open(os.path.join(_root, _f)).convert('RGB'))
                                       for _f in _picks], 0)
                 _ret = model(_shots.to(device), is_training=True)
-                _fp = torch.sum(torch.stack([_ret['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                _fp = aggregate_patch_features(model, _ret['patch_feat_layer'], fused_layer)
                 _teacher_bank = F.normalize(_fp, dim=-1).reshape(-1, _fp.shape[-1])   # [K*N, D]
                 _M = _teacher_bank.shape[0]
                 _g = torch.Generator().manual_seed(int(getattr(args, 'distill_sub_seed', 1234)))
@@ -2059,6 +2300,20 @@ if __name__ == '__main__':
             else:
                 _w_rank_eff = args.w_rank
             model.token_mapping.train()
+            if getattr(model, 'token_mappings', None) is not None:
+                model.token_mappings.train()
+            if getattr(model, 'patch_aggregator', None) is not None:
+                model.patch_aggregator.train()
+            if getattr(model, 'prototype_refiner', None) is not None:
+                model.prototype_refiner.train()
+            if getattr(model, 'external_proto_aggregator', None) is not None:
+                model.external_proto_aggregator.train()
+            if getattr(model, 'external_patch_coupler', None) is not None:
+                model.external_patch_coupler.train()
+            if getattr(model, 'prompt_residual', None) is not None:
+                model.prompt_residual.train()
+            if getattr(model, 'anchor_residual', None) is not None:
+                model.anchor_residual.train()
             loss_list = []
             loss_cos_list = []
             loss_mse_list = []
@@ -2078,8 +2333,14 @@ if __name__ == '__main__':
                ret = model(target_imgs,is_training=True)
                patch_feat_layer, feat_list = ret['patch_feat_layer'], ret['feat_list']
 
-               fused_patch_token_list = [patch_feat_layer[i] for i in fused_layer]
-               fused_patch_token = torch.sum(torch.stack(fused_patch_token_list,dim=0), dim=0)
+               fused_patch_token = aggregate_patch_features(
+                   model, patch_feat_layer, fused_layer)
+               learn_patch_token = (
+                   ret['external_patch_feature']
+                   if ret.get('external_patch_feature') is not None
+                   else fused_patch_token)
+               normal_fused_patch_token = fused_patch_token
+               normal_feat_list = feat_list
                # [FIX-GRID] 用真实 patch 格数下采样 GT 掩码（DINOv2=784，DINOv3/patch16=625）
                aux_mask = resize_mask(
                    datas['img_mask'], num_tokens=fused_patch_token.shape[1]).to(device)  # B N
@@ -2092,16 +2353,25 @@ if __name__ == '__main__':
                # [vpt4.0 · M4] 双原型集：再拼上"全局（与图像无关）的可学习原型"，
                # 给原型集一个跨图固定的锚点 → 改善像素级 AUROC 的跨图校准
                if args.global_proto:
-                   _g = model.tokens_per_layer.token_dict['0'].expand(fused_learnable_token.shape[0], -1, -1)
+                   _g = global_prototype_tensor(model).expand(fused_learnable_token.shape[0], -1, -1)
                    fused_learnable_token = torch.cat([fused_learnable_token, _g], dim=1)
-               normal_patch_mapping = model.token_mapping(fused_patch_token)
-               normal_learnable_mapping = model.token_mapping(fused_learnable_token)
+               normal_proto_raw = fused_learnable_token
+               normal_proto_ref = refine_prototypes(
+                   model, fused_learnable_token, fused_patch_token,
+                   freeze_anchors=(_g.shape[1] if args.global_proto
+                                   and args.prototype_refiner_freeze_global else 0))
+               normal_patch_mapping = model.token_mapping(learn_patch_token)
+               normal_learnable_mapping = model.token_mapping(normal_proto_ref)
                # 异常部分
                ret = model(aux_imgs,is_training=True)
                patch_feat_layer, feat_list = ret['patch_feat_layer'], ret['feat_list']
 
-               fused_patch_token_list = [patch_feat_layer[i] for i in fused_layer]
-               fused_patch_token = torch.sum(torch.stack(fused_patch_token_list,dim=0), dim=0)
+               fused_patch_token = aggregate_patch_features(
+                   model, patch_feat_layer, fused_layer)
+               learn_patch_token = (
+                   ret['external_patch_feature']
+                   if ret.get('external_patch_feature') is not None
+                   else fused_patch_token)
 
                fused_learnable_token_list = [feat_list[i] for i in fused_layer_learnable]
                fused_learnable_token = torch.sum(torch.stack(fused_learnable_token_list,dim=0), dim=0)
@@ -2112,14 +2382,133 @@ if __name__ == '__main__':
                # **测试图**是 `sum(feat_list) ⊕ token_dict['0']`（K=96），而这里若只留 K=64，
                # M5/M7 用的原型集就与线上推理不一致 → 损失在优化一个"线上不存在的"打分函数。
                if args.global_proto:
-                   _ga = model.tokens_per_layer.token_dict['0'].expand(fused_learnable_token.shape[0], -1, -1)
+                   _ga = global_prototype_tensor(model).expand(fused_learnable_token.shape[0], -1, -1)
                    fused_learnable_token = torch.cat([fused_learnable_token, _ga], dim=1)
-               abnormal_patch_mapping = model.token_mapping(fused_patch_token)
-               # [PUSH-REF] 异常分支自己的原型（供"与推理一致的每图自参照"使用）
-               abnormal_learnable_mapping = model.token_mapping(fused_learnable_token)
-               loss,loss_dict = cos_loss(normal_patch_mapping, normal_learnable_mapping,
-                                         abnormal_patch_mapping, aux_mask,
-                                         neg_proto=abnormal_learnable_mapping)
+               abnormal_proto_raw = fused_learnable_token
+               abnormal_proto_ref = refine_prototypes(
+                   model, fused_learnable_token, fused_patch_token,
+                   freeze_anchors=(_ga.shape[1] if args.global_proto
+                                   and args.prototype_refiner_freeze_global else 0))
+               _multi_layers = tuple(getattr(model, 'learnable_insert_layers', ()) or ())
+               _multi_mapping = len(_multi_layers) > 1
+               if _multi_mapping:
+                   if getattr(model, 'prototype_refiner', None) is not None:
+                       raise RuntimeError('原型精炼模块当前只支持单 prototype 层配置')
+                   _unsupported = {
+                       'w_pixel': float(getattr(args, 'w_pixel', 0)),
+                       'w_cluster': float(getattr(args, 'w_cluster', 0)),
+                       'w_cluster_cons': float(getattr(args, 'w_cluster_cons', 0)),
+                       'w_distill': float(getattr(args, 'w_distill', 0)),
+                       'w_flip_cons': float(getattr(args, 'w_flip_cons', 0)),
+                       'w_scale_cons': float(getattr(args, 'w_scale_cons', 0)),
+                       'w_peak': float(getattr(args, 'w_peak', 0)),
+                       'w_ema': float(getattr(args, 'w_ema', 0)),
+                       'w_balance': float(getattr(args, 'w_balance', 0)),
+                       'w_prox': float(getattr(args, 'w_prox', 0)),
+                       'w_prod': float(getattr(args, 'w_prod', 0)),
+                       'w_near': float(getattr(args, 'w_near', 0)),
+                       'w_barlow': float(getattr(args, 'w_barlow', 0)),
+                       'w_comp': float(getattr(args, 'w_comp', 0)),
+                       'w_img_rank': float(getattr(args, 'w_img_rank', 0)),
+                   }
+                   _active_unsupported = [k for k, v in _unsupported.items() if v > 0]
+                   if _active_unsupported:
+                       raise RuntimeError(
+                           '多层独立 mapping 当前只支持 VPT3.8 默认损失；'
+                           f'以下探索损失尚未适配: {_active_unsupported}')
+                   _losses, _dicts = [], []
+                   _first = None
+                   for _idx, _layer in enumerate(_multi_layers):
+                       _T = model.get_token_mapping(_layer)
+                       _pn = normal_feat_list[_idx]
+                       _pa = feat_list[_idx]
+                       if args.global_proto:
+                           _gn = model.tokens_per_layer.token_dict[str(_layer)].expand(
+                               _pn.shape[0], -1, -1)
+                           _gau = model.tokens_per_layer.token_dict[str(_layer)].expand(
+                               _pa.shape[0], -1, -1)
+                           _pn = torch.cat([_pn, _gn], dim=1)
+                           _pa = torch.cat([_pa, _gau], dim=1)
+                       _np = _T(normal_fused_patch_token)
+                       _nq = _T(_pn)
+                       _ap = _T(fused_patch_token)
+                       _aq = _T(_pa)
+                       if _first is None:
+                           _first = (_np, _nq, _ap, _aq)
+                       _loss_l, _dict_l = cos_loss(
+                           _np, _nq, _ap, aux_mask, neg_proto=_aq)
+                       if args.w_div > 0:
+                           _P = F.normalize(_nq, dim=-1)
+                           _C = torch.bmm(_P, _P.transpose(1, 2))
+                           _K = _C.shape[1]
+                           _eye = torch.eye(_K, device=_C.device, dtype=torch.bool).unsqueeze(0)
+                           _off = _C.masked_fill(_eye, 0.0)
+                           _ldiv = torch.relu(_off - args.div_margin).sum(dim=(1, 2)) / (_K * (_K - 1))
+                           _loss_l = _loss_l + args.w_div * _ldiv.mean()
+                           _dict_l['div'] = float(_ldiv.mean())
+                       if args.w_rank > 0:
+                           _lrank = cross_image_rank_loss_from_features(
+                               _np, _nq, _ap, _aq, aux_mask,
+                               margin=args.rank_margin, n_sample=args.rank_samples,
+                               normalize=bool(args.rank_norm))
+                           _loss_l = _loss_l + _w_rank_eff * _lrank
+                           _dict_l['rank'] = float(_lrank)
+                       _losses.append(_loss_l)
+                       _dicts.append(_dict_l)
+                   loss = torch.stack(_losses).mean()
+                   loss_dict = {
+                       k: float(sum(d.get(k, 0.0) for d in _dicts) / len(_dicts))
+                       for k in set().union(*(d.keys() for d in _dicts))
+                   }
+                   (normal_patch_mapping, normal_learnable_mapping,
+                    abnormal_patch_mapping, abnormal_learnable_mapping) = _first
+               else:
+                   abnormal_patch_mapping = model.token_mapping(learn_patch_token)
+                   # [PUSH-REF] 异常分支自己的原型（供"与推理一致的每图自参照"使用）
+                   abnormal_learnable_mapping = model.token_mapping(abnormal_proto_ref)
+                   loss,loss_dict = cos_loss(normal_patch_mapping, normal_learnable_mapping,
+                                             abnormal_patch_mapping, aux_mask,
+                                             neg_proto=abnormal_learnable_mapping)
+                   if args.prompt_anchor_coupled:
+                       _K_anchor = global_prototype_tensor(model).shape[1]
+                       _local_m = F.normalize(
+                           normal_learnable_mapping[:, :_K_anchor], dim=-1)
+                       _anchor_m = F.normalize(
+                           normal_learnable_mapping[:, -_K_anchor:], dim=-1)
+                       if args.w_pacm_pair > 0:
+                           loss_pair = (
+                               1.0 - (_local_m * _anchor_m).sum(-1)).mean()
+                           loss = loss + args.w_pacm_pair * loss_pair
+                           loss_dict['pacm_pair'] = float(loss_pair)
+                       if args.w_pacm_assign > 0:
+                           _pm = F.normalize(normal_patch_mapping, dim=-1)
+                           _logits = torch.bmm(
+                               _pm, _anchor_m.transpose(1, 2)) / args.pacm_temp
+                           _logits = torch.nan_to_num(
+                               _logits, nan=0.0, posinf=20.0, neginf=-20.0
+                           ).clamp(-20.0, 20.0)
+                           _flat = _logits.reshape(-1, _K_anchor)
+                           # Sinkhorn 只产生平衡分配目标，不参与反向传播；
+                           # 可训练梯度仅经过 log_softmax 与 patch/anchor 映射。
+                           with torch.no_grad():
+                               _q = sinkhorn_assign(
+                                   _flat.detach(), eps=args.pacm_eps,
+                                   iters=args.pacm_iters)
+                           _logp = torch.log_softmax(_flat, dim=-1)
+                           loss_assign = -(_q * _logp).sum(-1).mean()
+                           loss = loss + args.w_pacm_assign * loss_assign
+                           loss_dict['pacm_assign'] = float(loss_assign)
+                   if getattr(model, 'prototype_refiner', None) is not None and args.w_ref_keep > 0:
+                       def _rel_proto_loss(raw, refined):
+                           num = (refined - raw).pow(2).mean()
+                           den = raw.pow(2).mean().detach().clamp_min(1e-8)
+                           return num / den
+                       loss_keep = 0.5 * (
+                           _rel_proto_loss(normal_proto_raw, normal_proto_ref)
+                           + _rel_proto_loss(abnormal_proto_raw, abnormal_proto_ref)
+                       )
+                       loss = loss + args.w_ref_keep * loss_keep
+                       loss_dict['ref_keep'] = float(loss_keep)
                # [CLUSTER · 机制1] 让正常 patch 在"可学习原型空间"里形成若干个簇：
                #   SimCLR 式的 softmax 目标会把每个 patch 拉向原型的**凸组合**（趋向均值），
                #   但正常 patch 本身是多样的（不同材质/纹理/部件），应当各自归属到某个簇。
@@ -2146,10 +2535,10 @@ if __name__ == '__main__':
                    if float(getattr(args, 'w_cluster_cons', 0.0)) > 0:
                        _xf = torch.flip(target_imgs, dims=[3])
                        _rf = model(_xf, is_training=True)
-                       _fpf = torch.sum(torch.stack([_rf['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                       _fpf = aggregate_patch_features(model, _rf['patch_feat_layer'], fused_layer)
                        _flrf = torch.sum(torch.stack(_rf['feat_list'], 0), 0)
                        if args.global_proto:
-                           _gf = model.tokens_per_layer.token_dict['0'].expand(_flrf.shape[0], -1, -1)
+                           _gf = global_prototype_tensor(model).expand(_flrf.shape[0], -1, -1)
                            _flrf = torch.cat([_flrf, _gf], dim=1)
                        _Xf = torch.nn.functional.normalize(model.token_mapping(_fpf), dim=-1)
                        _Pf = torch.nn.functional.normalize(model.token_mapping(_flrf), dim=-1)
@@ -2163,7 +2552,7 @@ if __name__ == '__main__':
 
                # [vpt4.0 · M3] 原型多样性正则：把映射后的 K 个原型两两余弦中"过高"的部分拉低，
                # 让 32 个原型真正覆盖多个正常模式（实测原始版本它们两两余弦 0.87、有效自由度仅 2~3）
-               if args.w_div > 0:
+               if args.w_div > 0 and not _multi_mapping:
                    P = torch.nn.functional.normalize(normal_learnable_mapping, dim=-1)
                    C = torch.bmm(P, P.transpose(1, 2))                 # [B,K,K]
                    K = C.shape[1]
@@ -2197,7 +2586,7 @@ if __name__ == '__main__':
                # 直接写进损失。正常像素 = 正常图全部像素 ∪ 辅助图里 mask=0 的像素；
                # 异常像素 = 辅助图里 mask=1 的像素。两侧都用**各自图自己的原型集**算分，
                # 因而优化的正是"不同图之间分数可比"这件事。
-               if args.w_rank > 0:
+               if args.w_rank > 0 and not _multi_mapping:
                    loss_rank = cross_image_rank_loss_from_features(
                        normal_patch_mapping, normal_learnable_mapping,
                        abnormal_patch_mapping, model.token_mapping(fused_learnable_token),
@@ -2246,10 +2635,10 @@ if __name__ == '__main__':
                if float(getattr(args, 'w_flip_cons', 0.0)) > 0:
                    _xf = torch.flip(aux_imgs, dims=[3])
                    _rf = model(_xf, is_training=True)
-                   _fp_f = torch.sum(torch.stack([_rf['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                   _fp_f = aggregate_patch_features(model, _rf['patch_feat_layer'], fused_layer)
                    _flr_f = torch.sum(torch.stack(_rf['feat_list'], 0), 0)
                    if args.global_proto:
-                       _gf = model.tokens_per_layer.token_dict['0'].expand(_flr_f.shape[0], -1, -1)
+                       _gf = global_prototype_tensor(model).expand(_flr_f.shape[0], -1, -1)
                        _flr_f = torch.cat([_flr_f, _gf], dim=1)
                    _S_f = proto_distance_scores(model.token_mapping(_fp_f),
                                                 model.token_mapping(_flr_f))       # [B,N]
@@ -2272,10 +2661,10 @@ if __name__ == '__main__':
                    _su = float(getattr(args, 'scale_cons_scale', 1.5))
                    _xu = F.interpolate(aux_imgs, scale_factor=_su, mode='bilinear', align_corners=False)
                    _ru = model(_xu, is_training=True)
-                   _fp_u = torch.sum(torch.stack([_ru['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                   _fp_u = aggregate_patch_features(model, _ru['patch_feat_layer'], fused_layer)
                    _flr_u = torch.sum(torch.stack(_ru['feat_list'], 0), 0)
                    if args.global_proto:
-                       _gu = model.tokens_per_layer.token_dict['0'].expand(_flr_u.shape[0], -1, -1)
+                       _gu = global_prototype_tensor(model).expand(_flr_u.shape[0], -1, -1)
                        _flr_u = torch.cat([_flr_u, _gu], dim=1)
                    _S_u = proto_distance_scores(model.token_mapping(_fp_u),
                                                 model.token_mapping(_flr_u))
@@ -2317,10 +2706,10 @@ if __name__ == '__main__':
                if _ema_model is not None:
                    with torch.no_grad():
                        _rt = _ema_model(aux_imgs, is_training=True)
-                       _fp_t = torch.sum(torch.stack([_rt['patch_feat_layer'][j] for j in fused_layer], 0), 0)
+                       _fp_t = aggregate_patch_features(_ema_model, _rt['patch_feat_layer'], fused_layer)
                        _flr_t = torch.sum(torch.stack(_rt['feat_list'], 0), 0)
                        if args.global_proto:
-                           _gt0 = _ema_model.tokens_per_layer.token_dict['0'].expand(_flr_t.shape[0], -1, -1)
+                           _gt0 = global_prototype_tensor(_ema_model).expand(_flr_t.shape[0], -1, -1)
                            _flr_t = torch.cat([_flr_t, _gt0], dim=1)
                        _S_t = proto_distance_scores(_ema_model.token_mapping(_fp_t),
                                                     _ema_model.token_mapping(_flr_t))
@@ -2461,11 +2850,21 @@ if __name__ == '__main__':
                    loss = loss + args.w_img_rank * loss_img_rank
                    loss_dict['img_rank'] = float(loss_img_rank)
                loss += loss_seg
-               
+               if not torch.isfinite(loss):
+                   raise RuntimeError(
+                       f'非有限训练损失：epoch={epoch + 1}, '
+                       f'loss={loss.item()}, dict={loss_dict}')
+
                optimizer.zero_grad()
                loss.backward()
-               nn.utils.clip_grad_norm(trainable.parameters(), max_norm=0.5)
+               grad_norm = nn.utils.clip_grad_norm_(
+                   trainable.parameters(), max_norm=0.5)
+               if not torch.isfinite(grad_norm):
+                   raise RuntimeError(
+                       f'非有限梯度范数：epoch={epoch + 1}, '
+                       f'grad_norm={grad_norm.item()}, dict={loss_dict}')
                optimizer.step()
+               loss_dict['grad_norm'] = float(grad_norm)
                if _ema_model is not None:      # [LOSS-EMA] 更新教师（EMA）
                    _decay = float(getattr(args, 'ema_decay', 0.999))
                    with torch.no_grad():
@@ -2486,7 +2885,10 @@ if __name__ == '__main__':
                loss_seg_list.append(loss_seg.item())
                lr_scheduler.step()
                print_fn('epoch [{}/{}], total_loss:{:.4f}, cos_loss:{:.4f}, mse_loss:{:.4f}, neg_push_loss:{:.4f}, seg_loss:{:.4f}'.format(epoch+1, args.total_epochs, np.mean(loss_list),np.mean(loss_cos_list),np.mean(loss_mse_list),np.mean(loss_tri_list),np.mean(loss_seg_list)))
-               if args.w_pixel > 0 or args.w_rank > 0 or args.w_div > 0 or args.w_img_rank > 0 or float(getattr(args, 'w_cluster', 0.0)) > 0:
+               if (args.w_pixel > 0 or args.w_rank > 0 or args.w_div > 0
+                       or args.w_img_rank > 0
+                       or float(getattr(args, 'w_cluster', 0.0)) > 0
+                       or args.w_pacm_assign > 0 or args.w_pacm_pair > 0):
                    _aux = []
                    if args.w_div > 0:
                        _aux.append('div:{:.4f}'.format(loss_dict.get('div', float('nan'))))
@@ -2494,6 +2896,14 @@ if __name__ == '__main__':
                        _aux.append('px:{:.4f}'.format(loss_dict.get('px', float('nan'))))
                    if args.w_rank > 0:
                        _aux.append('rank:{:.4f}'.format(loss_dict.get('rank', float('nan'))))
+                   if args.w_pacm_assign > 0:
+                       _aux.append('pacm_assign:{:.4f}'.format(
+                           loss_dict.get('pacm_assign', float('nan'))))
+                   if args.w_pacm_pair > 0:
+                       _aux.append('pacm_pair:{:.4f}'.format(
+                           loss_dict.get('pacm_pair', float('nan'))))
+                   _aux.append('grad_norm:{:.4f}'.format(
+                       loss_dict.get('grad_norm', float('nan'))))
                    if args.w_img_rank > 0:
                        _aux.append('imgrank:{:.4f}'.format(loss_dict.get('img_rank', float('nan'))))
                    if float(getattr(args, 'w_cluster', 0.0)) > 0:

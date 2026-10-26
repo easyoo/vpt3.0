@@ -1,3 +1,30 @@
+# vpt3.9 使用说明（2026-10-26）
+
+> **v3.9 = VPT3.8 主干与训练配方 + 数据集通用 SS-MSF 推理融合**
+
+VPT3.9 删除 VPT3.8 中依赖数据集阈值的 Support-Adaptive 规则，改为统一的
+support-only 连续门控：
+
+```text
+c = cosine(中心区域平均特征, 边缘区域平均特征)
+r = 中心区域平均特征范数 / 边缘区域平均特征范数
+w_m = clip((1-c) * r, 0, 1)
+w_b = 1-w_m
+```
+
+异常图在 9、25、41 三个池化尺度上融合，三个尺度共享同一张异常图，不增加
+网络前向次数。融合不使用任何测试集统计量。
+
+| 数据集 | 1-shot | 2-shot | 4-shot |
+|---|---:|---:|---:|
+| MVTec-AD | 87.6806 | 88.3969 | 89.3952 |
+| VisA | 82.0201 | 82.1743 | 82.9413 |
+
+详细说明见 `docs/SUPPORT_STRUCTURE_MULTISCALE_FUSION.md` 和
+`docs/VPT39_124SHOT_UNIFIED_FUSION_COMPARISON.md`。
+
+---
+
 # vpt3.8 使用说明（2026-10-20）
 
 > **v3.8 = 严格 4-shot 数据协议 + raw 高分辨率融合**

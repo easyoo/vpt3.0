@@ -1,0 +1,2 @@
+{"device": "NVIDIA GeForce RTX 3090", "class": "transistor", "images": 100, "batch_size": 1, "learning_branch_images_per_s": 16.333027893358068, "learning_branch_ms_per_image": 61.22563474018534}
+{"device": "NVIDIA GeForce RTX 3090", "class": "transistor", "images": 100, "batch_size": 4, "learning_branch_images_per_s": 18.473364392073023, "learning_branch_ms_per_image": 54.13199127004191}

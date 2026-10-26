@@ -49,6 +49,7 @@ class DinoV3HFAdapter(nn.Module):
         miss = [k for k in info.missing_keys if not k.startswith('head.')]
         if miss or info.unexpected_keys:
             raise RuntimeError(f'DINOv3 权重键不匹配 missing={miss[:5]} unexpected={info.unexpected_keys[:5]}')
+        self.embed_dim = int(self.backbone.embed_dim)
         self.patch_size = int(self.backbone.patch_embed.patch_size[0])
         self.num_register_tokens = int(self.backbone.num_prefix_tokens) - 1
         print(f'[dinov3-adapter] {arch} 载入完成：patch={self.patch_size} '

@@ -79,6 +79,13 @@ class DinoV3Mapping(nn.Module):
         self.blocks = self.backbone.blocks
         self.norm = self.backbone.norm
         learnable_layers = 4 if arg is None else arg.learnable_layers
+        self.learnable_insert_layer = (
+            int(getattr(arg, 'learnable_insert_layer', 0)) if arg is not None else 0
+        )
+        if not 0 <= self.learnable_insert_layer < len(self.blocks):
+            raise ValueError('learnable_insert_layer=%d 超出 DINOv3 blocks 范围 [0,%d)'
+                             % (self.learnable_insert_layer, len(self.blocks)))
+        print(f'[dinov3] learnable prototype insert_layer={self.learnable_insert_layer}')
         _tok_std = getattr(arg, 'token_init_std', 0.02) if arg is not None else 0.02
         self.tokens_per_layer = LearnableTokens(
             layers=learnable_layers, dim=self.embed_dim,
@@ -125,11 +132,28 @@ class DinoV3Mapping(nn.Module):
             raise NotImplementedError('list 输入未使用')
         x, rope, _hw = self._embed(x, masks)
         b, l, c = x.shape
-        x = torch.cat((x, self.tokens_per_layer.token_dict['0'].expand(x.shape[0], -1, -1)), dim=1)
         feat_list, patch_feat_layer = [], []
         n_learn = len(self.tokens_per_layer.token_dict.keys())
+        single_layer = n_learn == 1
+        insert_i = int(self.learnable_insert_layer)
+        if single_layer and insert_i == 0:
+            # 保留历史 block-0 行为：循环外一次 + 循环内一次，共 64 个原型 token。
+            x = torch.cat((x, self.tokens_per_layer.token_dict['0'].expand(x.shape[0], -1, -1)), dim=1)
         for i, blk in enumerate(self.blocks):
-            if i < n_learn:
+            if single_layer and i == insert_i:
+                tok = self.tokens_per_layer.token_dict['0']
+                n_extra = x.shape[1] - l
+                # block-0 已在循环外插入一次，因此循环内只补一次；其他层在循环内补两次，
+                # 以保持原实现的 64 个原型 token 及其重复结构完全不变。
+                n_add = 1 if insert_i == 0 else 2
+                for _ in range(n_add):
+                    x = torch.cat((x, tok.expand(x.shape[0], -1, -1)), dim=1)
+                x = blk(x, rope=_pad_rope_no_rotate(rope, n_extra + n_add * tok.shape[1]))
+                length = x.shape[1] - l
+                feat_list.append(x[:, -length:, :])
+                patch_feat_layer.append(x[:, 5:l, :])
+                x = x[:, :l, :]
+            elif not single_layer and i < n_learn:
                 tok = self.tokens_per_layer.token_dict[str(i)]
                 # 进入本层前序列里已有的"非 patch"多余 token（layer-0 的循环外追加会带 32 个）
                 n_extra = x.shape[1] - l

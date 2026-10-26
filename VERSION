@@ -1,72 +1,35 @@
-vpt3.8
-# 版本冻结: 2026-10-20
-# 定位：严格 4-shot 数据协议 + raw 高分辨率 bank 融合版本
+vpt3.9
+# 版本冻结: 2026-10-26
+# 定位：VPT3.8 主干与训练配方不变，推理融合统一为
+#       Support-Structure Multi-Scale Fusion (SS-MSF)
 #
-# 【v3.8 核心变化】
-#   * 新增严格 MVTec 4-shot 数据视图与 source 清单；
-#   * 训练、mapping、bank 通过 VPT_SHOT_DIR 共用同一份严格 shot 清单；
-#   * 保留已有 AnoStyler 原始 4-source × 35 数据，不引用 1/2-shot 数据；
-#   * 新增 z_mode=none：取消所有类内测试集 z-score；
-#   * 新增 672 bank 不降采样融合：mapping 448 上采样到 672，bank 保持 672；
-#   * MemoryBank 22x 增强显式固定 seed；
-#   * 新增完整六组 raw/per-image/class-z 对照与指标审计。
+# 【相对 v3.8 的变化】
+#   * 取消原 Support-Adaptive 的数据集约 0.25/0.88 阈值和 0.50/0.75 离散权重。
+#   * 使用统一 support-only 连续门控：
+#       c = cosine(中心区域平均特征, 边缘区域平均特征)
+#       r = 中心区域平均特征范数 / 边缘区域平均特征范数
+#       w_m = clip((1-c) * r, 0, 1)
+#       w_b = 1-w_m
+#   * 使用固定 9/25/41 多尺度区域池化：
+#       S = mean_k [w_m * box_k(Mapping) + w_b * box_k(Bank)]
+#   * 三尺度共享同一异常图，不增加网络前向次数。
+#   * 不使用测试集统计量、z-score 或 min-max 进行融合参数估计。
 #
-# 【当前默认推理】
-#   mapping raw: sqrt(d1 * q512)
-#   learnable:   dlmin
-#   mapping map: 0.6 * learnable + 0.4 * raw
-#   mapping/bank fusion:
-#       0.5 * box25(resize(mapping,672)) + 0.5 * box25(bank672)
-#   Gaussian: k=5, sigma=4
-#   image score: top-0.5% mean
-#   no class-level z-score
+# 【六组性能（七项均值，单 seed）】
+#   MVTec 1-shot: 87.6806
+#   MVTec 2-shot: 88.3969
+#   MVTec 4-shot strict: 89.3952
+#   VisA 1-shot: 82.0201
+#   VisA 2-shot: 82.1743
+#   VisA 4-shot: 82.9413
 #
-# 【VisA raw 672 results in this version】
-#   VisA 2-shot raw: 448=81.4020, 672=81.9804
-#   VisA 4-shot raw: 448=82.0479, 672=82.5795
-#   Authoritative per-class CSV files are under logs/.
+# 【吞吐量（RTX 3090, transistor, 100 张测试图）】
+#   学习分支 batch=1: 16.33 img/s, 61.23 ms/image
+#   学习分支 batch=4: 18.47 img/s, 54.13 ms/image
+#   完整 2-shot batch=4: 6.42 img/s, 155.78 ms/image
+#   完整 4-shot batch=4: 5.12 img/s, 195.18 ms/image
 #
-# 【Strict MVTec 4-shot】
-#   Training: Resize448 -> CenterCrop392
-#   Inference: Resize448 -> 1.5x -> 672
-#   Training checkpoints: 35 epochs, fixed epoch 35
-#   Final strict result is not embedded in VERSION; see generated CSV/log.
-
-vpt3.7
-# 版本冻结: 2026-10-13
-# 定位：**把"简化版"固化为默认行为**（相对 vpt3.6 仅改推理端打分与默认值；训练代码与权重完全一致）
-#
-# 【本版默认配方】
-#   mapping 原始库侧： s_raw   = d1^0.5 · q50^0.5
-#                      （d1 = 到 K×1024 个正常 patch 的最近邻距离；q50 = 该距离分布的中位数，1024 子采样估计）
-#   mapping 可学习侧： s_learn = dlmin
-#                      （只取"到最近可学习原型"的距离；**去掉全局项**，因此**不再对 bank 做 token_mapping**）
-#   视图内融合：        m = 0.6 · s_learn + 0.4 · s_raw
-#   测试期 TTA：        **单视图**（1.5× 放大，无翻转）⇒ 推理前向次数相对 v3.6 减半
-#   mapping ⊕ bank：    类内 z 后 0.5 · z(mapping) + 0.5 · z(bank)（未变）
-#
-# 【相对 vpt3.6 的差异】
-#   --l_global 64 → 0   （去掉 learn 侧全局项；该步曾让 bank 过 token_mapping）
-#   --flip      1 → 0   （去掉翻转视图）
-#   --w       0.5 → 0.6 （与已验证的简化配方一致；v3.6 实际运行也用 0.6）
-#   --script 默认改为自动探测（兼容仓库包布局 ../code 与工作目录布局 ./code_vpt4）
-#   要完整恢复 v3.6 行为：加 `--l_global 64 --flip 1`
-#
-# 【三数据集性能（官方 adeval，7 项平均；与 v3.6 同权重、同测试集）】
-#   VisA 4-shot（12 类）：   mapping 78.85（v3.6 78.93） | bank 78.74 | **融合 81.64**（v3.6 81.61）
-#   MVTec 2-shot（15 类）：  mapping 85.09（85.59）      | bank 85.92 | **融合 87.51**（87.65）
-#   MVTec 4-shot（15 类）：  mapping 85.59（86.24）      | bank 87.47 | **融合 88.57**（88.64）
-#   ⇒ 交付口径（mapping ⊕ bank）几乎不变（+0.03 / −0.14 / −0.07）；代价主要落在 mapping 单支。
-#
-# 【实现级精简（输出逐位不变，已用 candle/transistor/screw 三类验证）】
-#   * learn 侧只映射 1024 个子采样 patch（原 4096）⇒ 省 75% 显存与映射计算
-#   * raw 侧分块求 min + 分块收集子采样列 ⇒ 不再物化 [B,N,4096]（B=16 时 604 MB）
-#
-# 【依据与消融】docs/ABLATION_2026-10-13.md：训练侧 8 组消融全部变差（无冗余可删），
-#   推理侧仅这两项可精简；docs/COMPARE_three_datasets.md §九 为完整指标对比。
-#
-# 【已知限制】
-#   * 训练损失仍用 min 打分 → 训练/推理口径不完全一致（新公式仅推理端）
-#   * 打分指数(0.5)、全局分位(512)、视图内权重(0.6)、融合权重(0.5) 均在三个测试集上选过，未见独立验证集
-#   * 融合的类内 z 统计量取自测试集（transductive）；fuse_nocrop.py 只校验两张异常图形状
-#   * mapping 单支在 MVTec 上比 v3.6 低 0.5~0.65 —— 若以 mapping-only 为主口径，请用 `--l_global 64 --flip 1`
+# 【说明】
+#   * MVTec 2-shot 与 VisA 4-shot checkpoint 为 VPT3.8-equivalent。
+#   * 当前性能为单 seed，尚需多 seed 方差验证。
+#   * 大型权重、异常图和实验缓存全部不入库，可从脚本与 shot 清单重建。
